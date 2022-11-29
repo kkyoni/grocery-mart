@@ -1,0 +1,5 @@
+html, body {
+	background-image: url(backgroud.jpg);
+    background-size: cover;
+	/*background-image: linear-gradient(to right top, #36d866, #00c993, #00b6b0, #00a1ba, #008aaf, #3b85b0, #577fad, #6c7aa7, #8b83b6, #ac8bc0, #ce93c6, #ee9cc7);*/
+}
