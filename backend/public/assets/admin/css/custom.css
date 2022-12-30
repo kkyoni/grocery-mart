@@ -1,0 +1,36 @@
+.middle-box {
+	/*max-width: 400px;
+	z-index: 100;
+	margin: 0 auto;
+	padding-top: 0;*/
+}
+
+.nav-header{
+
+	/*background-color :#4b5ff1 !important;*/
+}
+
+.ibox{
+	margin-top: 20px !important;
+}
+
+.ibox-content{
+	/*border-style : none !important;
+	padding : 0px 0px 50px 20px!important;*/
+}
+
+.ibox-content_login{
+	padding: 15px 20px 20px 20px !important;border-style: solid solid none !important;
+}
+
+.ibox-title{
+	/*display: none;*/
+}
+
+.nav-second-level li:last-child{
+	padding-bottom : 0px !important;
+}
+
+#imagePreview{
+	/*width: 155px !important;*/
+}

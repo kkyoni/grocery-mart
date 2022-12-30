@@ -14,18 +14,18 @@ class SettingSeeder extends Seeder
     public function run()
     {
         Setting::create([
-            'code' => 'site_logo',
+            'code' => 'application_logo',
             'type' => 'FILE',
             'label' => 'Site Logo',
-            'value' => 'site_logo.png',
+            'value' => 'application_logo.png',
             'hidden' => '0',
         ]);
 
         Setting::create([
-            'code' => 'project_title',
+            'code' => 'application_title',
             'type' => 'TEXT',
-            'label' => 'Project Title',
-            'value' => 'Project Title',
+            'label' => 'Application Title',
+            'value' => 'Grocery Mart',
             'hidden' => '0',
         ]);
 
@@ -33,7 +33,7 @@ class SettingSeeder extends Seeder
             'code' => 'favicon_logo',
             'type' => 'FILE',
             'label' => 'Favicon Logo',
-            'value' => 'favicon.ico',
+            'value' => 'favicon_logo.png',
             'hidden' => '0',
         ]);
 
@@ -41,15 +41,7 @@ class SettingSeeder extends Seeder
             'code' => 'copyright',
             'type' => 'TEXT',
             'label' => 'Copy Right',
-            'value' => 'Inspinia we app framework base on Bootstrap 3',
-            'hidden' => '0',
-        ]);
-
-        Setting::create([
-            'code' => 'thankyou',
-            'type' => 'TEXT',
-            'label' => 'Thank You',
-            'value' => 'The Infusion Analysts Team',
+            'value' => 'Grocery Mart',
             'hidden' => '0',
         ]);
     }

@@ -11,5 +11,5 @@ class Brand extends Model
     use SoftDeletes;
 
     protected $table = 'brand';
-    protected $fillable = ['brand_name'];
+    protected $fillable = ['brand_name','brand_image'];
 }

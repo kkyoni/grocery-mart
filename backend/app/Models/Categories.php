@@ -15,6 +15,11 @@ class Categories extends Model
 
     public function product_details()
     {
-        return $this->hasOne('App\Models\Product','categories_id','id')->with(['productimage']);
+        return $this->hasOne('App\Models\Product','category_id','id')->with(['productimage']);
+    }
+
+    public function brand_details()
+    {
+        return $this->hasOne('App\Models\Brand','id','brand_id');
     }
 }

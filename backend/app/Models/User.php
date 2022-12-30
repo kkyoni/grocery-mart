@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -16,12 +17,14 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'avatar',
-        'name',
-        'email',
-        'password',
         'user_type',
+        'first_name',
+        'last_name',
+        'email',
+        'avatar',
+        'password',
         'status',
+        'address_id',
     ];
 
     /**
@@ -42,7 +45,6 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -61,5 +63,8 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    public function UserAddress(){
+        return $this->hasOne(\App\Models\UserAddress::class,'id','address_id');
     }
 }

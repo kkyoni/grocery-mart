@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'stripe_public_secret' => env('STRIPE_SECRET', 'sk_test_51KWJ4KSJGBX5t2vVri6YCeBQ5FXPPj2EzrnkhJEXPY7oGXHOvsKFirHxwQ5rO4LVMRE2Iy9Dcfjjc4suo1VvxTd900dcRfaH9t'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -162,6 +164,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Mckenziearts\Notify\LaravelNotifyServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
+        \Hemarao\Laravelsettings\app\Providers\SettingServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -177,7 +181,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -232,7 +236,12 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Settings' => \Hemarao\Laravelsettings\app\Facades\Setting::class,
+        'Notify' => Helmesvs\Notify\Facades\Notify::class,
+        'Html' => Collective\Html\HtmlFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
+        'Form' => Collective\Html\FormFacade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 

@@ -13,4 +13,8 @@ class Blog extends Model
 
     protected $table = 'blog';
     protected $fillable = ['title','description','image'];
+    public function Comment()
+    {
+        return $this->hasMany('App\Models\Comment','blog_id','id')->with('UserDetails')->orderBy('updated_at', 'desc')->limit(3);
+    }
 }
