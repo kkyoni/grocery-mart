@@ -14,6 +14,8 @@
 - Step 4 : php artisan storage:link
 - Step 5 : ./clean-up.sh
 
+## Backend Templete
+- http://webapplayers.com/inspinia_admin-v2.9.4/
 
 
 <p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/2300px-React-icon.svg.png" style="width:240px"></p>
@@ -39,5 +41,5 @@
 - application_title : For Admin Penal Site Name Change
 
 
-## Templete W3layout
-- https://demo.w3layouts.com/demos_new/template_demo/06-10-2021/grocery-mart-liberty-demo_Free/794674028/web/index.html
+## Front Templete
+- https://demo.w3layouts.com/demos_new/template_demo/06-10-2021/grocery-mart-liberty-demo_Free/794674028/web/
