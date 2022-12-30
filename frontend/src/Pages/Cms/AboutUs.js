@@ -5,17 +5,30 @@ import Header from "../../Components/Header";
 import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
 class AboutUs extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            isLoading: true,
+        }
+    }
+    async componentDidMount() {
+        this.setState({
+            isLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({ isLoading: false });
+        }, 1000);
+    }
     render() {
         return (
             <div>
                 <Title />
-                <Header />
+                <Header isLoading={this.state.isLoading} />
                 <div className="banner banner2">
                     <div className="container">
                         <h2>About Us</h2>
                     </div>
                 </div>
-
                 <div className="breadcrumb_dress">
                     <div className="container">
                         <ul>
@@ -25,7 +38,6 @@ class AboutUs extends Component {
                         </ul>
                     </div>
                 </div>
-
                 <div className="about py-5">
                     <div className="container py-lg-5 py-4">
                         <div className="row w3ls_about_grids align-items-center">
@@ -52,5 +64,4 @@ class AboutUs extends Component {
         )
     }
 }
-
 export default AboutUs;

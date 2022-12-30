@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import Service from "../../services/Service";
 class SliderCategory extends Component {
     constructor(props) {
@@ -7,17 +8,14 @@ class SliderCategory extends Component {
         this.state = {
             categories: [],
             loading: false,
-            Data: false,
         }
     }
     async componentDidMount() {
         const res = await axios.get('http://127.0.0.1:8000/api/getcategories');
         if (res.data.status === 'success') {
-            if (res.data.categories.length === 0) {
-                this.setState({ categories: [], dataLoaded: true, error: false, Data: false });
-            } else {
-                this.setState({ categories: res.data.categories, dataLoaded: true, error: false, Data: true });
-            }
+            this.setState({ categories: res.data.categories, connection: true, notrecordloading: true });
+        } else {
+            this.setState({ categories: [], connection: true, notrecordloading: false });
         }
     }
     handleCategorys(id) {
@@ -31,19 +29,19 @@ class SliderCategory extends Component {
     }
     render() {
         var categories_HTMLTABLE = "";
-        if (this.state.dataLoaded) {
-            if (this.state.Data) {
+        if (this.state.connection) {
+            if (this.state.notrecordloading) {
                 categories_HTMLTABLE =
                     this.state.categories.map((item, i) => {
                         return (
-                            <li key={i}><a href="javascript:void(0)" onClick={() => this.handleCategorys(item.id)}>{item.categories_name}</a></li>
+                            <li key={i}><Link onClick={() => this.handleCategorys(item.id)}>{item.categories_name}</Link></li>
                         );
                     });
             } else {
-                categories_HTMLTABLE = <div><h2>Not Data Found ...</h2></div>
+                categories_HTMLTABLE = <img src='assets/images/nodatafound.png' alt="nodatafound" className="img-max" style={{ width: "100%", height: "1%" }} />
             }
         } else {
-            categories_HTMLTABLE = <div><h2>Loading ...</h2></div>;
+            categories_HTMLTABLE = <img src='assets/images/connection_lost.png' alt="connection_lost" className="img-max" style={{ width: "100%", height: "1%" }} />
         }
         return (
             <div className="w3ls_mobiles_grid_left_grid">

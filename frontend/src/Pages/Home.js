@@ -7,16 +7,28 @@ import Partners from "./Partners/Partners";
 import TopProducts from "./TopProducts/TopProducts";
 import SpecialDeals from "./SpecialDeals/SpecialDeals";
 import Banner from "./Banner/Banner";
-import Categories from "./Categories/Categories";
 import SliderBanner from "./Banner/SliderBanner";
 class Home extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            isLoading: true,
+        }
+    }
+    async componentDidMount() {
+        this.setState({
+            isLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({ isLoading: false });
+        }, 1000);
+    }
     render() {
         return (
             <div>
                 <Title />
-                <Header />
+                <Header isLoading={this.state.isLoading} />
                 <SliderBanner />
-                <Categories />
                 <Banner />
                 <SpecialDeals />
                 <TopProducts />
@@ -27,5 +39,4 @@ class Home extends Component {
         );
     }
 }
-
 export default Home;

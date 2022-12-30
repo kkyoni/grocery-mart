@@ -11,6 +11,7 @@ import Price from "../Slider/Price";
 import Service from "../../services/Service";
 import { Button } from "reactstrap";
 import Sorting from "../Slider/Sorting";
+import { toast } from 'react-toastify';
 class Products extends Component {
 	constructor(props) {
 		super(props)
@@ -20,29 +21,38 @@ class Products extends Component {
 			loading: false,
 			photo: 'http://127.0.0.1:8000/storage/product/',
 			visible: 6,
-			Data: false,
+			isLoading: true,
 			isLoadingButton: false,
 			AddCartDetails: false,
 			singleFetchedProduct: {}
 		}
 		this.loadmore = this.loadmore.bind(this);
 	}
-
 	catagoryDataFromChildComp = (data) => this.setState({ product: data });
 	brandDataFromChildComp = (data) => this.setState({ product: data });
 	priceDataFromChildComp = (data) => this.setState({ product: data });
 	sortDataFromChildComp = (data) => this.setState({ product: data });
 	async componentDidMount() {
+		this.setState({
+			isLoading: true,
+		});
+		setTimeout(() => {
+			this.setState({ isLoading: false });
+		}, 1000);
 		const res = await axios.get('http://127.0.0.1:8000/api/getproducts');
 		if (res.data.status === 'success') {
-			if (res.data.product.length === 0) {
-				this.setState({ product: [], dataLoaded: true, error: false, Data: false });
-			} else {
-				this.setState({ product: res.data.product, dataLoaded: true, error: false, Data: true });
-			}
+			this.setState({ product: res.data.product, connection: true, notrecordloading: true });
+		} else {
+			this.setState({ product: [], connection: true, notrecordloading: false });
 		}
 	}
 	loadmore() {
+		this.setState({
+			isLoading: true,
+		});
+		setTimeout(() => {
+			this.setState({ isLoading: false });
+		}, 1000);
 		this.setState((old) => {
 			return { visible: old.visible + 6 };
 		});
@@ -52,7 +62,6 @@ class Products extends Component {
 			this.setState({ singleFetchedProduct: res.data.product[0] });
 		})
 	}
-
 	onAddCartHandler = (item) => {
 		const productDetails = JSON.parse(localStorage.getItem("product_details"));
 		let products;
@@ -61,45 +70,64 @@ class Products extends Component {
 			products.push(item);
 			localStorage.setItem('product_details', JSON.stringify(products))
 		} else {
-			products = JSON.parse(localStorage.getItem("product_details"))
-			products.push(item);
-			localStorage.setItem('product_details', JSON.stringify(products))
+			let currentProduct = productDetails.filter(x => x.id === item.id);
+			let index = productDetails.findIndex(x => x.id === item.id);
+			if (currentProduct.length > 0) {
+				let quantity = currentProduct[0].qty;
+				let price = Number(currentProduct[0].price);
+				let main_price = Number(currentProduct[0].main_price);
+				quantity = quantity + 1;
+				price = price + main_price;
+				currentProduct[0].qty = quantity;
+				currentProduct[0].price = Number.parseFloat(price).toFixed(2);
+				productDetails[index] = currentProduct[0];
+				this.setState({ product_cart: productDetails });
+				localStorage.setItem('product_details', JSON.stringify(productDetails));
+				toast.success("Add To Cart", { position: toast.POSITION.TOP_RIGHT });
+			} else {
+				productDetails.push(item);
+				localStorage.setItem('product_details', JSON.stringify(productDetails));
+				toast.success("Add To Cart", { position: toast.POSITION.TOP_RIGHT });
+			}
 		}
-		this.setState({ AddCartDetails: true })
-	}
-	viewProducts(id) {
-		this.props.history.push(`/single-products/${id}`);
+		this.setState({
+			isLoading: true,
+		});
+		setTimeout(() => {
+			this.setState({ AddCartDetails: true, isLoading: false });
+		}, 1000);
+		toast.success("Add To Cart", { position: toast.POSITION.TOP_RIGHT });
 	}
 	render() {
 		const { name, description, productimage, price } = this.state.singleFetchedProduct;
 		const { isLoadingButton } = this.state.isLoadingButton;
 		var product_HTMLTABLE = "";
-		if (this.state.dataLoaded) {
-			if (this.state.Data) {
+		if (this.state.connection) {
+			if (this.state.notrecordloading) {
 				product_HTMLTABLE =
 					this.state.product.slice(0, this.state.visible).map((item, index) => {
 						return (
 							<div key={index} className="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_mobiles mt-3">
 								<div className="agile_ecommerce_tab_left mobiles_grid">
-									<div className="hs-wrapper hs-wrapper2">
+									<div className="hs-wrapper hs-wrapper2" style={{ zIndex: "0" }}>
 										{item.productimage.map((type, i) => {
 											return <img key={i} src={this.state.photo + type.image} alt={type.image} className="img-fluid" />
 										})}
 										<div className="w3_hs_bottom w3_hs_bottom_sub1">
 											<ul>
 												<li>
-													<a href="javascript:void(0)" onClick={() => this.handleViewProduct(item.id)} data-bs-toggle="modal"
-														data-bs-target="#myModal17"><i className="fas fa-eye"></i></a>
+													<Link onClick={() => this.handleViewProduct(item.id)} data-bs-toggle="modal"
+														data-bs-target="#myModal17"><i className="fas fa-eye"></i></Link>
 												</li>
 											</ul>
 										</div>
 									</div>
-									<h5><Link onClick={() => this.viewProducts(item.id)}>{item.name}</Link></h5>
+									<h5><Link to={`/single-products/${item.id}`}>{item.name}</Link></h5>
 									<div className="simpleCart_shelfItem">
 										<p><i className="item_price">₹ {item.price}</i></p>
 										<Button className="w3ls-cart" onClick={() => this.onAddCartHandler(item)}>
 											{isLoadingButton ? (
-												<i class="fa fa-refresh fa-spin"></i>
+												<i className="fa fa-refresh fa-spin"></i>
 											) : (
 												<span>Add to cart</span>
 											)}</Button>
@@ -114,22 +142,20 @@ class Products extends Component {
 						);
 					});
 			} else {
-				product_HTMLTABLE = <div><h2>Not Data Found ...</h2></div>
+				product_HTMLTABLE = <img src='assets/images/nodatafound.png' alt="nodatafound" className="img-max" />
 			}
 		} else {
-			product_HTMLTABLE = <div><h2>Loading ...</h2></div>;
+			product_HTMLTABLE = <img src='assets/images/connection_lost.png' alt="connection_lost" className="img-max" />
 		}
 		return (
 			<div>
 				<Title />
-				<Header CartDetails={this.state.AddCartDetails} />
-
+				<Header isLoading={this.state.isLoading} CartDetails={this.state.AddCartDetails} />
 				<div className="banner banner2">
 					<div className="container">
 						<h2>Top Selling <span>Kitchen Products</span> Flat <i>25% Discount</i></h2>
 					</div>
 				</div>
-
 				<div className="breadcrumb_dress">
 					<div className="container">
 						<ul>
@@ -139,7 +165,6 @@ class Products extends Component {
 						</ul>
 					</div>
 				</div>
-
 				<div className="mobiles py-5">
 					<div className="container py-lg-4 py-3">
 						<div className="row w3ls_mobiles_grids">
@@ -167,9 +192,7 @@ class Products extends Component {
 										</div>
 									</div>
 								</div>
-
-								<Sorting parentSortCallback={this.sortDataFromChildComp} />
-
+								<Sorting parentSortCallback={this.sortDataFromChildComp} ShowResults={this.state.visible} />
 								<div className="row w3ls_mobiles_grid_right_grid3">
 									{product_HTMLTABLE}
 									<br />
@@ -180,15 +203,11 @@ class Products extends Component {
 											</div>
 										}
 									</div>
-
 								</div>
-
-
 							</div>
 						</div>
 					</div>
 				</div>
-
 				<div className="modal fade" id="myModal17" tabindex="-1" aria-labelledby="myModal17" aria-hidden="true">
 					<div className="modal-dialog modal-dialog-centered">
 						<div className="modal-content">
@@ -236,12 +255,10 @@ class Products extends Component {
 						</div>
 					</div>
 				</div>
-
 				<Newsletter />
 				<Footer />
 			</div>
 		)
 	}
 }
-
 export default Products;

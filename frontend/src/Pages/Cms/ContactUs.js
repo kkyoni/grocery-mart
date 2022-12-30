@@ -1,23 +1,59 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import axios from "axios";
 import Title from "../../Components/Title";
 import Header from "../../Components/Header";
 import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
 import Iframe from 'react-iframe'
+import { toast } from 'react-toastify';
 class ContactUs extends Component {
+    state = {
+        first_name: '',
+        last_name: '',
+        email: '',
+        message: '',
+        isLoading: true,
+    };
+    async componentDidMount() {
+        this.setState({
+            isLoading: true,
+        });
+        setTimeout(() => {
+            this.setState({ isLoading: false });
+        }, 1000);
+    }
+    handleInput = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+    saveContact = async (e) => {
+        e.preventDefault();
+        const res = await axios.post('http://127.0.0.1:8000/api/add-contact', this.state);
+        if (res.data.status === "success") {
+            toast.success("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
+            this.setState({
+                first_name: '',
+                last_name: '',
+                email: '',
+                message: '',
+            });
+        } else {
+            toast.error("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
+            this.props.history.push('/contact');
+        }
+    }
     render() {
         return (
             <div>
                 <Title />
-                <Header />
-
+                <Header isLoading={this.state.isLoading} />
                 <div className="banner banner2">
                     <div className="container">
                         <h2>Contact Us</h2>
                     </div>
                 </div>
-
                 <div className="breadcrumb_dress">
                     <div className="container">
                         <ul>
@@ -27,7 +63,6 @@ class ContactUs extends Component {
                         </ul>
                     </div>
                 </div>
-
                 <section className="w3l-contact py-5" id="contact">
                     <div className="container py-lg-5 py-4">
                         <div className="row contact-block">
@@ -73,20 +108,14 @@ class ContactUs extends Component {
                                 </ul>
                             </div>
                             <div className="col-md-6 contact-right mt-md-0 mt-5 ps-lg-0">
-                                <form action="#" method="post" className="signin-form">
+                                <form method="post" className="signin-form" onSubmit={this.saveContact}>
                                     <div className="input-grids">
-                                        <input type="text" name="w3lName" id="w3lName" placeholder="Your Name*"
-                                            className="contact-input" required="" />
-                                        <input type="email" name="w3lSender" id="w3lSender" placeholder="Your Email*"
-                                            className="contact-input" required="" />
-                                        <input type="text" name="w3lSubect" id="w3lSubect" placeholder="Subject*"
-                                            className="contact-input" required="" />
-                                        <input type="text" name="w3lWebsite" id="w3lWebsite" placeholder="Website URL*"
-                                            className="contact-input" required="" />
+                                        <input type="text" className="contact-input" id="w3lName" name="first_name" placeholder="Your First Name*" onChange={this.handleInput} value={this.state.first_name} required="" />
+                                        <input type="text" className="contact-input" id="w3lName" name="last_name" placeholder="Your Last Name*" onChange={this.handleInput} value={this.state.last_name} required="" />
+                                        <input type="email" className="contact-input" id="w3lSender" name="email" placeholder="Your Email*" onChange={this.handleInput} value={this.state.email} required="" />
                                     </div>
                                     <div className="form-input">
-                                        <textarea name="w3lMessage" id="w3lMessage" placeholder="Type your message here*"
-                                            required=""></textarea>
+                                        <textarea className="form-control" name="message" id="w3lMessage" placeholder="Type your message here*" onChange={this.handleInput} value={this.state.message} required=""></textarea>
                                     </div>
                                     <button className="btn btn-style">Send Message</button>
                                 </form>
@@ -94,18 +123,15 @@ class ContactUs extends Component {
                         </div>
                     </div>
                 </section>
-
                 <div className="map-iframe">
                     <Iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317718.69319292053!2d-0.3817765050863085!3d51.528307984912544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C+UK!5e0!3m2!1sen!2spl!4v1562654563739!5m2!1sen!2spl"
                         width="100%" height="400" frameborder="0" style={{ border: '0px' }} allowfullscreen="" />
                 </div>
-
                 <Newsletter />
                 <Footer />
             </div>
         )
     }
 }
-
 export default ContactUs;

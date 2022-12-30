@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 import Service from "../../services/Service";
 class Brand extends Component {
     constructor(props) {
@@ -13,11 +14,9 @@ class Brand extends Component {
     async componentDidMount() {
         const res = await axios.get('http://127.0.0.1:8000/api/getbrand');
         if (res.data.status === 'success') {
-            if (res.data.brand.length === 0) {
-                this.setState({ brand: [], dataLoaded: true, error: false, Data: false });
-            } else {
-                this.setState({ brand: res.data.brand, dataLoaded: true, error: false, Data: true });
-            }
+            this.setState({ brand: res.data.brand, connection: true, notrecordloading: true });
+        } else {
+            this.setState({ brand: [], connection: true, notrecordloading: false });
         }
     }
     handleBrand(id) {
@@ -35,19 +34,19 @@ class Brand extends Component {
     }
     render() {
         var brand_HTMLTABLE = "";
-        if (this.state.dataLoaded) {
-            if (this.state.Data) {
+        if (this.state.connection) {
+            if (this.state.notrecordloading) {
                 brand_HTMLTABLE =
                     this.state.brand.map((item, i) => {
                         return (
-                            <li><a href="javascript:void(0)" key={i}><input type="checkbox" onClick={() => this.handleBrand(item.id)} className="checked" />{item.brand_name}</a></li>
+                            <li><Link key={i}><input type="checkbox" onClick={() => this.handleBrand(item.id)} className="checked" />{item.brand_name}</Link></li>
                         );
                     });
             } else {
-                brand_HTMLTABLE = <div><h2>Not Data Found ...</h2></div>
+                brand_HTMLTABLE = <img src='assets/images/nodatafound.png' alt="nodatafound" className="img-max" style={{ width: "100%", height: "1%" }} />
             }
         } else {
-            brand_HTMLTABLE = <div><h2>Loading ...</h2></div>;
+            brand_HTMLTABLE = <img src='assets/images/connection_lost.png' alt="connection_lost" className="img-max" style={{ width: "100%", height: "1%" }} />
         }
         return (
             <div className="w3ls_mobiles_grid_left_grid">

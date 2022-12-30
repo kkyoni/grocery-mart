@@ -17,10 +17,10 @@ class Footer extends Component {
                         <div className="col-md-3 w3_footer_grid">
                             <h3>Information</h3>
                             <ul className="info">
-                                <li><Link to={"/home"}><i className="fas fa-angle-right"></i>About Us</Link></li>
-                                <li><Link to={"/home"}><i className="fas fa-angle-right"></i>Contact Us</Link></li>
+                                <li><Link to={"/about-us"}><i className="fas fa-angle-right"></i>About Us</Link></li>
+                                <li><Link to={"/contact-us"}><i className="fas fa-angle-right"></i>Contact Us</Link></li>
                                 <li><Link to={"/home"}><i className="fas fa-angle-right"></i>Shortcodes</Link></li>
-                                <li><Link to={"/home"}><i className="fas fa-angle-right"></i>FAQ's</Link></li>
+                                <li><Link to={"/faq"}><i className="fas fa-angle-right"></i>FAQ's</Link></li>
                                 <li><Link to={"/home"}><i className="fas fa-angle-right"></i>Special Products</Link></li>
                             </ul>
                         </div>

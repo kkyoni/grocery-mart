@@ -6,19 +6,28 @@ import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
 import Service from "../../services/Service";
 import { Button } from "reactstrap";
+import { toast } from 'react-toastify';
 class ProductsSingle extends Component {
 	constructor(props) {
 		super(props)
-
 		this.state = {
 			id: this.props.match.params.id,
-			photo: 'http://127.0.0.1:8000/storage/blog/',
+			isLoading: true,
+			photo: 'http://127.0.0.1:8000/storage/product/',
 			productsdetail: {}
 		}
 	}
 	async componentDidMount() {
+		console.log("jaymin");
+
 		Service.getProductsSingle(this.state.id).then(res => {
-			this.setState({ productsdetail: res.data.productsdetail });
+			this.setState({
+				isLoading: true,
+			});
+			setTimeout(() => {
+				this.setState({ isLoading: false, productsdetail: res.data.productsdetail });
+			}, 1000);
+			// this.setState({ productsdetail: res.data.productsdetail });
 		})
 	}
 	onAddCartHandler = (item) => {
@@ -33,21 +42,20 @@ class ProductsSingle extends Component {
 			products.push(item);
 			localStorage.setItem('product_details', JSON.stringify(products))
 		}
-		localStorage.setItem('product_details', JSON.stringify(item))
 		this.setState({ AddCartDetails: true })
+		toast.success("Add To Cart", { position: toast.POSITION.TOP_RIGHT });
 	}
 	render() {
+		const { name, description, productimage, price } = this.state.productsdetail;
 		return (
 			<div>
 				<Title />
-				<Header />
+				<Header isLoading={this.state.isLoading} />
 				<div className="banner banner2">
 					<div className="container">
 						<h2>Single Page</h2>
 					</div>
 				</div>
-
-
 				<div className="breadcrumb_dress">
 					<div className="container">
 						<ul>
@@ -57,17 +65,14 @@ class ProductsSingle extends Component {
 						</ul>
 					</div>
 				</div>
-
-
-
 				<div className="single py-5">
 					<div className="container py-lg-5 py-4">
 						<div className="row align-items-center">
 							<div className="col-lg-4 col-md-8 single-right-left ">
-								<img src="../assets/images/pp4.png" data-imagezoom="true" className="img-fluid" alt="pp4" />
+								{productimage && <img src={this.state.photo + productimage[0]?.image} alt={productimage[0]?.image} className="img-fluid" />}
 							</div>
 							<div className="col-md-8 single-right">
-								<h3>{this.state.productsdetail.name}</h3>
+								<h3>{name}</h3>
 								<div className="rating1">
 									<span className="starRating">
 										<input id="rating5" type="radio" name="rating" value="5" />
@@ -84,23 +89,10 @@ class ProductsSingle extends Component {
 								</div>
 								<div className="description">
 									<h5><i>Description</i></h5>
-									<p>{this.state.productsdetail.description}</p>
-								</div>
-								<div className="color-quality">
-									<div className="color-quality-right">
-										<h5>Quality :</h5>
-										<div className="quantity">
-											<div className="quantity-select">
-												<div className="entry value-minus1">&nbsp;</div>
-												<div className="entry value1"><span>1</span></div>
-												<div className="entry value-plus1 active">&nbsp;</div>
-											</div>
-										</div>
-									</div>
-									<div className="clearfix"> </div>
+									<p>{description}</p>
 								</div>
 								<div className="simpleCart_shelfItem">
-									<p><i className="item_price">${this.state.productsdetail.price}</i></p>
+									<p><i className="item_price">₹ {price}</i></p>
 									<Button className="w3ls-cart" onClick={() => this.onAddCartHandler(this.state.productsdetail)}>Add to cart</Button>
 								</div>
 							</div>
@@ -113,5 +105,4 @@ class ProductsSingle extends Component {
 		)
 	}
 }
-
 export default ProductsSingle;

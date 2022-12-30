@@ -8,19 +8,19 @@ class Partners extends Component {
                     <div className="row align-items-center">
                         <div className="owl-three owl-carousel owl-theme logo-view">
                             <div className="item">
-                                <img src="assets/images/tb1.png" alt="company-logo" className="img-fluid" />
+                                <img src="http://127.0.0.1:8000/storage/brand/tb1.png" alt="company-logo" className="img-fluid" />
                             </div>
                             <div className="item">
-                                <img src="assets/images/tb2.png" alt="company-logo" className="img-fluid" />
+                                <img src="http://127.0.0.1:8000/storage/brand/tb2.png" alt="company-logo" className="img-fluid" />
                             </div>
                             <div className="item">
-                                <img src="assets/images/tb3.png" alt="company-logo" className="img-fluid" />
+                                <img src="http://127.0.0.1:8000/storage/brand/tb3.png" alt="company-logo" className="img-fluid" />
                             </div>
                             <div className="item">
-                                <img src="assets/images/tb4.png" alt="company-logo" className="img-fluid" />
+                                <img src="http://127.0.0.1:8000/storage/brand/tb4.png" alt="company-logo" className="img-fluid" />
                             </div>
                             <div className="item">
-                                <img src="assets/images/tb5.png" alt="company-logo" className="img-fluid" />
+                                <img src="http://127.0.0.1:8000/storage/brand/tb5.png" alt="company-logo" className="img-fluid" />
                             </div>
                         </div>
                     </div>
@@ -29,5 +29,4 @@ class Partners extends Component {
         )
     }
 }
-
 export default Partners;

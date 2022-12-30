@@ -1,252 +1,146 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import axios from "axios";
+import Service from "../../services/Service";
+import { Button } from "reactstrap";
+import { toast } from 'react-toastify';
 class TopProducts extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            product: [],
+            loading: false,
+            photo: 'http://127.0.0.1:8000/storage/product/',
+            Data: false,
+            isLoadingButton: false,
+            singleFetchedProduct: {}
+        }
+    }
+    async componentDidMount() {
+        const res = await axios.get('http://127.0.0.1:8000/api/gettopproducts');
+        if (res.data.status === 'success') {
+            this.setState({ product: res.data.product, connection: true, notrecordloading: true });
+        } else {
+            this.setState({ product: [], connection: true, notrecordloading: false });
+        }
+    }
+    onAddCartHandler = (item) => {
+        const productDetails = JSON.parse(localStorage.getItem("product_details"));
+        let products;
+        if (!productDetails) {
+            products = []
+            products.push(item);
+            localStorage.setItem('product_details', JSON.stringify(products))
+        } else {
+            products = JSON.parse(localStorage.getItem("product_details"))
+            products.push(item);
+            localStorage.setItem('product_details', JSON.stringify(products))
+        }
+        this.setState({ AddCartDetails: true })
+        toast.success("Add To Cart", { position: toast.POSITION.TOP_RIGHT });
+    }
+    handleViewProduct(id) {
+        Service.getSingleProduct(id).then(res => {
+            this.setState({ singleFetchedProduct: res.data.product[0] });
+        })
+    }
     render() {
+        const { name, description, productimage, price } = this.state.singleFetchedProduct;
+        const { isLoadingButton } = this.state.isLoadingButton;
+        var product_HTMLTABLE = "";
+        if (this.state.connection) {
+            if (this.state.notrecordloading) {
+                product_HTMLTABLE =
+                    this.state.product.map((item, index) => {
+                        return (
+                            <div key={index} className="col-md-3 agileinfo_new_products_grid mt-5">
+                                <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
+                                    <div className="hs-wrapper hs-wrapper1" style={{ zIndex: "0" }}>
+                                        {item.productimage.map((type, i) => {
+                                            return <img key={i} src={this.state.photo + type.image} alt={type.image} className="img-fluid" />
+                                        })}
+                                        <div className="w3_hs_bottom w3_hs_bottom_sub">
+                                            <ul>
+                                                <li>
+                                                    <Link onClick={() => this.handleViewProduct(item.id)} data-bs-toggle="modal"
+                                                        data-bs-target="#myModal13"><i className="fas fa-eye"></i></Link>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <h5><Link to={`/single-products/${item.id}`}>{item.name}</Link></h5>
+                                    <div className="simpleCart_shelfItem">
+                                        <p><i className="item_price">₹ {item.price}</i></p>
+                                        <Button className="w3ls-cart" onClick={() => this.onAddCartHandler(item)}>
+                                            {isLoadingButton ? (
+                                                <i className="fa fa-refresh fa-spin"></i>
+                                            ) : (
+                                                <span>Add to cart</span>
+                                            )}</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    });
+            } else {
+                product_HTMLTABLE = <img src='assets/images/nodatafound.png' alt="nodatafound" className="img-max" style={{ width: "100%", height: "1%" }} />
+            }
+        } else {
+            product_HTMLTABLE = <img src='assets/images/connection_lost.png' alt="connection_lost" className="img-max" style={{ width: "100%", height: "1%" }} />
+        }
         return (
-            <div className="new-products py-5">
-                <div className="container py-md-5 py-4">
-                    <h3>Top Products</h3>
-                    <div className="row agileinfo_new_products_grids">
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/e1.png" alt="e1" className="img-fluid" />
-                                    <img src="assets/images/ee1.png" alt="ee1" className="img-fluid" />
-                                    <img src="assets/images/e1.png" alt="e1" className="img-fluid" />
-                                    <img src="assets/images/ee1.png" alt="ee1" className="img-fluid" />
-                                    <img src="assets/images/e1.png" alt="e1" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal13"} data-bs-toggle="modal" data-bs-target="#myModal13"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>ProV Pistachios</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$520</span> <i className="item_price">$500</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="ProV Pistachios" />
-                                        <input type="hidden" name="amount" value="500.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/e2.png" alt="e2" className="img-fluid" />
-                                    <img src="assets/images/ee2.png" alt="ee2" className="img-fluid" />
-                                    <img src="assets/images/e2.png" alt="e2" className="img-fluid" />
-                                    <img src="assets/images/ee2.png" alt="ee2" className="img-fluid" />
-                                    <img src="assets/images/e2.png" alt="e2" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal14"} data-bs-toggle="modal" data-bs-target="#myModal14"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>Himalayan Cashews</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$380</span> <i className="item_price">$370</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Himalayan Cashews" />
-                                        <input type="hidden" name="amount" value="370.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/e3.png" alt="e3" className="img-fluid" />
-                                    <img src="assets/images/ee3.png" alt="ee3" className="img-fluid" />
-                                    <img src="assets/images/e3.png" alt="e3" className="img-fluid" />
-                                    <img src="assets/images/ee3.png" alt="ee3" className="img-fluid" />
-                                    <img src="assets/images/e3.png" alt="e3" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal15"} data-bs-toggle="modal" data-bs-target="#myModal15"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>Kernels Walnuts</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$150</span> <i className="item_price">$100</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Kernels Walnuts" />
-                                        <input type="hidden" name="amount" value="100.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/e4.png" alt="e4" className="img-fluid" />
-                                    <img src="assets/images/ee4.png" alt="ee4" className="img-fluid" />
-                                    <img src="assets/images/e4.png" alt="e4" className="img-fluid" />
-                                    <img src="assets/images/ee4.png" alt="ee4" className="img-fluid" />
-                                    <img src="assets/images/e4.png" alt="e4" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal16"} data-bs-toggle="modal" data-bs-target="#myModal16"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>Himalayan Almonds</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$280</span> <i className="item_price">$250</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Himalayan Almonds" />
-                                        <input type="hidden" name="amount" value="250.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
-                            </div>
+            <div>
+                <div className="new-products py-5">
+                    <div className="container py-md-5 py-4">
+                        <h3>Top Products</h3>
+                        <div className="row agileinfo_new_products_grids">
+                            {product_HTMLTABLE}
                         </div>
                     </div>
-                    <div className="row agileinfo_new_products_grids mt-5">
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/f1.png" alt="f1" className="img-fluid" />
-                                    <img src="assets/images/f11.png" alt="f11" className="img-fluid" />
-                                    <img src="assets/images/f1.png" alt="f1" className="img-fluid" />
-                                    <img src="assets/images/f11.png" alt="f11" className="img-fluid" />
-                                    <img src="assets/images/f1.png" alt="f1" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal29"} data-bs-toggle="modal" data-bs-target="#myModal29"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>Yellow Arhar Dal</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$40</span> <i className="item_price">$30</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Yellow Arhar Dal" />
-                                        <input type="hidden" name="amount" value="30.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
+                </div>
+                <div className="modal fade" id="myModal13" tabindex="-1" aria-labelledby="myModal13" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header border-0">
+                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                        </div>
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/f2.png" alt="f2" className="img-fluid" />
-                                    <img src="assets/images/f22.png" alt="f22" className="img-fluid" />
-                                    <img src="assets/images/f2.png" alt="f2" className="img-fluid" />
-                                    <img src="assets/images/f22.png" alt="f22" className="img-fluid" />
-                                    <img src="assets/images/f2.png" alt="f2" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal30"} data-bs-toggle="modal" data-bs-target="#myModal30"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
+                            <div className="row modal-body">
+                                <div className="col-md-5 modal_body_left">
+                                    {Object.keys(this.state.singleFetchedProduct).length > 0 &&
+                                        <img
+                                            src={`${this.state.photo}${productimage[0].image}`}
+                                            alt={productimage[0].image}
+                                            className="img-fluid"
+                                        />}
+                                </div>
+                                {Object.keys(this.state.singleFetchedProduct).length > 0 && (
+                                    <div className="col-md-7 modal_body_right">
+                                        <h4>{name}</h4>
+                                        <p>{description}</p>
+                                        <div className="rating">
+                                            <div className="rating-left">
+                                                <img src="assets/images/star-.png" alt="star-" className="img-fluid" />
+                                            </div>
+                                            <div className="rating-left">
+                                                <img src="assets/images/star-.png" alt="star-" className="img-fluid" />
+                                            </div>
+                                            <div className="rating-left">
+                                                <img src="assets/images/star-.png" alt="star-" className="img-fluid" />
+                                            </div>
+                                            <div className="rating-left">
+                                                <img src="assets/images/star.png" alt="star" className="img-fluid" />
+                                            </div>
+                                            <div className="rating-left">
+                                                <img src="assets/images/star.png" alt="star" className="img-fluid" />
+                                            </div>
+                                            <div className="clearfix"> </div>
+                                        </div>
+                                        <div className="modal_body_right_cart simpleCart_shelfItem">
+                                            <p><i className="item_price">₹ {price}</i></p>
+                                            <Button className="w3ls-cart" onClick={() => this.onAddCartHandler(this.state.singleFetchedProduct)}>Add to cart</Button>
+                                        </div>
                                     </div>
-                                </div>
-                                <h5><Link to={"/home"}>Tata Sampann Poha</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$280</span> <i className="item_price">$170</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Tata Sampann Poha" />
-                                        <input type="hidden" name="amount" value="170.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/f3.png" alt="f3" className="img-fluid" />
-                                    <img src="assets/images/f33.png" alt="f33" className="img-fluid" />
-                                    <img src="assets/images/f3.png" alt="f3" className="img-fluid" />
-                                    <img src="assets/images/f33.png" alt="f33" className="img-fluid" />
-                                    <img src="assets/images/f3.png" alt="f3" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal31"} data-bs-toggle="modal" data-bs-target="#myModal31"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>Lay's Onion Chips</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$20</span> <i className="item_price">$10</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Lay's Onion Chips" />
-                                        <input type="hidden" name="amount" value="10.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3 agileinfo_new_products_grid">
-                            <div className="agile_ecommerce_tab_left agileinfo_new_products_grid1">
-                                <div className="hs-wrapper hs-wrapper1">
-                                    <img src="assets/images/f4.png" alt="f4" className="img-fluid" />
-                                    <img src="assets/images/f44.png" alt="f44" className="img-fluid" />
-                                    <img src="assets/images/f4.png" alt="f4" className="img-fluid" />
-                                    <img src="assets/images/f44.png" alt="f44" className="img-fluid" />
-                                    <img src="assets/images/f4.png" alt="f4" className="img-fluid" />
-                                    <div className="w3_hs_bottom w3_hs_bottom_sub">
-                                        <ul>
-                                            <li>
-                                                <Link to={"#myModal32"} data-bs-toggle="modal" data-bs-target="#myModal32"><i
-                                                    className="fas fa-eye"></i></Link>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <h5><Link to={"/home"}>Cadbury Dairy Milk</Link></h5>
-                                <div className="simpleCart_shelfItem">
-                                    <p><span>$300</span> <i className="item_price">$200</i></p>
-                                    <form action="#" method="post">
-                                        <input type="hidden" name="cmd" value="_cart" />
-                                        <input type="hidden" name="add" value="1" />
-                                        <input type="hidden" name="w3ls_item" value="Cadbury Dairy Milk" />
-                                        <input type="hidden" name="amount" value="200.00" />
-                                        <button type="submit" className="w3ls-cart">Add to cart</button>
-                                    </form>
-                                </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -255,5 +149,4 @@ class TopProducts extends Component {
         )
     }
 }
-
 export default TopProducts;

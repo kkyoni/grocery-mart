@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from "./Pages/Home";
 import AboutUs from "./Pages/Cms/AboutUs";
@@ -9,19 +9,23 @@ import BlogSingle from "./Pages/Blog/BlogSingle";
 import Products from "./Pages/Products/Products";
 import ProductsSingle from "./Pages/Products/ProductsSingle";
 import PageNotFund from "./Components/Error/PageNotFund";
+import CheckOut from "./Pages/CheckOut/CheckOut";
+import Profile from "./Pages/Profile/Profile";
 function App() {
   return (
     <div>
       <Router>
         <Switch>
           <Route exact path='/' component={Home} />
-          <Route path='/home' component={Home} />
+          <Route exact path='/home' component={Home} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/contact-us" component={ContactUs} />
           <Route path="/faq" component={Faq} />
           <Route path="/blog" component={Blog} />
-          <Route path="/blog-single" component={BlogSingle} />
+          <Route path="/:blog-single/:id" component={BlogSingle} />
           <Route path="/products" component={Products} />
+          <Route path="/check-out" component={CheckOut} />
+          <Route path="/profile" component={Profile} />
           <Route path="/:single-products/:id" component={ProductsSingle} />
           <Route component={PageNotFund} />
         </Switch>
@@ -29,5 +33,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

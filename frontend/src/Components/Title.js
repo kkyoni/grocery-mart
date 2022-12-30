@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Form, Input } from "reactstrap";
 import axios from "axios";
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 class Title extends Component {
     constructor(props) {
@@ -18,6 +18,7 @@ class Title extends Component {
             errMsgPwd: "",
             errMsg: "",
             otp: false,
+            siteLogo: 'http://127.0.0.1:8000/uploads/settings/application_logo.png',
             openModel: false,
         };
     }
@@ -131,22 +132,23 @@ class Title extends Component {
         const login = JSON.parse(localStorage.getItem("userData"));
         return (
             <div>
+                <ToastContainer />
                 <div className="header" id="home1">
                     <div className="container">
                         <div className="d-flex align-items-center justify-content-between">
                             {otplogin && login ? (
                                 <div className="w3l_login">
                                     <button onClick={this.onLogoutHandler} style={{ fontSize: '18px', color: 'var(--heading-color)', width: '45px', height: '45px', lineHeight: '45px', display: 'block', textAlign: 'center', border: '1px solid var(--border-color-light)', borderRadius: '50%' }}> <i
-                                        class="fas fa-sign-out-alt"></i> </button>
+                                        className="fas fa-sign-out-alt"></i> </button>
                                 </div>
                             ) : (
                                 <div className="w3l_login">
-                                    <a href="javascript:void(0)" onClick={() => this.setOpenModal(true)} data-bs-toggle="modal" data-bs-target="#myModal12"><i
-                                        class="fas fa-user"></i></a>
+                                    <Link onClick={() => this.setOpenModal(true)} data-bs-toggle="modal" data-bs-target="#myModalAuthentication"><i
+                                        className="fas fa-user"></i></Link>
                                 </div>
                             )}
                             <div className="w3l_logo text-center ml-auto">
-                                <h1><Link to={"/home"}>Grocery Mart<span>Online Grocery Shopping</span></Link></h1>
+                                <h1><Link to={"/home"}><img src={this.state.siteLogo} alt={'siteLogo'} /></Link></h1>
                             </div>
                             <div className="cart cart box_1">
                             </div>
@@ -154,11 +156,11 @@ class Title extends Component {
                     </div>
                 </div>
                 {this.state.openModel ? (
-                    <div class="modal fade" id="myModal12" tabindex="-1" aria-labelledby="myModal12" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header border-0">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => this.setOpenModal(false)}></button>
+                    <div className="modal fade" id="myModalAuthentication" tabindex="-1" aria-labelledby="myModalAuthentication" aria-hidden="true">
+                        <div className="modal-dialog modal-dialog-centered">
+                            <div className="modal-content">
+                                <div className="modal-header border-0">
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => this.setOpenModal(false)}></button>
                                 </div>
                                 <div className="row modal-body">
                                     {otpmodal ? (
@@ -178,14 +180,14 @@ class Title extends Component {
                                                             <div className="sign-up">
                                                                 <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onOtpHandler} > Verify OTP
                                                                     {isLoading ? (
-                                                                        <i class="fa fa-refresh fa-spin"></i>
+                                                                        <i className="fa fa-refresh fa-spin"></i>
                                                                     ) : (
                                                                         <span></span>
                                                                     )}
                                                                 </Button>
                                                                 <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onResetOtpHandler} style={{ float: 'right' }}> Reset OTP
                                                                     {isLoading ? (
-                                                                        <i class="fa fa-refresh fa-spin"></i>
+                                                                        <i className="fa fa-refresh fa-spin"></i>
                                                                     ) : (
                                                                         <span></span>
                                                                     )}
@@ -222,7 +224,7 @@ class Title extends Component {
                                                             <div className="sign-up">
                                                                 <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onSignInHandler} > Sign in
                                                                     {isLoading ? (
-                                                                        <i class="fa fa-refresh fa-spin"></i>
+                                                                        <i className="fa fa-refresh fa-spin"></i>
                                                                     ) : (
                                                                         <span></span>
                                                                     )}

@@ -16,7 +16,6 @@ class Categories extends Component {
                                             <span className="fa fa-play"></span>
                                         </span>
                                     </a>
-
                                     <div id="small-dialog" className="zoom-anim-dialog mfp-hide">
                                         <Iframe src="https://player.vimeo.com/video/106183791?h=b24e6f79f8"
                                             allow="fullscreen" allowfullscreen="" />
@@ -68,7 +67,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Ladies Finger 500g</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$380</span> <i className="item_price">$350</i></p>
+                                                    <p><span>₹ 380</span> <i className="item_price">₹ 350</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -97,7 +96,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Brinjal long 500g</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$330</span> <i className="item_price">$302</i></p>
+                                                    <p><span>₹ 330</span> <i className="item_price">₹ 302</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -126,7 +125,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Palak 250g</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$250</span> <i className="item_price">$245</i></p>
+                                                    <p><span>₹ 250</span> <i className="item_price">₹ 245</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -159,7 +158,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Prawns (Big)</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$320</span> <i className="item_price">$250</i></p>
+                                                    <p><span>₹ 320</span> <i className="item_price">₹ 250</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -188,7 +187,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Silver Belly Fish</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$180</span> <i className="item_price">$150</i></p>
+                                                    <p><span>₹ 180</span> <i className="item_price">₹ 150</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -217,7 +216,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Prawns Meat (Small)</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$220</span> <i className="item_price">$180</i></p>
+                                                    <p><span>₹ 220</span> <i className="item_price">₹ 180</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -250,7 +249,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Pista Soan Papdi</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$880</span> <i className="item_price">$850</i></p>
+                                                    <p><span>₹ 880</span> <i className="item_price">₹ 850</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -279,7 +278,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>KARACHI Halwa Box</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$290</span> <i className="item_price">$280</i></p>
+                                                    <p><span>₹ 290</span> <i className="item_price">₹ 280</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -308,7 +307,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>KARACHI Fruit Cookies</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$120</span> <i className="item_price">$80</i></p>
+                                                    <p><span>₹ 120</span> <i className="item_price">₹ 80</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -341,7 +340,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Thums Up Soft drink</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$950</span> <i className="item_price">$90</i></p>
+                                                    <p><span>₹ 950</span> <i className="item_price">₹ 90</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -370,7 +369,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Coca-Cola Can</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$700</span> <i className="item_price">$80</i></p>
+                                                    <p><span>₹ 700</span> <i className="item_price">₹ 80</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -399,7 +398,7 @@ class Categories extends Component {
                                                 </div>
                                                 <h5><Link to={"/home"}>Fanta PET Bottle</Link></h5>
                                                 <div className="simpleCart_shelfItem">
-                                                    <p><span>$520</span> <i className="item_price">$50</i></p>
+                                                    <p><span>₹ 520</span> <i className="item_price">₹ 50</i></p>
                                                     <form action="#" method="post">
                                                         <input type="hidden" name="cmd" value="_cart" />
                                                         <input type="hidden" name="add" value="1" />
@@ -416,7 +415,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal" tabIndex={-1} aria-labelledby="myModal" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -451,7 +449,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$380</span> <i className="item_price">$350</i></p>
+                                        <p><span>₹ 380</span> <i className="item_price">₹ 350</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -465,7 +463,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal1" tabIndex={-1} aria-labelledby="myModal1" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -504,7 +501,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$330</span> <i className="item_price">$302</i></p>
+                                        <p><span>₹ 330</span> <i className="item_price">₹ 302</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -518,7 +515,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal2" tabIndex={-1} aria-labelledby="myModal2" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -556,7 +552,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$250</span> <i className="item_price">$245</i></p>
+                                        <p><span>₹ 250</span> <i className="item_price">₹ 245</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -570,7 +566,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal3" tabIndex={-1} aria-labelledby="myModal3" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -606,7 +601,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$320</span> <i className="item_price">$250</i></p>
+                                        <p><span>₹ 320</span> <i className="item_price">₹ 250</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -620,7 +615,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal4" tabIndex={-1} aria-labelledby="myModal4" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -659,7 +653,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$180</span> <i className="item_price">$150</i></p>
+                                        <p><span>₹ 180</span> <i className="item_price">₹ 150</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -673,7 +667,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal5" tabIndex={-1} aria-labelledby="myModal5" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -713,7 +706,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$220</span> <i className="item_price">$180</i></p>
+                                        <p><span>₹ 220</span> <i className="item_price">₹ 180</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -727,7 +720,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal6" tabIndex={-1} aria-labelledby="myModal6" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -766,7 +758,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$880</span> <i className="item_price">$850</i></p>
+                                        <p><span>₹ 880</span> <i className="item_price">₹ 850</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -780,7 +772,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal7" tabIndex={-1} aria-labelledby="myModal7" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -819,7 +810,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$290</span> <i className="item_price">$280</i></p>
+                                        <p><span>₹ 290</span> <i className="item_price">₹ 280</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -833,7 +824,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal8" tabIndex={-1} aria-labelledby="myModal8" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -872,7 +862,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$120</span> <i className="item_price">$80</i></p>
+                                        <p><span>₹ 120</span> <i className="item_price">₹ 80</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -886,7 +876,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal9" tabIndex={-1} aria-labelledby="myModal9" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -925,7 +914,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$950</span> <i className="item_price">$90</i></p>
+                                        <p><span>₹ 950</span> <i className="item_price">₹ 90</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -939,7 +928,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal10" tabIndex={-1} aria-labelledby="myModal10" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -978,7 +966,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$700</span> <i className="item_price">$80</i></p>
+                                        <p><span>₹ 700</span> <i className="item_price">₹ 80</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -992,7 +980,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal11" tabIndex={-1} aria-labelledby="myModal11" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -1031,7 +1018,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$520</span> <i className="item_price">$50</i></p>
+                                        <p><span>₹ 520</span> <i className="item_price">₹ 50</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1045,7 +1032,6 @@ class Categories extends Component {
                         </div>
                     </div>
                 </div>
-
                 <div className="modal fade" id="myModal13" tabIndex={-1} aria-labelledby="myModal13" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
@@ -1084,7 +1070,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$520</span> <i className="item_price">$500</i></p>
+                                        <p><span>₹ 520</span> <i className="item_price">₹ 500</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1137,7 +1123,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$380</span> <i className="item_price">$370</i></p>
+                                        <p><span>₹ 380</span> <i className="item_price">₹ 370</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1190,7 +1176,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$150</span> <i className="item_price">$100</i></p>
+                                        <p><span>₹ 150</span> <i className="item_price">₹ 100</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1243,7 +1229,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$280</span> <i className="item_price">$250</i></p>
+                                        <p><span>₹ 280</span> <i className="item_price">₹ 250</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1296,7 +1282,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$40</span> <i className="item_price">$30</i></p>
+                                        <p><span>₹ 40</span> <i className="item_price">₹ 30</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1349,7 +1335,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$280</span> <i className="item_price">$170</i></p>
+                                        <p><span>₹ 280</span> <i className="item_price">₹ 170</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1402,7 +1388,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$20</span> <i className="item_price">$10</i></p>
+                                        <p><span>₹ 20</span> <i className="item_price">₹ 10</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
@@ -1455,7 +1441,7 @@ class Categories extends Component {
                                         <div className="clearfix"> </div>
                                     </div>
                                     <div className="modal_body_right_cart simpleCart_shelfItem">
-                                        <p><span>$300</span> <i className="item_price">$200</i></p>
+                                        <p><span>₹ 300</span> <i className="item_price">₹ 200</i></p>
                                         <form action="#" method="post">
                                             <input type="hidden" name="cmd" value="_cart" />
                                             <input type="hidden" name="add" value="1" />
