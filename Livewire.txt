@@ -1,3 +1,0 @@
-composer require livewire/livewire  == To install livewire
-
- php artisan livewire:publish === Publish livewire
