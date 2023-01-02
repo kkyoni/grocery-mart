@@ -150,5 +150,6 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         //====================> Order Management =========================
         Route::get('/order', [OrderController::class, 'index'])->name('order.index');
         Route::post('/order/filter_by_button', [OrderController::class, 'index'])->name('order.filter_by_button');
+        Route::get('/order/view/{id}', [OrderController::class, 'view'])->name('order.view');
     });
 });

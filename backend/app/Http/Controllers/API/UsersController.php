@@ -386,7 +386,7 @@ class UsersController extends Controller
     {
         try {
             $order_list = Order::with(['OrderProductDetails'])->where('user_id', $user_id)->get();
-            if (!empty($order_list)) {
+            if (sizeof($order_list) > 0) {
                 return response()->json([
                     'order_list'  => $order_list,
                     'status' => 'success',
@@ -1104,6 +1104,29 @@ class UsersController extends Controller
                 'user'  => $user,
                 'status' => 'success',
                 'message' => 'User Profile Sucessfully !!'
+            ]);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()]);
+        }
+    }
+
+
+    public function addaddress(Request $request)
+    {
+        try {
+            UserAddress::create([
+                'user_id' => $request->user_id,
+                'zip' => $request->zip,
+                'states' => $request->states,
+                'country' => $request->country,
+                'street_address' => $request->street_address,
+                'city' => $request->city,
+            ]);
+            $alluserAddress = UserAddress::where('user_id', $request->user_id)->get();
+            return response()->json([
+                'alluserAddress'  => $alluserAddress,
+                'status' => 'success',
+                'message' => 'Contact Added Sucessfully !!'
             ]);
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()]);

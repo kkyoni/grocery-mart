@@ -14,6 +14,7 @@ use Yajra\DataTables\Html\Builder;
 use Auth;
 use Event;
 use App\Helpers\Helper;
+use App\Models\OrderProduct;
 use App\Models\Promo;
 use App\Models\PromoUser;
 use App\Models\User;
@@ -89,10 +90,10 @@ class OrderController extends Controller
                 })
                 ->editColumn('action', function (Order $order) {
                     $action  = '';
-                    $action .= '<a href="javascript:void(0)" class="btn btn-primary btn-circle btn-sm ShowOrder" data-id="' . $order->id . '" data-toggle="tooltip" title="Show"><i class="fa fa-eye"></i></a>';
+                    $action .= '<a class="btn btn-primary btn-circle btn-sm" href=' . route('admin.order.view', [$order->id]) . '><i class="fa fa-eye" data-toggle="tooltip" title="View"></i></a>';
                     return $action;
                 })
-                ->rawColumns(['action', 'user_email','status'])
+                ->rawColumns(['action', 'user_email', 'status'])
                 ->make(true);
         }
 
@@ -116,5 +117,27 @@ class OrderController extends Controller
             ])
             ->parameters(['order' => []]);
         return view($this->pageLayout . 'index', compact('html'));
+    }
+
+    /*-----------------------------------------------------------------------------------
+    @Description: Function for Edit Promo
+    ---------------------------------------------------------------------------------- */
+    public function view($id)
+    {
+        try {
+            $order = Order::with(['user_details','UserAddressDetails'])->where('id', $id)->first();
+            $ProductOrder = OrderProduct::where('order_id', $id)->get();
+            if (!empty($order)) {
+                return view($this->pageLayout . 'view', compact('order','ProductOrder'));
+            } else {
+                smilify('error', 'Edit Order Not Found ⚡️');
+                return redirect()->route('admin.order.index');
+            }
+        } catch (\Exception $e) {
+            return back()->with([
+                'alert-type'    => 'danger',
+                'message'       => $e->getMessage()
+            ]);
+        }
     }
 }

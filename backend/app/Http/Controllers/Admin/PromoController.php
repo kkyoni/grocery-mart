@@ -17,6 +17,8 @@ use App\Models\Promo;
 use App\Models\PromoUser;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\PromoCodeJob;
+use Illuminate\Support\Facades\Mail;
 
 class PromoController extends Controller
 {
@@ -105,6 +107,7 @@ class PromoController extends Controller
             'end_date.required'    => 'End Date is Required',
             'status.required'      => 'Status is Required',
             'discount.required'    => 'Discount is Required',
+            'description.required'    => 'Description is Required',
         ];
         $validatedData = Validator::make($request->all(), [
             'code'    => 'required|unique:promo,code,NULL,id,deleted_at,NULL',
@@ -113,23 +116,46 @@ class PromoController extends Controller
             'end_date'   => 'required',
             'status'     => 'required',
             'discount'   => 'required',
+            'description'   => 'required',
         ], $customMessages);
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         try {
+            if ($request->hasFile('promocodeimages')) {
+                $file = $request->file('promocodeimages');
+                $extension = $file->getClientOriginalExtension();
+                $filename = Str::random(10) . '.' . $extension;
+                Storage::disk('public')->putFileAs('promocode', $file, $filename);
+            } else {
+                $filename = 'default.png';
+            }
             $promo = Promo::create([
-                'code'        => @$request->get('code'),
-                'start_date'  => @$request->get('start_date'),
-                'end_date'    => @$request->get('end_date'),
-                'status'      => @$request->get('status'),
-                'discount'    => @$request->get('discount'),
+                'code'            => @$request->get('code'),
+                'start_date'      => @$request->get('start_date'),
+                'end_date'        => @$request->get('end_date'),
+                'status'          => @$request->get('status'),
+                'discount'        => @$request->get('discount'),
+                'description'     => @$request->get('description'),
+                'promocodeimages' => @$filename,
             ]);
             foreach ($request->get('user_id') as $val) {
                 PromoUser::create([
                     'user_id'     => @$val,
                     'promo_id'     => @$promo->id,
                 ]);
+                $UserEmail = User::where('id', $val)->first();
+                $details = [
+                    'subject' => 'Promo Code',
+                    'email' => $request->email,
+                    'discount' => $request->discount,
+                    'username' => $UserEmail->first_name . ' ' . $UserEmail->last_name,
+                    'description' => $request->description,
+                    'code' => $request->code,
+                    'expires' => $request->end_date,
+                    'images' => $filename,
+                ];
+                Mail::to($UserEmail->email)->send(new \App\Mail\PromoCodeMail($details));
             }
             smilify('success', 'Promo Created Successfully ⚡️');
             return redirect()->route('admin.promo.index');
@@ -168,13 +194,14 @@ class PromoController extends Controller
     public function update($id, Request $request)
     {
         $customMessages = [
-            'code.required'       => 'Code is required',
-            'code.unique'         => 'Code is unique',
+            'code.required'        => 'Code is required',
+            'code.unique'          => 'Code is unique',
             'user_id.required'     => 'User is Required',
             'start_date.required'  => 'Start Date is Required',
             'end_date.required'    => 'End Date is Required',
             'status.required'      => 'Status is Required',
             'discount.required'    => 'Discount is Required',
+            'description.required' => 'Description is Required',
         ];
         $validatedData = Validator::make($request->all(), [
             'code'       => 'required|unique:promo,code,' . $id . ',id,deleted_at,NULL',
@@ -183,18 +210,34 @@ class PromoController extends Controller
             'end_date'   => 'required',
             'status'     => 'required',
             'discount'   => 'required',
+            'description'   => 'required',
         ], $customMessages);
 
         if ($validatedData->fails()) {
             return redirect()->back()->withErrors($validatedData)->withInput();
         }
         try {
+            $oldDetails = Promo::find($id);
+            if ($request->hasFile('promocodeimages')) {
+                $file = $request->file('promocodeimages');
+                $extension = $file->getClientOriginalExtension();
+                $filename = Str::random(10) . '.' . $extension;
+                Storage::disk('public')->putFileAs('promocode', $file, $filename);
+            } else {
+                if ($oldDetails->promocodeimages !== null) {
+                    $filename = $oldDetails->promocodeimages;
+                } else {
+                    $filename = 'default.png';
+                }
+            }
             $promo = Promo::where('id', $id)->update([
-                'code'        => @$request->get('code'),
-                'start_date'  => @$request->get('start_date'),
-                'end_date'    => @$request->get('end_date'),
-                'status'      => @$request->get('status'),
-                'discount'    => @$request->get('discount'),
+                'code'            => @$request->get('code'),
+                'start_date'      => @$request->get('start_date'),
+                'end_date'        => @$request->get('end_date'),
+                'status'          => @$request->get('status'),
+                'discount'        => @$request->get('discount'),
+                'description'     => @$request->get('description'),
+                'promocodeimages' => @$filename,
             ]);
             $images = PromoUser::where('promo_id', $id)->get();
             $images->each(function ($val, $key) {

@@ -25,4 +25,21 @@
 @section('styles')
 @endsection
 @section('scripts')
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#imagePreview img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        $('#imagePreview img').on('click', function() {
+            $('input[type="file"]').trigger('click');
+            $('input[type="file"]').change(function() {
+                readURL(this);
+            });
+        });
+    </script>
 @endsection

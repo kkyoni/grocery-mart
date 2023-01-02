@@ -37,6 +37,7 @@ Route::post('/add-Comment', [UsersController::class, 'addcomment']);
 Route::get('/get-Comment/{id}', [UsersController::class, 'getcomment']);
 Route::post('/profile', [UsersController::class, 'profile']);
 Route::post('/promocode', [UsersController::class, 'promocode']);
+Route::post('/add-address', [UsersController::class, 'addaddress']);
 // });
 
 // Route::post('/user-signup',[UsersController::class, 'userSignUp']);

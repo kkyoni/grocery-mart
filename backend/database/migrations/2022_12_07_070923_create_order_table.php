@@ -23,6 +23,7 @@ class CreateOrderTable extends Migration
             $table->string('grandtotal')->length(250)->nullable();
             $table->enum('status',['processing','accepted','ontheway','delivered','cancelled'])->default('processing');
             $table->enum('payment_mode',['cod','paypal'])->default('cod');
+            $table->string('date')->length(250)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

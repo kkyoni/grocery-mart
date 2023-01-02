@@ -17,9 +17,11 @@ class CreatePromoTable extends Migration
             $table->id();
             $table->string('code')->length(250)->nullable();
             $table->string('user_id')->length(250)->nullable();
+            $table->string('promocodeimages')->length(250)->nullable();
             $table->string('start_date')->length(250)->nullable();
             $table->string('end_date')->length(250)->nullable();
             $table->string('discount')->length(250)->nullable();
+            $table->string('description')->length(250)->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
             $table->softDeletes();

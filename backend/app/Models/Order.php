@@ -12,7 +12,7 @@ class Order extends Model
     use SoftDeletes;
 
     protected $table = 'order';
-    protected $fillable = ['invoice', 'user_id', 'address_id', 'promo_id', 'comment', 'grandtotal', 'status', 'payment_mode', 'maintotal', 'promototal'];
+    protected $fillable = ['invoice', 'user_id', 'address_id', 'promo_id', 'comment', 'grandtotal', 'status', 'payment_mode', 'maintotal', 'promototal', 'date'];
     public function OrderProductDetails()
     {
         return $this->hasMany('App\Models\OrderProduct', 'order_id', 'id');
