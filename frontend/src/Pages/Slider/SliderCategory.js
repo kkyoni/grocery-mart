@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import Service from "../../services/Service";
 class SliderCategory extends Component {
@@ -11,12 +10,13 @@ class SliderCategory extends Component {
         }
     }
     async componentDidMount() {
-        const res = await axios.get('http://127.0.0.1:8000/api/getcategories');
-        if (res.data.status === 'success') {
-            this.setState({ categories: res.data.categories, connection: true, notrecordloading: true });
-        } else {
-            this.setState({ categories: [], connection: true, notrecordloading: false });
-        }
+        Service.getCategories().then((res) => {
+			if (res.data.status === 'success') {
+				this.setState({ categories: res.data.categories, connection: true, notrecordloading: true });
+			} else {
+				this.setState({ categories: [], connection: true, notrecordloading: false });
+			}
+		});
     }
     handleCategorys(id) {
         Service.getSinglecategorys(id).then(res => {

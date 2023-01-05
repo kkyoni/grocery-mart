@@ -26,6 +26,8 @@ class CheckOut extends Component {
       address_id: '',
       promo_id: '',
       comments: "",
+      purchase: false,
+      purchasepayment: '',
     };
     this.handleCartItems = this.handleCartItems.bind(this);
   }
@@ -74,11 +76,17 @@ class CheckOut extends Component {
         promocode: '',
         cod: false,
         codcash: false,
+        purchase: true,
+        purchasepayment: true
       });
       localStorage.removeItem("product_details");
       toast.success("COD Payment SuccessFully...", { position: toast.POSITION.TOP_RIGHT });
     } else {
       toast.error("COD Payment Not SuccessFully...", { position: toast.POSITION.TOP_RIGHT });
+      this.setState({
+        purchase: true,
+        purchasepayment: false
+      });
     }
   };
   SaveCheckOutPay = async (e) => {
@@ -160,7 +168,7 @@ class CheckOut extends Component {
     );
     if (res.data.status === "success") {
       toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
-      this.setState({ newTotal: Number.parseFloat(res.data.DisCount).toFixed(2), promo_id: res.data.promo_id, promototal:Number.parseFloat(res.data.promototal) });
+      this.setState({ newTotal: Number.parseFloat(res.data.DisCount).toFixed(2), promo_id: res.data.promo_id, promototal: Number.parseFloat(res.data.promototal) });
     } else {
       toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
     }
@@ -247,286 +255,330 @@ class CheckOut extends Component {
             </ul>
           </div>
         </div>
-        <div className="about py-5">
-          <div className="container py-lg-5 py-4">
-            <div className="row">
-              <div className="col-xl-9 col-md-8">
-                <h2 className="h6 d-flex flex-wrap justify-content-between align-items-center px-4 py-3 bg-secondary text-white">
-                  <span>Products</span>
-                  <Link to={"/products"} className="font-size-sm text-white">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      className="feather feather-chevron-left"
-                      style={{ width: "1rem", height: "1rem" }}
-                    >
-                      <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                    Continue shopping
-                  </Link>
-                </h2>
+        <div>
+          {this.state.purchase ? (
+            <div className="about py-5">
+              <div className="container py-lg-5 py-4">
                 <div className="row gutters">
-                  <div className="col-lg-12 col-md-12 col-sm-12">
-                    <div className="table-responsive">
-                      <table className="table custom-table m-0">
-                        <thead>
-                          <tr>
-                            <th width="80">Product</th>
-                            <th>Items</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>{Cart_HTMLTABLE}</tbody>
-                      </table>
-                    </div>
-                  </div>
+                  {this.state.purchasepayment ? (
+                    <center>
+                      <img class="w-full h-full" src="https://colombo.andevfrontend.com/img/purchase-done.svg" alt="purchase completed" style={{ width: "300px", height: "300px" }} />
+                      <br />
+                      <br />
+                      <span class="uppercase text-primary-color text-4xl">Purchase Completed</span>
+                      <br />
+                      <br />
+                      <p class="text-lg">Your purchase has been successful, you can see the <Link class="text-primary-color hover:text-primary-hover hover:underline">details of your purchase here</Link>.</p>
+                      <br />
+                      <p class="text-lg">We have sent the confirmation of your purchase to the email registered in your account.</p>
+                      <br />
+                      <Link to={"/home"} class="btn btn-primary">
+                        <span>Go Back Home</span>
+                      </Link>
+                    </center>
+                  ) : (
+                    <center>
+                      <img class="w-full h-full" src="https://colombo.andevfrontend.com/img/purchase-cancelled.svg" alt="purchase completed" style={{ width: "300px", height: "300px" }} />
+                      <br />
+                      <br />
+                      <span class="uppercase text-primary-color text-4xl">Purchase Failed</span>
+                      <br />
+                      <br />
+                      <p class="text-lg">An error occurred while completing your purchase, please try again.</p>
+                      <br />
+                      <p class="text-lg">If you continue to have this problem, contact <Link class="text-primary-color hover:text-primary-hover hover:underline">technical support</Link>.</p>
+                      <br />
+                      <Link to={"/home"} class="btn btn-primary">
+                        <span>Go Back Home</span>
+                      </Link>
+                    </center>
+                  )}
                 </div>
               </div>
-              <div className="col-xl-3 col-md-4 pt-3 pt-md-0">
-                <h2 className="h6 px-4 py-3 bg-secondary text-center text-white" style={{ marginBottom: 0 }}>
-                  HAVE A PROMO CODE?
-                </h2>
-                <div className="table-responsive" style={{ marginBottom: "0.5rem" }}>
-                  <table className="table m-0" style={{ background: "#FFF", border: "1px solid" }}>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <input type="hidden" name="maintotal" value={this.state.maintotal} />
-                          <input type="hidden" name="promototal" value={this.state.promototal} />
-                          <input type="hidden" name="user_id" value={this.state.user_id} />
-                          <input type="hidden" name="address_id" value={this.state.address_id} />
-                          <input type="hidden" name="promo_id" value={this.state.promo_id} />
-                          <input type="text" name="promocode" placeholder="HAVE A PROMO CODE?" style={{ border: "1px solid", height: "38px", verticalAlign: "middle" }} value={this.state.promocode} onChange={this.handleInput} />
-                          <button type="button" className="btn btn-dark" style={{ borderRadius: "0px" }} onClick={this.ApplyPromoCode}>Apply</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <h2 className="h6 px-4 py-3 bg-secondary text-center text-white">
-                  Order Summary
-                </h2>
-                <div className="table-responsive">
-                  <table className="table custom-table m-0 ordretable">
-                    <tbody>
-                      <tr colspan="2">
-                        <td className="text-center">Subtotal</td>
-                        <td className="text-center border-left">
-                          ₹ {this.state.newTotal}
-                        </td>
-                      </tr>
-                      <tr colspan="2" className="ordretable">
-                        <td className="text-center">shopping</td>
-                        <td className="text-center border-left">₹ 0.00</td>
-                      </tr>
-                      <tr colspan="2">
-                        <td className="text-center">Sales Tax</td>
-                        <td className="text-center border-left">₹ 0.00</td>
-                      </tr>
-                      <tr colspan="2" style={{ background: "#2e3d5f" }}>
-                        <td className="text-center">
-                          <h5 className="text-success">
-                            <strong>Grand Total</strong>
-                          </h5>
-                        </td>
-                        <td className="text-center">
-                          <h5 className="text-success">
-                            <strong>₹ {this.state.newTotal}</strong>
-                          </h5>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          className="condition"
-                          colspan="2"
-                          style={{ background: "#FFF", fontSize: "15px" }}
+            </div>
+          ) : (
+            <div className="about py-5">
+              <div className="container py-lg-5 py-4">
+                <div className="row">
+                  <div className="col-xl-9 col-md-8">
+                    <h2 className="h6 d-flex flex-wrap justify-content-between align-items-center px-4 py-3 bg-secondary text-white">
+                      <span>Products</span>
+                      <Link to={"/products"} className="font-size-sm text-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          className="feather feather-chevron-left"
+                          style={{ width: "1rem", height: "1rem" }}
                         >
-                          <div className="form-check mb-1 small">
-                            <label className="form-check-label" for="tnc">
-                              I agree to the <Link to={"home"} data-bs-toggle="modal" data-bs-target="#exampleModalCenter" style={{ color: "#ed174a" }}>
-                                terms and conditions
-                              </Link>
-                            </label>
-                          </div>
-                          <div className="form-check mb-3 small">
-                            <label className="form-check-label" for="subscribe">
-                              Get emails about product updates and events. If
-                              you change your mind, you can unsubscribe at any
-                              time. <Link to={"home"} data-bs-toggle="modal" data-bs-target="#exampleModalCenteredScrollable" style={{ color: "#ed174a" }}>
-                                Privacy Policy
-                              </Link>
-                            </label>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <hr />
-                <h2 className="h6 px-4 py-3 bg-secondary text-center text-white" style={{ marginBottom: "0px" }}>
-                  Additional comments
-                </h2>
-                <textarea
-                  name="comments"
-                  className="form-control mb-3"
-                  id="order-comments"
-                  onChange={this.handleInput}
-                  value={this.state.comments}
-                ></textarea>
-                <div className="accordion" id="accordionExample">
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingOne">
-                      <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Cash on delivery (COD)
-                      </button>
+                          <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                        Continue shopping
+                      </Link>
                     </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-                      <div className="mb-3 accordion-body">
-                        <div className="mb-3 form-check">
-                          {this.state.codcash ? (
-                            <input type="checkbox" name="codcash" className="form-check-input" id="exampleCheck1" checked onClick={() => this.handleCodeCash(this.state.codcash)} />
-                          ) : (
-                            <input type="checkbox" name="codcash" className="form-check-input" id="exampleCheck1" onClick={() => this.handleCodeCash(this.state.codcash)} />
-                          )}
-                          <strong style={{ color: "#F45C5D" }}>COD</strong>
-                          <label className="form-check-label" for="exampleCheck1">We also accept Credit/Debit card on delivery. Please Check with the agent.</label>
+                    <div className="row gutters">
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <div className="table-responsive">
+                          <table className="table custom-table m-0">
+                            <thead>
+                              <tr>
+                                <th width="80">Product</th>
+                                <th>Items</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>{Cart_HTMLTABLE}</tbody>
+                          </table>
                         </div>
-                        {cod ? (
-                          <button type="button" className="btn btn-primary" style={{ background: '#3A5795', border: '#3A5795' }} onClick={this.SaveCheckOutCOD}>
-                            COD PAYMENT {this.state.codLoading ? (
-                              <i className="fa fa-refresh fa-spin"></i>
-                            ) : (
-                              <span></span>
-                            )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-xl-3 col-md-4 pt-3 pt-md-0">
+                    <h2 className="h6 px-4 py-3 bg-secondary text-center text-white" style={{ marginBottom: 0 }}>
+                      HAVE A PROMO CODE?
+                    </h2>
+                    <div className="table-responsive" style={{ marginBottom: "0.5rem" }}>
+                      <table className="table m-0" style={{ background: "#FFF", border: "1px solid" }}>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="hidden" name="maintotal" value={this.state.maintotal} />
+                              <input type="hidden" name="promototal" value={this.state.promototal} />
+                              <input type="hidden" name="user_id" value={this.state.user_id} />
+                              <input type="hidden" name="address_id" value={this.state.address_id} />
+                              <input type="hidden" name="promo_id" value={this.state.promo_id} />
+                              <input type="text" name="promocode" placeholder="HAVE A PROMO CODE?" style={{ border: "1px solid", height: "38px", verticalAlign: "middle" }} value={this.state.promocode} onChange={this.handleInput} />
+                              <button type="button" className="btn btn-dark" style={{ borderRadius: "0px" }} onClick={this.ApplyPromoCode}>Apply</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <h2 className="h6 px-4 py-3 bg-secondary text-center text-white">
+                      Order Summary
+                    </h2>
+                    <div className="table-responsive">
+                      <table className="table custom-table m-0 ordretable">
+                        <tbody>
+                          <tr colspan="2">
+                            <td className="text-center">Subtotal</td>
+                            <td className="text-center border-left">
+                              ₹ {this.state.newTotal}
+                            </td>
+                          </tr>
+                          <tr colspan="2" className="ordretable">
+                            <td className="text-center">shopping</td>
+                            <td className="text-center border-left">₹ 0.00</td>
+                          </tr>
+                          <tr colspan="2">
+                            <td className="text-center">Sales Tax</td>
+                            <td className="text-center border-left">₹ 0.00</td>
+                          </tr>
+                          <tr colspan="2" style={{ background: "#2e3d5f" }}>
+                            <td className="text-center">
+                              <h5 className="text-success">
+                                <strong>Grand Total</strong>
+                              </h5>
+                            </td>
+                            <td className="text-center">
+                              <h5 className="text-success">
+                                <strong>₹ {this.state.newTotal}</strong>
+                              </h5>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              className="condition"
+                              colspan="2"
+                              style={{ background: "#FFF", fontSize: "15px" }}
+                            >
+                              <div className="form-check mb-1 small">
+                                <label className="form-check-label" for="tnc">
+                                  I agree to the <Link to={"home"} data-bs-toggle="modal" data-bs-target="#exampleModalCenter" style={{ color: "#ed174a" }}>
+                                    terms and conditions
+                                  </Link>
+                                </label>
+                              </div>
+                              <div className="form-check mb-3 small">
+                                <label className="form-check-label" for="subscribe">
+                                  Get emails about product updates and events. If
+                                  you change your mind, you can unsubscribe at any
+                                  time. <Link to={"home"} data-bs-toggle="modal" data-bs-target="#exampleModalCenteredScrollable" style={{ color: "#ed174a" }}>
+                                    Privacy Policy
+                                  </Link>
+                                </label>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <hr />
+                    <h2 className="h6 px-4 py-3 bg-secondary text-center text-white" style={{ marginBottom: "0px" }}>
+                      Additional comments
+                    </h2>
+                    <textarea
+                      name="comments"
+                      className="form-control mb-3"
+                      id="order-comments"
+                      onChange={this.handleInput}
+                      value={this.state.comments}
+                    ></textarea>
+                    <div className="accordion" id="accordionExample">
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingOne">
+                          <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Cash on delivery (COD)
                           </button>
-                        ) : (
-                          <button type="button" className="btn btn-primary" style={{ background: '#3A5795', border: '#3A5795' }} disabled>COD PAYMENT</button>
-                        )}
+                        </h2>
+                        <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                          <div className="mb-3 accordion-body">
+                            <div className="mb-3 form-check">
+                              {this.state.codcash ? (
+                                <input type="checkbox" name="codcash" className="form-check-input" id="exampleCheck1" checked onClick={() => this.handleCodeCash(this.state.codcash)} />
+                              ) : (
+                                <input type="checkbox" name="codcash" className="form-check-input" id="exampleCheck1" onClick={() => this.handleCodeCash(this.state.codcash)} />
+                              )}
+                              <strong style={{ color: "#F45C5D" }}>COD</strong>
+                              <label className="form-check-label" for="exampleCheck1">We also accept Credit/Debit card on delivery. Please Check with the agent.</label>
+                            </div>
+                            {cod ? (
+                              <button type="button" className="btn btn-primary" style={{ background: '#3A5795', border: '#3A5795' }} onClick={this.SaveCheckOutCOD}>
+                                COD PAYMENT {this.state.codLoading ? (
+                                  <i className="fa fa-refresh fa-spin"></i>
+                                ) : (
+                                  <span></span>
+                                )}
+                              </button>
+                            ) : (
+                              <button type="button" className="btn btn-primary" style={{ background: '#3A5795', border: '#3A5795' }} disabled>COD PAYMENT</button>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingTwo">
-                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Credit/Debit
-                      </button>
-                    </h2>
-                    <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                      <div className="mb-3 accordion-body">
-                        <form>
-                          <div className="mb-3">
-                            <label for="exampleInputEmail1" className="form-label">Name on Cards</label>
-                            <input type="text" className="form-control" />
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingTwo">
+                          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Credit/Debit
+                          </button>
+                        </h2>
+                        <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                          <div className="mb-3 accordion-body">
+                            <form>
+                              <div className="mb-3">
+                                <label for="exampleInputEmail1" className="form-label">Name on Cards</label>
+                                <input type="text" className="form-control" />
+                              </div>
+                              <div className="mb-3">
+                                <label for="exampleInputPassword1" className="form-label">Card Number</label>
+                                <input type="text" className="form-control" />
+                              </div>
+                              <div className="mb-3">
+                                <label for="exampleInputPassword1" className="form-label">CVV</label>
+                                <input type="text" className="form-control" />
+                              </div>
+                              <div className="mb-3">
+                                <label for="exampleInputPassword1" className="form-label">Expiration Date</label>
+                                <input type="text" className="form-control" />
+                              </div>
+                              <button type="submit" className="btn btn-primary" disabled>Make a payment </button>
+                            </form>
                           </div>
-                          <div className="mb-3">
-                            <label for="exampleInputPassword1" className="form-label">Card Number</label>
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="mb-3">
-                            <label for="exampleInputPassword1" className="form-label">CVV</label>
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="mb-3">
-                            <label for="exampleInputPassword1" className="form-label">Expiration Date</label>
-                            <input type="text" className="form-control" />
-                          </div>
-                          <button type="submit" className="btn btn-primary" disabled>Make a payment </button>
-                        </form>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingThree">
-                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Net Banking
-                      </button>
-                    </h2>
-                    <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                      <div className="mb-3 accordion-body">
-                        <strong style={{ color: "#F45C5D" }}>Select From Popular Banks</strong> <br />
-                        <p>Syndicate Bank</p>
-                        <p>Bank of Baroda</p>
-                        <p>Canara Bank</p>
-                        <p>ICICI Bank</p>
-                        <p>State Bank Of India</p>
-                        <br />
-                        <strong style={{ color: "#F45C5D" }}>Or Select Other Bank</strong> <br />
-                        <select className="form-control">
-                          <option value="">=== Other Banks ===</option>
-                          <option value="ALB-NA">Allahabad Bank NetBanking</option>
-                          <option value="ADB-NA">Andhra Bank</option>
-                          <option value="BBK-NA">Bank of Bahrain and Kuwait NetBanking</option>
-                          <option value="BBC-NA">Bank of Baroda Corporate NetBanking</option>
-                          <option value="BBR-NA">Bank of Baroda Retail NetBanking</option>
-                          <option value="BOI-NA">Bank of India NetBanking</option>
-                          <option value="BOM-NA">Bank of Maharashtra NetBanking</option>
-                          <option value="CSB-NA">Catholic Syrian Bank NetBanking</option>
-                          <option value="CBI-NA">Central Bank of India</option>
-                          <option value="CUB-NA">City Union Bank NetBanking</option>
-                          <option value="CRP-NA">Corporation Bank</option>
-                          <option value="DBK-NA">Deutsche Bank NetBanking</option>
-                          <option value="DCB-NA">Development Credit Bank</option>
-                          <option value="DC2-NA">Development Credit Bank - Corporate</option>
-                          <option value="DLB-NA">Dhanlaxmi Bank NetBanking</option>
-                          <option value="FBK-NA">Federal Bank NetBanking</option>
-                          <option value="IDS-NA">Indusind Bank NetBanking</option>
-                          <option value="IOB-NA">Indian Overseas Bank</option>
-                          <option value="ING-NA">ING Vysya Bank (now Kotak)</option>
-                          <option value="JKB-NA">Jammu and Kashmir NetBanking</option>
-                          <option value="JSB-NA">Janata Sahakari Bank Limited</option>
-                          <option value="KBL-NA">Karnataka Bank NetBanking</option>
-                          <option value="KVB-NA">Karur Vysya Bank NetBanking</option>
-                          <option value="LVR-NA">Lakshmi Vilas Bank NetBanking</option>
-                          <option value="OBC-NA">Oriental Bank of Commerce NetBanking</option>
-                          <option value="CPN-NA">PNB Corporate NetBanking</option>
-                          <option value="PNB-NA">PNB NetBanking</option>
-                          <option value="RSD-DIRECT">Rajasthan State Co-operative Bank-Debit Card</option>
-                          <option value="RBS-NA">RBS (The Royal Bank of Scotland)</option>
-                          <option value="SWB-NA">Saraswat Bank NetBanking</option>
-                          <option value="SBJ-NA">SB Bikaner and Jaipur NetBanking</option>
-                          <option value="SBH-NA">SB Hyderabad NetBanking</option>
-                          <option value="SBM-NA">SB Mysore NetBanking</option>
-                          <option value="SBT-NA">SB Travancore NetBanking</option>
-                          <option value="SVC-NA">Shamrao Vitthal Co-operative Bank</option>
-                          <option value="SIB-NA">South Indian Bank NetBanking</option>
-                          <option value="SBP-NA">State Bank of Patiala NetBanking</option>
-                          <option value="SYD-NA">Syndicate Bank NetBanking</option>
-                          <option value="TNC-NA">Tamil Nadu State Co-operative Bank NetBanking</option>
-                          <option value="UCO-NA">UCO Bank NetBanking</option>
-                          <option value="UBI-NA">Union Bank NetBanking</option>
-                          <option value="UNI-NA">United Bank of India NetBanking</option>
-                          <option value="VJB-NA">Vijaya Bank NetBanking</option>
-                        </select>
-                        <br />
-                        <Link to={"#"} className="btn btn-primary" style={{ background: "#3a5795", border: "#3a5795" }} onClick={this.SaveCheckOutPay} disabled>PAY NOW</Link>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingFour">
-                      <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        Paypal Account
-                      </button>
-                    </h2>
-                    <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-                      <div className="accordion-body">
-                        <div className="d-flex flex-row bd-highlight mb-3">
-                          <div className="p-2 bd-highlight">
-                            <img className="pp-img" src="assets/images/paypal.png" alt="paypal" style={{ width: "65%" }} />
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingThree">
+                          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Net Banking
+                          </button>
+                        </h2>
+                        <div id="collapseThree" className="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                          <div className="mb-3 accordion-body">
+                            <strong style={{ color: "#F45C5D" }}>Select From Popular Banks</strong> <br />
+                            <p>Syndicate Bank</p>
+                            <p>Bank of Baroda</p>
+                            <p>Canara Bank</p>
+                            <p>ICICI Bank</p>
+                            <p>State Bank Of India</p>
                             <br />
-                            <p style={{ color: "#8B8B8B", fontSize: "0.95em", fontWeight: "400" }}>Important: You will be redirected to PayPal's website to securely complete your payment.</p>
+                            <strong style={{ color: "#F45C5D" }}>Or Select Other Bank</strong> <br />
+                            <select className="form-control">
+                              <option value="">=== Other Banks ===</option>
+                              <option value="ALB-NA">Allahabad Bank NetBanking</option>
+                              <option value="ADB-NA">Andhra Bank</option>
+                              <option value="BBK-NA">Bank of Bahrain and Kuwait NetBanking</option>
+                              <option value="BBC-NA">Bank of Baroda Corporate NetBanking</option>
+                              <option value="BBR-NA">Bank of Baroda Retail NetBanking</option>
+                              <option value="BOI-NA">Bank of India NetBanking</option>
+                              <option value="BOM-NA">Bank of Maharashtra NetBanking</option>
+                              <option value="CSB-NA">Catholic Syrian Bank NetBanking</option>
+                              <option value="CBI-NA">Central Bank of India</option>
+                              <option value="CUB-NA">City Union Bank NetBanking</option>
+                              <option value="CRP-NA">Corporation Bank</option>
+                              <option value="DBK-NA">Deutsche Bank NetBanking</option>
+                              <option value="DCB-NA">Development Credit Bank</option>
+                              <option value="DC2-NA">Development Credit Bank - Corporate</option>
+                              <option value="DLB-NA">Dhanlaxmi Bank NetBanking</option>
+                              <option value="FBK-NA">Federal Bank NetBanking</option>
+                              <option value="IDS-NA">Indusind Bank NetBanking</option>
+                              <option value="IOB-NA">Indian Overseas Bank</option>
+                              <option value="ING-NA">ING Vysya Bank (now Kotak)</option>
+                              <option value="JKB-NA">Jammu and Kashmir NetBanking</option>
+                              <option value="JSB-NA">Janata Sahakari Bank Limited</option>
+                              <option value="KBL-NA">Karnataka Bank NetBanking</option>
+                              <option value="KVB-NA">Karur Vysya Bank NetBanking</option>
+                              <option value="LVR-NA">Lakshmi Vilas Bank NetBanking</option>
+                              <option value="OBC-NA">Oriental Bank of Commerce NetBanking</option>
+                              <option value="CPN-NA">PNB Corporate NetBanking</option>
+                              <option value="PNB-NA">PNB NetBanking</option>
+                              <option value="RSD-DIRECT">Rajasthan State Co-operative Bank-Debit Card</option>
+                              <option value="RBS-NA">RBS (The Royal Bank of Scotland)</option>
+                              <option value="SWB-NA">Saraswat Bank NetBanking</option>
+                              <option value="SBJ-NA">SB Bikaner and Jaipur NetBanking</option>
+                              <option value="SBH-NA">SB Hyderabad NetBanking</option>
+                              <option value="SBM-NA">SB Mysore NetBanking</option>
+                              <option value="SBT-NA">SB Travancore NetBanking</option>
+                              <option value="SVC-NA">Shamrao Vitthal Co-operative Bank</option>
+                              <option value="SIB-NA">South Indian Bank NetBanking</option>
+                              <option value="SBP-NA">State Bank of Patiala NetBanking</option>
+                              <option value="SYD-NA">Syndicate Bank NetBanking</option>
+                              <option value="TNC-NA">Tamil Nadu State Co-operative Bank NetBanking</option>
+                              <option value="UCO-NA">UCO Bank NetBanking</option>
+                              <option value="UBI-NA">Union Bank NetBanking</option>
+                              <option value="UNI-NA">United Bank of India NetBanking</option>
+                              <option value="VJB-NA">Vijaya Bank NetBanking</option>
+                            </select>
                             <br />
-                            <Link className="btn btn-primary" style={{ background: "#3a5795", border: "#3a5795" }} onClick={this.SaveCheckOutPaypal} disabled>Checkout via Paypal</Link>
+                            <Link to={"#"} className="btn btn-primary" style={{ background: "#3a5795", border: "#3a5795" }} onClick={this.SaveCheckOutPay} disabled>PAY NOW</Link>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingFour">
+                          <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Paypal Account
+                          </button>
+                        </h2>
+                        <div id="collapseFour" className="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                          <div className="accordion-body">
+                            <div className="d-flex flex-row bd-highlight mb-3">
+                              <div className="p-2 bd-highlight">
+                                <img className="pp-img" src="assets/images/paypal.png" alt="paypal" style={{ width: "65%" }} />
+                                <br />
+                                <p style={{ color: "#8B8B8B", fontSize: "0.95em", fontWeight: "400" }}>Important: You will be redirected to PayPal's website to securely complete your payment.</p>
+                                <br />
+                                <Link className="btn btn-primary" style={{ background: "#3a5795", border: "#3a5795" }} onClick={this.SaveCheckOutPaypal} disabled>Checkout via Paypal</Link>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -535,12 +587,12 @@ class CheckOut extends Component {
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
         <Newsletter />
         <Footer />
         {/* terms and conditions */}
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+        <div class="modal fade" id="exampleModalCenter" tabIndex={-1} aria-labelledby="exampleModalCenterTitle"
           aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -571,7 +623,7 @@ class CheckOut extends Component {
         </div>
 
         {/* Privacy Policy */}
-        <div class="modal fade" id="exampleModalCenteredScrollable" tabindex="-1" aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenteredScrollable" tabIndex={-1} aria-labelledby="exampleModalCenteredScrollableTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
@@ -585,7 +637,8 @@ class CheckOut extends Component {
             </div>
           </div>
         </div>
-      </div >
+
+      </div>
     );
   }
 }

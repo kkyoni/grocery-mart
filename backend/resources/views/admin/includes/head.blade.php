@@ -23,6 +23,12 @@ table.dataTable {clear: both;margin-top: 6px !important;margin-bottom: 6px !impo
 .op-btn{margin-right:22px;}
 table tfoot{display: none;}
 .disabled {pointer-events: none; cursor: default;}
+.google_translate_element{margin-top:9px;}
+.goog-te-gadget-simple{background-color: #fff !important; border-left: 1px solid #DDD !important; border-top: 1px solid #DDD !important; border-bottom: 1px solid #DDD !important; border-right: 1px solid #DDD !important; font-size: 10pt !important; display: inline-block !important; padding-top: 0px !important; padding-bottom: 0px !important; cursor: pointer !important; zoom: 1 !important;}
+.goog-te-gadget img{display: none;}
+.goog-te-gadget-simple .goog-te-menu-value span{color: #676a6c !important; font-size: 13px; border-left:0px !important; font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;}
+.goog-te-banner-frame{display: none !important;}
+body{top: 0px !important;}
 </style>
 @yield('styles')
 </head>

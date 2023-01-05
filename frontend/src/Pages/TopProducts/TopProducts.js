@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import Service from "../../services/Service";
 import { Button } from "reactstrap";
 import { toast } from 'react-toastify';
@@ -17,12 +16,13 @@ class TopProducts extends Component {
         }
     }
     async componentDidMount() {
-        const res = await axios.get('http://127.0.0.1:8000/api/gettopproducts');
-        if (res.data.status === 'success') {
-            this.setState({ product: res.data.product, connection: true, notrecordloading: true });
-        } else {
-            this.setState({ product: [], connection: true, notrecordloading: false });
-        }
+        Service.getTopProducts().then((res) => {
+			if (res.data.status === 'success') {
+				this.setState({ product: res.data.product, connection: true, notrecordloading: true });
+			} else {
+				this.setState({ product: [], connection: true, notrecordloading: false });
+			}
+		});
     }
     onAddCartHandler = (item) => {
         const productDetails = JSON.parse(localStorage.getItem("product_details"));
@@ -98,7 +98,7 @@ class TopProducts extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="modal fade" id="myModal13" tabindex="-1" aria-labelledby="myModal13" aria-hidden="true">
+                <div className="modal fade" id="myModal13" tabIndex={-1} aria-labelledby="myModal13" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header border-0">

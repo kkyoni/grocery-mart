@@ -21,6 +21,8 @@ class CreateOrderTable extends Migration
             $table->string('promo_id')->length(250)->nullable();
             $table->string('comment')->length(250)->nullable();
             $table->string('grandtotal')->length(250)->nullable();
+            $table->string('maintotal')->length(250)->nullable();
+            $table->string('promototal')->length(250)->nullable();
             $table->enum('status',['processing','accepted','ontheway','delivered','cancelled'])->default('processing');
             $table->enum('payment_mode',['cod','paypal'])->default('cod');
             $table->string('date')->length(250)->nullable();

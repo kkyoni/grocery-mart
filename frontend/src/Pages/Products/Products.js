@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import Title from "../../Components/Title";
 import Header from "../../Components/Header";
 import Newsletter from "../Newsletter/Newsletter";
@@ -39,12 +38,14 @@ class Products extends Component {
 		setTimeout(() => {
 			this.setState({ isLoading: false });
 		}, 1000);
-		const res = await axios.get('http://127.0.0.1:8000/api/getproducts');
-		if (res.data.status === 'success') {
-			this.setState({ product: res.data.product, connection: true, notrecordloading: true });
-		} else {
-			this.setState({ product: [], connection: true, notrecordloading: false });
-		}
+
+		Service.getProducts().then((res) => {
+			if (res.data.status === 'success') {
+				this.setState({ product: res.data.product, connection: true, notrecordloading: true });
+			} else {
+				this.setState({ product: [], connection: true, notrecordloading: false });
+			}
+		});
 	}
 	loadmore() {
 		this.setState({
@@ -208,7 +209,7 @@ class Products extends Component {
 						</div>
 					</div>
 				</div>
-				<div className="modal fade" id="myModal17" tabindex="-1" aria-labelledby="myModal17" aria-hidden="true">
+				<div className="modal fade" id="myModal17" tabIndex={-1} aria-labelledby="myModal17" aria-hidden="true">
 					<div className="modal-dialog modal-dialog-centered">
 						<div className="modal-content">
 							<div className="modal-header border-0">

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import axios from "axios";
 import { Link } from 'react-router-dom';
 import Service from "../../services/Service";
 class Brand extends Component {
@@ -12,12 +11,13 @@ class Brand extends Component {
         }
     }
     async componentDidMount() {
-        const res = await axios.get('http://127.0.0.1:8000/api/getbrand');
-        if (res.data.status === 'success') {
-            this.setState({ brand: res.data.brand, connection: true, notrecordloading: true });
-        } else {
-            this.setState({ brand: [], connection: true, notrecordloading: false });
-        }
+        Service.getBrand().then((res) => {
+			if (res.data.status === 'success') {
+				this.setState({ brand: res.data.brand, connection: true, notrecordloading: true });
+			} else {
+				this.setState({ brand: [], connection: true, notrecordloading: false });
+			}
+		});
     }
     handleBrand(id) {
         Service.getSinglebrand(id).then(res => {

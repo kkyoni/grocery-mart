@@ -26,6 +26,9 @@ class Header extends Component {
         }
     }
     componentDidMount() {
+        if (window.location.pathname !== '/order-tracking') {
+            localStorage.removeItem('invoice');
+        }
         const CurrentproductDetails = localStorage.getItem("product_details");
         let newTotal = 0.00;
         if (JSON.parse(CurrentproductDetails) && JSON.parse(CurrentproductDetails).length > 0) {
@@ -206,6 +209,7 @@ class Header extends Component {
                                             <ul className="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
                                                 <li><Link to={"/profile"} className={`${pathname.match('/profile') ? 'dropdown-item active' : 'dropdown-item'}`}>Profile</Link></li>
                                                 <li><Link to={"/check-out"} className={`${pathname.match('/check-out') ? 'dropdown-item active' : 'dropdown-item'}`}>CheckOut</Link></li>
+                                                <li><Link to={"/order-tracking"} className={`${pathname.match('/order-tracking') ? 'dropdown-item active' : 'dropdown-item'}`}>OrderTracking</Link></li>
                                             </ul>
                                         </li>
                                     ) : ("")}
@@ -241,7 +245,7 @@ class Header extends Component {
                                 </nav>
                             </div>
 
-                            <div className="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style={{ width: "auto" }}>
+                            <div className="offcanvas offcanvas-start" tabIndex={-1} id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style={{ width: "auto" }}>
                                 <div className="offcanvas-header">
                                     <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                 </div>

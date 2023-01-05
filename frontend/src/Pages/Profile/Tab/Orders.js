@@ -38,7 +38,7 @@ class Orders extends Component {
                     </tr>
                 </thead>;
                 order_HTMLTABLE =
-                    this.state.order_list.map((item, i) => {
+                this.state.order_list.map((item, i) => {
                         return (
                             <tr key={i}>
                                 <th className="border p-2" scope="row">#{item.invoice}</th>
@@ -97,7 +97,7 @@ class Orders extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="modal fade" id="myModalViewOrder" tabindex="-1" aria-labelledby="myModalViewOrder" aria-hidden="true">
+                <div className="modal fade" id="myModalViewOrder" tabIndex={-1} aria-labelledby="myModalViewOrder" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <div className="modal-header border-0">

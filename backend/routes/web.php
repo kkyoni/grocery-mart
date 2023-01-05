@@ -45,8 +45,21 @@ Route::get('/clear-cache', static function () {
 });
 
 
-Route::get('/', [HomeController::class, 'welcome']);
 Route::group(['middleware' => 'preventBackHistory'], function () {
+    Route::get(
+        'siteIsUnderConstruction',
+        static function () {
+            return view('underMaintenance');
+        }
+    )->name('underMaintenance');
+    Route::group(
+        [
+            'middleware'    => ['UnderMaintenance']
+        ],
+        static function () {
+            Route::get('/', [HomeController::class, 'welcome']);
+        }
+    );
     Route::get('admin', [LoginController::class, 'showLoginForm'])->name('admin.showLoginForm');
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('admin.login');
     Route::get('admin/login', [LoginController::class, 'showLoginForm'])->name('admin.login');
@@ -60,6 +73,8 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
 
     Route::group(['prefix' => 'admin', 'middleware' => 'Admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
+        Route::get('/down', [MainController::class, 'maintenancemode_down'])->name('down');
+        Route::get('/up', [MainController::class, 'maintenancemode_up'])->name('up');
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
         //====================> User Management <====================

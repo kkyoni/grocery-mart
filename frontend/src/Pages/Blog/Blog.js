@@ -4,7 +4,7 @@ import Title from "../../Components/Title";
 import Header from "../../Components/Header";
 import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
-import axios from "axios";
+import Service from "../../services/Service";
 import moment from "moment";
 class Blog extends Component {
     constructor(props) {
@@ -22,12 +22,14 @@ class Blog extends Component {
         setTimeout(() => {
             this.setState({ isLoading: false });
         }, 1000);
-        const res = await axios.get('http://127.0.0.1:8000/api/getblog');
-        if (res.data.status === 'success') {
-            this.setState({ blog: res.data.blog, connection: true, notrecordloading: true });
-        } else {
-            this.setState({ blog: [], connection: true, notrecordloading: false });
-        }
+
+        Service.getBlog().then((res) => {
+			if (res.data.status === 'success') {
+				this.setState({ blog: res.data.blog, connection: true, notrecordloading: true });
+			} else {
+				this.setState({ blog: [], connection: true, notrecordloading: false });
+			}
+		});
     }
     viewBlog(id) {
         this.props.history.push(`/blog-single/${id}`);

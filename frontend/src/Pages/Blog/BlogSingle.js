@@ -12,9 +12,7 @@ class BlogSingle extends Component {
         super(props)
         this.state = {
             id: this.props.match.params.id,
-            NextBlogId: 0,
             isLoading: true,
-            PreviousBlogId: 0,
             photo: 'http://127.0.0.1:8000/storage/blog/',
             blogdetail: {}
         }
@@ -27,36 +25,10 @@ class BlogSingle extends Component {
             this.setState({ isLoading: false });
         }, 1000);
         Service.getSingleBlogById(this.state.id).then(res => {
-            this.setState({ blogdetail: res.data.blogdetail, NextBlogId: res.data.NextBlogId, PreviousBlogId: res.data.PreviousBlogId });
+            this.setState({ blogdetail: res.data.blogdetail });
         })
-    }
-    PreviousBlog(id) {
-        this.setState({
-            isLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({ isLoading: false });
-        }, 1000);
-        Service.getSingleBlogById(id).then(res => {
-            this.setState({ blogdetail: res.data.blogdetail, NextBlogId: res.data.NextBlogId, PreviousBlogId: res.data.PreviousBlogId });
-        })
-        this.props.history.push(`/blog-single/${id}`);
-    }
-    NextBlog(id) {
-        this.setState({
-            isLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({ isLoading: false });
-        }, 1000);
-        Service.getSingleBlogById(id).then(res => {
-            this.setState({ blogdetail: res.data.blogdetail, NextBlogId: res.data.NextBlogId, PreviousBlogId: res.data.PreviousBlogId });
-        })
-        this.props.history.push(`/blog-single/${id}`);
     }
     render() {
-        const NextBlogId = this.state.NextBlogId;
-        const PreviousBlogId = this.state.PreviousBlogId;
         const SingleBlog = this.state.blogdetail;
         const title = this.state.blogdetail.title;
         const description = this.state.blogdetail.description;
@@ -124,13 +96,6 @@ class BlogSingle extends Component {
                                         }}
                                     />
                                 </ul>
-                                <div className="single-pagination">
-                                    <Link className="prev-post pull-left" onClick={() => this.PreviousBlog(PreviousBlogId)}><span className="fa fa-arrow-left"
-                                        aria-hidden="true"></span>
-                                        Previous Post</Link>
-                                    <Link className="next-post pull-right" onClick={() => this.NextBlog(NextBlogId)}>Next Post <span className="fa fa-arrow-right"
-                                        aria-hidden="true"></span></Link>
-                                </div>
                                 <Comment blog_id={this.props.match.params.id} />
                             </div>
                         </div>

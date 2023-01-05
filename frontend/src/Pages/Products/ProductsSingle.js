@@ -18,8 +18,6 @@ class ProductsSingle extends Component {
 		}
 	}
 	async componentDidMount() {
-		console.log("jaymin");
-
 		Service.getProductsSingle(this.state.id).then(res => {
 			this.setState({
 				isLoading: true,
@@ -27,7 +25,6 @@ class ProductsSingle extends Component {
 			setTimeout(() => {
 				this.setState({ isLoading: false, productsdetail: res.data.productsdetail });
 			}, 1000);
-			// this.setState({ productsdetail: res.data.productsdetail });
 		})
 	}
 	onAddCartHandler = (item) => {

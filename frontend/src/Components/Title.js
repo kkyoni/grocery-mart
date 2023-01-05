@@ -4,6 +4,7 @@ import { Button, Form, Input } from "reactstrap";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Service from "../services/Service";
 class Title extends Component {
     constructor(props) {
         super(props);
@@ -21,6 +22,14 @@ class Title extends Component {
             siteLogo: 'http://127.0.0.1:8000/uploads/settings/application_logo.png',
             openModel: false,
         };
+    }
+    async componentDidMount() {
+        Service.getsiteLogo().then((res) => {
+            console.log("sdfsd", res);
+            if (res.data.code === 503) {
+                window.location = "under-maintenance";
+            }
+        });
     }
     setOpenModal = (e) => {
         this.setState({
@@ -122,6 +131,7 @@ class Title extends Component {
     onLogoutHandler = () => {
         localStorage.removeItem('userData');
         localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('invoice');
         this.setState({ navigate: true });
         toast.success("logout in successfully ⚡️", { position: toast.POSITION.TOP_RIGHT });
     };
@@ -156,7 +166,7 @@ class Title extends Component {
                     </div>
                 </div>
                 {this.state.openModel ? (
-                    <div className="modal fade" id="myModalAuthentication" tabindex="-1" aria-labelledby="myModalAuthentication" aria-hidden="true">
+                    <div className="modal fade" id="myModalAuthentication" tabIndex={-1} aria-labelledby="myModalAuthentication" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
                                 <div className="modal-header border-0">

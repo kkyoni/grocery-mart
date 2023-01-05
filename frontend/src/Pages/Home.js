@@ -15,7 +15,7 @@ class Home extends Component {
             isLoading: true,
         }
     }
-    async componentDidMount() {
+    componentDidMount() {
         this.setState({
             isLoading: true,
         });

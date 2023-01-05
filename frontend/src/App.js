@@ -11,6 +11,8 @@ import ProductsSingle from "./Pages/Products/ProductsSingle";
 import PageNotFund from "./Components/Error/PageNotFund";
 import CheckOut from "./Pages/CheckOut/CheckOut";
 import Profile from "./Pages/Profile/Profile";
+import OrderTracking from './Pages/Order/OrderTracking';
+import UnderMaintenance from './Components/Error/UnderMaintenance';
 function App() {
   return (
     <div>
@@ -26,8 +28,11 @@ function App() {
           <Route path="/products" component={Products} />
           <Route path="/check-out" component={CheckOut} />
           <Route path="/profile" component={Profile} />
+          <Route path="/order-tracking" component={OrderTracking} />
           <Route path="/:single-products/:id" component={ProductsSingle} />
+          <Route path="/under-maintenance" component={UnderMaintenance} />
           <Route component={PageNotFund} />
+          {/* <Route component={UnderMaintenance} /> */}
         </Switch>
       </Router>
     </div>

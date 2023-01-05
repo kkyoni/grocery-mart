@@ -4,11 +4,11 @@ import Title from "../../Components/Title";
 import Header from "../../Components/Header";
 import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
+import './profile.css';
 import MyAccount from "./Tab/MyAccount";
 import Orders from "./Tab/Orders";
-import MyAddress from "./Tab/MyAddress";
-import Support from "./Tab/Support";
-import './profile.css';
+import MyAddress from "./Tab/ MyAddress";
+import Support from "./Tab/ Support";
 class Profile extends Component {
     state = {
         isLoading: true,
