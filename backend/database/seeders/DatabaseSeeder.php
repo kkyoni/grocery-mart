@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductImageSeeder::class);
         $this->call(SettingSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(SiteSettingSeeder::class);
     }
 }
