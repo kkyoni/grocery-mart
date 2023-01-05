@@ -27,6 +27,7 @@
         "maximebf/debugbar": "^1.16",
         "mckenziearts/laravel-notify": "^2.2",
         "nesbot/carbon": "^2.46",
+        "srmklive/paypal": "~3.0",
         "stripe/stripe-php": "^10.1",
         "sven/artisan-view": "^3.4",
         "tymon/jwt-auth": "^1.0",
