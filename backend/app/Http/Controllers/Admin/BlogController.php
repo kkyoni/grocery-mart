@@ -259,8 +259,7 @@ class BlogController extends Controller
                 <button type="button" name="load_more_button" class="btn btn-primary btn-block m"  data-id="' . $last_id . '" id="load_more_button"><i class="fa fa-arrow-down"></i> Show More</button>
                 </div>';
         } else {
-            $buttonoutput .= '
-            Not Out Put';
+            $buttonoutput .= '';
         }
         return response()->json([
             'output'    => $output,

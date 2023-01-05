@@ -82,7 +82,12 @@
                     <span>Maintenance <code>.Mode</code></span>
                     <div class="switch">
                         <div class="onoffswitch">
-                            <input type="checkbox"  class="onoffswitch-checkbox" id="example1" <?php $site = \App\Models\SiteSetting::where(['id' => '1'])->value('meta_value'); if($site == '1'){ echo "checked"; }else{ } ?> name="site_maintenance">
+                            <input type="checkbox" class="onoffswitch-checkbox" id="example1" <?php $site = \App\Models\SiteSetting::where(['id' => '1'])->value('meta_value');
+                            if ($site == '1') {
+                                echo 'checked';
+                            } else {
+                            } ?>
+                                name="site_maintenance">
                             <label class="onoffswitch-label" for="example1">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>
@@ -90,7 +95,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="setings-item">
+                {{-- <div class="setings-item">
                     <span>Language <code>.Site</code></span>
                     <div id="google_translate_element" style="width: 10px; height: 10px; float: right; margin-right: 100px;"></div>
                     <script type="text/javascript">
@@ -126,10 +131,13 @@
                             });
                         });
                     </script>
-                </div>
+                </div> --}}
                 <div class="sidebar-content">
                     <h4>Settings</h4>
-                    <div class="small">I belive that. Lorem Ipsum is simply dummy text of the printing and typesetting industry.And typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.Over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                    <div class="small">I belive that. Lorem Ipsum is simply dummy text of the printing and typesetting
+                        industry.And typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever
+                        since the 1500s.Over the years, sometimes by accident, sometimes on purpose (injected humour and
+                        the like).
                     </div>
                 </div>
             </div>

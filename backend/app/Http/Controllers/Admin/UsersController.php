@@ -62,7 +62,7 @@ class UsersController extends Controller
                     $action .= '<a class="btn btn-warning btn-circle btn-sm" href=' . route('admin.user.edit', [$user->id]) . '  data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>';
                     $action .= '<a class="btn btn-danger btn-circle btn-sm m-l-10 deleteuser ml-1 mr-1" data-id ="' . $user->id . '" href="javascript:void(0)" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                     $action .= '<a href="javascript:void(0)" class="btn btn-primary btn-circle btn-sm ShowUser" data-id="' . $user->id . '" data-toggle="tooltip" title="Show"><i class="fa fa-eye"></i></a>';
-                    $action .= '<a class="btn btn-warning btn-circle btn-sm" href=' . route('admin.user.activity_log', [$user->id]) . '  data-toggle="tooltip" title="Order Detail"><i class="fa fa-pencil"></i></a>';
+                    $action .= '<a class="btn btn-warning btn-circle btn-sm ml-1" href=' . route('admin.user.activity_log', [$user->id]) . '  data-toggle="tooltip" title="Activity Log"><i class="fa fa-tasks"></i></a>';
                     return $action;
                 })
                 ->rawColumns(['status', 'action', 'avatar', 'name'])
@@ -306,6 +306,6 @@ class UsersController extends Controller
         $user_detail = User::where('id', $id)->first();
         // $user_detail = Comment::where('user_id', $id)->get();
         $messages_count = Comment::where('user_id', $id)->count('user_id');
-        return view($this->pageLayout . 'ActivityLog', compact('user_detail','messages_count'));
+        return view($this->pageLayout . 'ActivityLog', compact('user_detail', 'messages_count'));
     }
 }

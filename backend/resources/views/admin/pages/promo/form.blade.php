@@ -34,6 +34,7 @@
             'class' => 'select2_demo_2 form-control',
             'id' => 'user_id',
             'multiple' => 'multiple',
+            'data-width' => '100%',
         ]) !!}
         <span class="help-block">
             <font color="red"> {{ $errors->has('user_id') ? '' . $errors->first('user_id') . '' : '' }} </font>
@@ -121,6 +122,11 @@
     <link href="{{ asset('assets/admin/css/plugins/select2/select2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/plugins/select2/select2-bootstrap4.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/admin/css/plugins/iCheck/custom.css') }}" rel="stylesheet">
+    <style>
+        .select2-container .select2-search--inline .select2-search__field {
+            width: 140px !important;
+        }
+    </style>
 @endsection
 @section('scripts')
     <script src="{{ asset('assets/admin/js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
@@ -138,6 +144,7 @@
             $(".select2_demo_2").select2({
                 theme: 'bootstrap4',
                 placeholder: "Select a User Email",
+                dropdownAutoWidth: true,
                 allowClear: true
             });
             $('#data_5 .input-daterange').datepicker({

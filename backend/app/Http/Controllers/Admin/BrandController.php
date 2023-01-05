@@ -41,9 +41,9 @@ class BrandController extends Controller
             return DataTables::of($brand->get())->addIndexColumn()
                 ->editColumn('brand_image', function (Brand $brand) {
                     if (!$brand->brand_image) {
-                        return '<img class="img-thumbnail" src="' . asset('storage/brand/default.png') . '" width="60px">';
+                        return '<img class="img-thumbnail" src="' . asset('storage/brand/default.png') . '" width="50px" height="50px">';
                     } else {
-                        return '<img class="img-thumbnail" src="' . asset('storage/brand' . '/' . $brand->brand_image) . '" width="60px">';
+                        return '<img class="img-thumbnail" src="' . asset('storage/brand' . '/' . $brand->brand_image) . '" width="50px" height="50px">';
                     }
                 })
                 ->editColumn('action', function (Brand $brand) {
