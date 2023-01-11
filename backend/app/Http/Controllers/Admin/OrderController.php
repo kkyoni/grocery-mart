@@ -19,6 +19,8 @@ use App\Models\Promo;
 use App\Models\PromoUser;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use PDF;
+use View;
 
 class OrderController extends Controller
 {
@@ -125,10 +127,10 @@ class OrderController extends Controller
     public function view($id)
     {
         try {
-            $order = Order::with(['user_details','UserAddressDetails'])->where('id', $id)->first();
+            $order = Order::with(['user_details', 'UserAddressDetails'])->where('id', $id)->first();
             $ProductOrder = OrderProduct::where('order_id', $id)->get();
             if (!empty($order)) {
-                return view($this->pageLayout . 'view', compact('order','ProductOrder'));
+                return view($this->pageLayout . 'view', compact('order', 'ProductOrder'));
             } else {
                 smilify('error', 'Edit Order Not Found ⚡️');
                 return redirect()->route('admin.order.index');
