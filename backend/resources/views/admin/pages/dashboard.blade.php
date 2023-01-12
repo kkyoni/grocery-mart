@@ -14,10 +14,10 @@
         </div>
     </div>
     <div class="wrapper wrapper-content">
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="row">
+
                     <div class="col-xl-4 col-lg-6 col-12">
                         <div class="col-lg-12">
                             <div class="row">
@@ -182,44 +182,6 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-6 col-lg-3 col-12 mb-10">
-                                    <div class="card">
-                                        <div class="card-content">
-                                            <div class="media align-items-stretch">
-                                                <div class="p-2 text-center bg-setting_count bg-darken-2">
-                                                    <i class="fa fa-money fa-3x icon_admin"></i>
-                                                </div>
-                                                <div class="p-2 bg-gradient-x-setting_count white media-body">
-                                                    <h3>Setting</h3>
-                                                    <h5 class="text-bold-400 mb-0">{{ $TotalSetting }}</h5>
-                                                    <div class="media-left media-middle mt-1">
-                                                        <a class="white" href="{{ url('settings') }}">View more</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-6 col-lg-3 col-12 mb-10">
-                                    <div class="card">
-                                        <div class="card-content">
-                                            <div class="media align-items-stretch">
-                                                <div class="p-2 text-center bg-order_count bg-darken-2">
-                                                    <i class="fa fa-money fa-3x icon_admin"></i>
-                                                </div>
-                                                <div class="p-2 bg-gradient-x-order_count white media-body">
-                                                    <h3>Order</h3>
-                                                    <h5 class="text-bold-400 mb-0">{{ $TotalOrder }}</h5>
-                                                    <div class="media-left media-middle mt-1">
-                                                        <a class="white" href="{{ route('admin.order.index') }}">View
-                                                            more</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
@@ -242,6 +204,170 @@
                             </div>
                         </div>
                     </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6 col-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Messages</h5>
+                            </div>
+                            <div class="ibox-content ibox-heading" style="">
+                                <h3><i class="fa fa-envelope-o"></i> New messages</h3>
+                                <small><i class="fa fa-tim"></i> You have 22 new messages and 16 waiting in draft
+                                    folder.</small>
+                            </div>
+                            <div class="ibox-content" style="">
+                                <div class="feed-activity-list">
+
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right text-navy">1m ago</small>
+                                            <strong>Monica Smith</strong>
+                                            <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                                Lorem Ipsum</div>
+                                            <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right">2m ago</small>
+                                            <strong>Jogn Angel</strong>
+                                            <div>There are many variations of passages of Lorem Ipsum available</div>
+                                            <small class="text-muted">Today 2:23 pm - 11.06.2014</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right">5m ago</small>
+                                            <strong>Jesica Ocean</strong>
+                                            <div>Contrary to popular belief, Lorem Ipsum</div>
+                                            <small class="text-muted">Today 1:00 pm - 08.06.2014</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right">5m ago</small>
+                                            <strong>Monica Jackson</strong>
+                                            <div>The generated Lorem Ipsum is therefore </div>
+                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right">5m ago</small>
+                                            <strong>Anna Legend</strong>
+                                            <div>All the Lorem Ipsum generators on the Internet tend to repeat </div>
+                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
+                                        </div>
+                                    </div>
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right">5m ago</small>
+                                            <strong>Damian Nowak</strong>
+                                            <div>The standard chunk of Lorem Ipsum used </div>
+                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
+                                        </div>
+                                    </div>
+                                    <div class="feed-element">
+                                        <div>
+                                            <small class="float-right">5m ago</small>
+                                            <strong>Gary Smith</strong>
+                                            <div>200 Latin words, combined with a handful</div>
+                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-8">
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Order cron list</h5>
+                                    </div>
+                                    <div class="ibox-content table-responsive">
+                                        <table class="table table-hover no-margins">
+                                            <thead>
+                                            <tr>
+                                                <th>Status</th>
+                                                <th>Date</th>
+                                                <th>User</th>
+                                                <th>Value</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><span class="label label-warning">Canceled</span> </td>
+                                                <td><i class="fa fa-clock-o"></i> 10:40am</td>
+                                                <td>Monica</td>
+                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
+                                            </tr>
+                                            <tr>
+                                                <td><small>Pending...</small> </td>
+                                                <td><i class="fa fa-clock-o"></i> 12:08am</td>
+                                                <td>Damian</td>
+                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 23% </td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="label label-primary">Completed</span> </td>
+                                                <td><i class="fa fa-clock-o"></i> 04:10am</td>
+                                                <td>Amelia</td>
+                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="ibox ">
+                                    <div class="ibox-title">
+                                        <h5>Support list</h5>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <ul class="todo-list m-t small-list">
+                                            <li>
+                                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
+                                                <span class="m-l-xs todo-completed">Buy a milk</span>
+
+                                            </li>
+                                            <li>
+                                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
+                                                <span class="m-l-xs">Send documents to Mike</span>
+                                                <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 mins</small>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
+                                                <span class="m-l-xs todo-completed">Plan vacation</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -330,24 +456,6 @@
 
         .bg-gradient-x-promocode_count {
             background-image: linear-gradient(to right, #FF6275 0%, #FF9EAC 100%);
-            background-repeat: repeat-x;
-        }
-
-        .bg-setting_count {
-            background-color: #00A5A8 !important;
-        }
-
-        .bg-gradient-x-setting_count {
-            background-image: linear-gradient(to right, #00A5A8 0%, #4DCBCD 100%);
-            background-repeat: repeat-x;
-        }
-
-        .bg-order_count {
-            background-color: #33FFBD !important;
-        }
-
-        .bg-gradient-x-order_count {
-            background-image: linear-gradient(to right, #33FFBD 0%, #b3ffe7 100%);
             background-repeat: repeat-x;
         }
 
@@ -488,14 +596,6 @@
                     name: 'Promo Code',
                     y: {{ $TotalPromo }},
                     color: '#FF6275',
-                }, {
-                    name: 'Setting',
-                    y: {{ $TotalSetting }},
-                    color: '#00A5A8',
-                }, {
-                    name: 'Order',
-                    y: {{ $TotalOrder }},
-                    color: '#33FFBD',
                 }, ]
             }]
         });

@@ -98,9 +98,9 @@
                                                         <p>
                                                             {{ $order->user_details->first_name }}
                                                             {{ $order->user_details->last_name }} <br>
-                                                            {{ $order->UserAddressDetails->street_address }},{{ $order->UserAddressDetails->city }}
+                                                            {{ @$order->UserAddressDetails->street_address }},{{ @$order->UserAddressDetails->city }}
                                                             <br>
-                                                            {{ $order->UserAddressDetails->states }},{{ $order->UserAddressDetails->country }},{{ $order->UserAddressDetails->zip }}<br>
+                                                            {{ @$order->UserAddressDetails->states }},{{ @$order->UserAddressDetails->country }},{{ @$order->UserAddressDetails->zip }}<br>
                                                         </p>
                                                     </div>
                                                 </div>
