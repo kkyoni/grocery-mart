@@ -4,7 +4,7 @@ class Loader extends Component {
     render() {
         return (
             <div>
-                {this.props.isLoading ? (
+                {this.props.isLoadingPage ? (
                     <div className="loader-container">
                         <div className="spinner"></div>
                     </div>

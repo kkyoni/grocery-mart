@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './header.css';
 import './cart.css';
 import swal from "sweetalert";
-import Loader from './Loader';
 class Header extends Component {
     constructor(props) {
         super(props)
@@ -137,7 +136,6 @@ class Header extends Component {
         }
         return (
             <div>
-                <Loader isLoading={this.props.isLoading} />
                 <header id="site-header" className="fixed-top">
                     <div className="container">
                         <nav className="navbar navbar-expand-lg navbar-light">

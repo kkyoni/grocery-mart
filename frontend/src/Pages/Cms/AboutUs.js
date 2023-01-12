@@ -22,8 +22,8 @@ class AboutUs extends Component {
     render() {
         return (
             <div>
-                <Title />
-                <Header isLoading={this.state.isLoading} />
+                <Title isLoadingPage={this.state.isLoading} />
+                <Header />
                 <div className="banner banner2">
                     <div className="container">
                         <h2>About Us</h2>

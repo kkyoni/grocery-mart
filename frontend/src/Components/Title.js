@@ -5,6 +5,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Service from "../services/Service";
+import Loader from './Loader';
 class Title extends Component {
     constructor(props) {
         super(props);
@@ -14,9 +15,8 @@ class Title extends Component {
             code: "",
             msg: "",
             isLoading: false,
+            isotpLoading: false,
             redirect: false,
-            errMsgEmail: "",
-            errMsgPwd: "",
             errMsg: "",
             otp: false,
             siteLogo: 'http://127.0.0.1:8000/uploads/settings/application_logo.png',
@@ -25,7 +25,6 @@ class Title extends Component {
     }
     async componentDidMount() {
         Service.getsiteLogo().then((res) => {
-            console.log("sdfsd", res);
             if (res.data.code === 503) {
                 window.location = "under-maintenance";
             }
@@ -53,15 +52,16 @@ class Title extends Component {
     };
     onOtpHandler = () => {
         const otpemail = localStorage.getItem("otpemail");
-        this.setState({ isLoading: true });
+        this.setState({ isotpLoading: true });
         axios
             .post("http://127.0.0.1:8000/api/verifyOtp", {
                 email: otpemail,
                 otp_number: this.state.code,
             })
             .then((res) => {
-                this.setState({ isLoading: false });
+                this.setState({ isotpLoading: false });
                 if (res.data.status === 'success') {
+                    localStorage.setItem("userData", JSON.stringify(res.data.data));
                     localStorage.setItem("isLoggedIn", true);
                     localStorage.removeItem('otpemail');
                     this.setState({
@@ -72,7 +72,12 @@ class Title extends Component {
                     this.setState({ openModel: false });
                     toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
                 } else {
-                    toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+                    this.setState({
+                        errMsg: res.data.message,
+                    });
+                    setTimeout(() => {
+                        this.setState({ errMsg: "" });
+                    }, 2000);
                 }
             })
             .catch((error) => {
@@ -95,7 +100,12 @@ class Title extends Component {
                     });
                     toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
                 } else {
-                    toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+                    this.setState({
+                        errMsg: res.data.message,
+                    });
+                    setTimeout(() => {
+                        this.setState({ errMsg: "" });
+                    }, 2000);
                 }
             })
             .catch((error) => {
@@ -112,16 +122,19 @@ class Title extends Component {
             .then((res) => {
                 this.setState({ isLoading: false });
                 if (res.data.status === 'success') {
-                    localStorage.setItem("userData", JSON.stringify(res.data.data));
                     localStorage.setItem("otpemail", this.state.email);
                     this.setState({ otp: true });
                     this.setState({
                         msg: res.data.message,
                         redirect: true,
                     });
-                    toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
                 } else {
-                    toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+                    this.setState({
+                        errMsg: res.data.message,
+                    });
+                    setTimeout(() => {
+                        this.setState({ errMsg: "" });
+                    }, 2000);
                 }
             })
             .catch((error) => {
@@ -136,27 +149,26 @@ class Title extends Component {
         toast.success("logout in successfully ⚡️", { position: toast.POSITION.TOP_RIGHT });
     };
     render() {
+        const openModel = this.state.openModel;
+        const isotpLoading = this.state.isotpLoading;
         const isLoading = this.state.isLoading;
         const otpmodal = this.state.otp;
         const otplogin = localStorage.getItem("isLoggedIn");
         const login = JSON.parse(localStorage.getItem("userData"));
+        let button;
+        if (otplogin && login) {
+            button = <button onClick={this.onLogoutHandler} style={{ fontSize: '18px', color: 'var(--heading-color)', width: '45px', height: '45px', lineHeight: '45px', display: 'block', textAlign: 'center', border: '1px solid var(--border-color-light)', borderRadius: '50%' }}><i className="fas fa-sign-out-alt"></i> </button>
+        } else {
+            button = <Link onClick={() => this.setOpenModal(true)} data-bs-toggle="modal" data-bs-target="#myModalAuthentication"><i className="fas fa-user"></i></Link>
+        }
         return (
             <div>
+                <Loader isLoadingPage={this.props.isLoadingPage} />
                 <ToastContainer />
                 <div className="header" id="home1">
                     <div className="container">
                         <div className="d-flex align-items-center justify-content-between">
-                            {otplogin && login ? (
-                                <div className="w3l_login">
-                                    <button onClick={this.onLogoutHandler} style={{ fontSize: '18px', color: 'var(--heading-color)', width: '45px', height: '45px', lineHeight: '45px', display: 'block', textAlign: 'center', border: '1px solid var(--border-color-light)', borderRadius: '50%' }}> <i
-                                        className="fas fa-sign-out-alt"></i> </button>
-                                </div>
-                            ) : (
-                                <div className="w3l_login">
-                                    <Link onClick={() => this.setOpenModal(true)} data-bs-toggle="modal" data-bs-target="#myModalAuthentication"><i
-                                        className="fas fa-user"></i></Link>
-                                </div>
-                            )}
+                            <div className="w3l_login">{button}</div>
                             <div className="w3l_logo text-center ml-auto">
                                 <h1><Link to={"/home"}><img src={this.state.siteLogo} alt={'siteLogo'} /></Link></h1>
                             </div>
@@ -165,7 +177,7 @@ class Title extends Component {
                         </div>
                     </div>
                 </div>
-                {this.state.openModel ? (
+                {openModel ?(
                     <div className="modal fade" id="myModalAuthentication" tabIndex={-1} aria-labelledby="myModalAuthentication" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
@@ -185,22 +197,15 @@ class Title extends Component {
                                                 <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                                     <div className="register">
                                                         <Form>
+                                                            <p className="text-danger" style={{ color: "red" }}>{this.state.errMsg}</p>
                                                             <Input type="text" name="code" placeholder="OTP" value={this.state.code} onChange={this.onChangeOtphandler} />
                                                             <br />
                                                             <div className="sign-up">
-                                                                <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onOtpHandler} > Verify OTP
-                                                                    {isLoading ? (
-                                                                        <i className="fa fa-refresh fa-spin"></i>
-                                                                    ) : (
-                                                                        <span></span>
-                                                                    )}
+                                                                <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onOtpHandler} >
+                                                                    {isotpLoading ? (<span>please wait...</span>) : (<span>Verify OTP</span>)}
                                                                 </Button>
-                                                                <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onResetOtpHandler} style={{ float: 'right' }}> Reset OTP
-                                                                    {isLoading ? (
-                                                                        <i className="fa fa-refresh fa-spin"></i>
-                                                                    ) : (
-                                                                        <span></span>
-                                                                    )}
+                                                                <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onResetOtpHandler} style={{ float: 'right' }}>
+                                                                    {isLoading ? (<span>please wait...</span>) : (<span>Reset OTP</span>)}
                                                                 </Button>
                                                             </div>
                                                         </Form>
@@ -224,20 +229,14 @@ class Title extends Component {
                                                 <div className="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                                     <div className="register">
                                                         <Form>
+                                                            <p className="text-danger" style={{ color: "red" }}>{this.state.errMsg}</p>
                                                             <Input type="text" name="email" placeholder="Email Address" value={this.state.email} onChange={this.onChangehandler} />
                                                             <span className="text-danger">{this.state.msg}</span>
-                                                            <span className="text-danger">{this.state.errMsgEmail}</span>
                                                             <Input type="password" name="password" placeholder="Password" value={this.state.password} onChange={this.onChangehandler} />
-                                                            <span className="text-danger">{this.state.errMsgPwd}</span>
-                                                            <p className="text-danger" style={{ color: "red" }}>{this.state.errMsg}</p>
                                                             <br />
                                                             <div className="sign-up">
-                                                                <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onSignInHandler} > Sign in
-                                                                    {isLoading ? (
-                                                                        <i className="fa fa-refresh fa-spin"></i>
-                                                                    ) : (
-                                                                        <span></span>
-                                                                    )}
+                                                                <Button className="buttonload text-center mb-4 btn button-eff" color="success" onClick={this.onSignInHandler}>
+                                                                    {isLoading ? (<span>please wait...</span>) : (<span>Sign in</span>)}
                                                                 </Button>
                                                                 <div className="">Forget Password</div>
                                                             </div>
@@ -265,7 +264,7 @@ class Title extends Component {
                             </div>
                         </div>
                     </div>
-                ) : ("")}
+                ):("")}
             </div>
         )
     }

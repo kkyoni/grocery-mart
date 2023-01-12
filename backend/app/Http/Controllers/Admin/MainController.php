@@ -4,8 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
+use App\Models\Brand;
+use App\Models\Categories;
+use App\Models\Cms;
+use App\Models\Faq;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\Promo;
 use App\Models\Setting;
 use App\Models\SiteSetting;
+use App\Models\User;
+use App\Models\UserAddress;
 use Carbon\Carbon;
 use Response;
 
@@ -38,9 +48,19 @@ class MainController extends Controller
     ----------------------------------------------------------------------------------- */
     public function dashboard()
     {
-        $totalSetting = Setting::count();
-        return view('admin.pages.dashboard', compact('totalSetting'));
+        $TotalUser = User::where('user_type', 'user')->count();
+        $TotalBlog = Blog::count();
+        $TotalCms = Cms::count();
+        $TotalFaq = Faq::count();
+        $TotalBrand = Brand::count();
+        $TotalCategories = Categories::count();
+        $TotalProduct = Product::count();
+        $TotalPromo = Promo::count();
+        $TotalSetting = Setting::count();
+        $TotalOrder = Order::count();
+        return view('admin.pages.dashboard', compact('TotalUser', 'TotalBlog', 'TotalCms', 'TotalFaq', 'TotalBrand', 'TotalCategories', 'TotalProduct', 'TotalPromo', 'TotalSetting', 'TotalOrder'));
     }
+
 
     public function maintenancemode_down()
     {
@@ -62,3 +82,4 @@ class MainController extends Controller
         return redirect()->route('admin.dashboard');
     }
 }
+

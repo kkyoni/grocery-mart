@@ -50,8 +50,8 @@ class OrderTracking extends Component {
         const { status } = this.state.TrackOrder;
         return (
             <div>
-                <Title />
-                <Header isLoading={this.state.isLoading} />
+                <Title isLoadingPage={this.state.isLoading} />
+                <Header />
                 <div className="banner banner2">
                     <div className="container">
                         <h2>Order Tracking</h2>

@@ -34,8 +34,8 @@ class BlogSingle extends Component {
         const description = this.state.blogdetail.description;
         return (
             <div>
-                <Title />
-                <Header isLoading={this.state.isLoading} />
+                <Title isLoadingPage={this.state.isLoading} />
+                <Header />
                 <div className="banner banner2">
                     <div className="container">
                         <h2>Blog Single</h2>

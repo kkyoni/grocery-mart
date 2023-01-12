@@ -46,8 +46,8 @@ class Faq extends Component {
 		}
 		return (
 			<div>
-				<Title />
-				<Header isLoading={this.state.isLoading} />
+				<Title isLoadingPage={this.state.isLoading} />
+                <Header />
 				<div className="banner banner2">
 					<div className="container">
 						<h2>FAQ's</h2>

@@ -27,8 +27,8 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <Title />
-                <Header isLoading={this.state.isLoading} />
+                <Title isLoadingPage={this.state.isLoading} />
+                <Header />
                 <SliderBanner />
                 <Banner />
                 <SpecialDeals />

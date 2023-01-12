@@ -176,7 +176,7 @@ class CheckOut extends Component {
   render() {
     const login = JSON.parse(localStorage.getItem("userData"));
     if (!login) {
-      return <Redirect to={'/home'} />;
+      return <Redirect to={'home'} />;
     }
     const cod = this.state.cod;
     var Cart_HTMLTABLE = "";
@@ -231,8 +231,8 @@ class CheckOut extends Component {
     }
     return (
       <div>
-        <Title />
-        <Header isLoading={this.state.isLoading} />
+        <Title isLoadingPage={this.state.isLoading} />
+        <Header />
         <div className="banner banner2">
           <div className="container">
             <h2>CheckOut</h2>

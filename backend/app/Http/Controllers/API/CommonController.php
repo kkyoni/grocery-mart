@@ -71,6 +71,7 @@ class CommonController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Invalid Credentials, Please try again', 'data' => (object)[]], 200);
             }
             $userTypeCheck = User::where('email', $request->get('email'))->where('status', 'active')->first();
+
             if ($userTypeCheck->user_type == 'user') {
                 $data['token'] = $token;
                 $data = $userTypeCheck;
@@ -185,8 +186,11 @@ class CommonController extends Controller
                 if (Carbon::now() >= Carbon::parse()) {
                     return response()->json(['status' => 'error', 'message' => 'Otp Expired']);
                 }
-                $getOtpuser = Otp::with('user')->where('email', $request->get('email'))->first();
-                return response()->json(['status'    => 'success', 'message'   => 'OTP is Verified.', 'data'        => $getOtpuser]);
+
+                // $getOtpuser = Otp::with('user')->where('email', $request->get('email'))->first();
+                $getOtpuser = User::where('email', $request->get('email'))->first();
+
+                return response()->json(['status'    => 'success', 'message'   => 'OTP is Verified.', 'data' => $getOtpuser]);
             }
             return response()->json(['status'    => 'error', 'message'   => 'Invalid Otp Details',]);
         } catch (Exception $exception) {

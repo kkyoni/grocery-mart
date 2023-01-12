@@ -46,8 +46,8 @@ class ProductsSingle extends Component {
 		const { name, description, productimage, price } = this.state.productsdetail;
 		return (
 			<div>
-				<Title />
-				<Header isLoading={this.state.isLoading} />
+				<Title isLoadingPage={this.state.isLoading} />
+                <Header />
 				<div className="banner banner2">
 					<div className="container">
 						<h2>Single Page</h2>

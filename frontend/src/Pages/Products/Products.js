@@ -150,8 +150,8 @@ class Products extends Component {
 		}
 		return (
 			<div>
-				<Title />
-				<Header isLoading={this.state.isLoading} CartDetails={this.state.AddCartDetails} />
+				<Title isLoadingPage={this.state.isLoading} />
+				<Header CartDetails={this.state.AddCartDetails} />
 				<div className="banner banner2">
 					<div className="container">
 						<h2>Top Selling <span>Kitchen Products</span> Flat <i>25% Discount</i></h2>
