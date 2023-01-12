@@ -620,57 +620,6 @@ class CommonController extends Controller
             return response()->json(['message' => $exception->getMessage()]);
         }
     }
-    public function checkoutsave(Request $request)
-    {
-        dd($request->all());
-        try {
-            $order_details = Order::create([
-                'invoice' => random_int(00000000001, 99999999999),
-                'comment' => $request->comments,
-                'grandtotal' => $request->newTotal,
-            ]);
-            if (!empty($order_details)) {
-                foreach ($request->product_cart as $values) {
-                    OrderProduct::create([
-                        'order_id' => $order_details->id,
-                        'product_id' => $values['id'],
-                        'category_id' => $order_details->category_id,
-                        'name' => $values['name'],
-                        'description' => $values['description'],
-                        'price' => $values['price'],
-                        'new_offer' => $values['new_offer'],
-                    ]);
-                }
-            }
-            $ProductOrder = OrderProduct::where('order_id', $order_details->id)->get();
-            $table = [];
-            foreach ($ProductOrder as $key => $value) {
-                $table[$key]['product'] = '<tr class="item">
-                <td>' . $value->name . '</td>
-                <td>₹' . $value->price . '</td>
-                </tr>';
-            }
-            $text = $table;
-            $emailcontent = array(
-                'text' => $text,
-                'invoice' => $order_details->invoice,
-                'date' => $order_details->created_at,
-                'ProductOrderTotal' => $order_details->grandtotal,
-                'userName' => 'Modi jaymin'
-            );
-            $details['email'] = 'modijaymin86@gmail.com';
-            $details['username'] = 'Modi Jaymin';
-            $details['subject'] = 'Invoice Bil';
-            dispatch(new InvoiceJob($details, $emailcontent));
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Order is SucessFully ⚡️'
-            ]);
-        } catch (Exception $exception) {
-            return response()->json(['message' => $exception->getMessage()]);
-        }
-    }
 
     public function paypal_payment(Request $request)
     {
@@ -769,12 +718,13 @@ class CommonController extends Controller
             $details['username'] = @$UserProductOrder->first_name . ' ' . @$UserProductOrder->last_name;
             $details['subject'] = 'Grocery Mart - Invoice';
             dispatch(new InvoiceJob($details, $emailcontent));
-
+            Helper::addToLog('COD Order SucessFully',$request->user_id,'success');
             return response()->json([
                 'status' => 'success',
                 'message' => 'Order is SucessFully ⚡️'
             ]);
         } catch (Exception $exception) {
+            Helper::addToLog('COD Order Not SucessFully',$request->user_id,'error');
             return response()->json(['message' => $exception->getMessage()]);
         }
     }
@@ -816,13 +766,14 @@ class CommonController extends Controller
                 $details['username'] = $contact->first_name . ' ' . $contact->last_name;
                 $details['subject'] = 'Contact Inquiry';
                 dispatch(new ContactJob($details, $emailcontent));
-
+                Helper::addToLog('Contact SucessFully',1,'success');
                 return response()->json([
                     'contact'  => $contact,
                     'status' => 'success',
-                    'message' => 'Contact Added Sucessfully !!'
+                    'message' => 'Contact Sucessfully !!'
                 ]);
             } else {
+                Helper::addToLog('Contact Not SucessFully',1,'error');
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Contact Not Sucessfully !!'
@@ -853,13 +804,14 @@ class CommonController extends Controller
                 $details['username'] = $support->supportname;
                 $details['subject'] = 'Support Inquiry';
                 dispatch(new SupportJob($details, $emailcontent));
-
+                Helper::addToLog('Support SucessFully',1,'success');
                 return response()->json([
                     'support'  => $support,
                     'status' => 'success',
-                    'message' => 'Support Added Sucessfully !!'
+                    'message' => 'Support Sucessfully !!'
                 ]);
             } else {
+                Helper::addToLog('Support Not SucessFully',1,'error');
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Support Not Sucessfully !!'

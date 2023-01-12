@@ -50,8 +50,91 @@
             </div>
         </div>
     </div>
+
+
+
+    <div id="chatContainer" style="display: none">
+        <div class="jaymin" style="bottom: 20px;right: 75px;width: 230px;height: 320px;border-radius: 4px">
+            <div class="heading" draggable="true"
+                style="background: #2f4050;padding: 8px 15px;font-weight: bold;color: #fff;">
+                {{ Settings::get('application_title') }} Chat
+            </div>
+            <div id="conversation" class="content">
+            </div>
+        </div>
+        <div id="messageTextBtn">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group">
+                        <div class="form-chat" style="padding: 10px 10px;">
+                            <input id="sendToID" name="sendToID" type="hidden">
+                            <div class="input-group input-group-sm">
+                                <input id="message" type="text" class="form-control"
+                                    placeholder="Enter message here . . .">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary sendMessage" type="button">Send</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="title">Start Conversation</div>
+    </div>
 @endsection
 @section('styles')
+    <style>
+        #chatContainer {
+            width: 250px;
+            height: 40px;
+            position: fixed;
+            right: 75px;
+            bottom: 50px;
+            z-index: 9999;
+            background-color: #fff;
+            box-shadow: 1px 2px 5px black;
+            cursor: pointer;
+        }
+
+        #chatContainer .title {
+            position: absolute;
+            bottom: 0;
+            border-top: 0px solid black;
+            height: 40px;
+            width: 100%;
+            padding: 10px;
+            display: block;
+            left: 0;
+            right: 0;
+            background-color: lightgray;
+            font-weight: 800;
+        }
+
+        #conversation {
+            display: none;
+            width: 100%;
+            height: 220px;
+            border: 0px solid #171717;
+            position: absolute;
+            top: 40px;
+            z-index: 2;
+            padding: 10px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            left: 0;
+            right: 0;
+            margin: 0;
+        }
+
+        #messageTextBtn {
+            display: none;
+            position: absolute;
+            width: 100%;
+            bottom: 40px;
+            padding: 0;
+        }
+    </style>
     <link rel="stylesheet" href="{{ asset('assets/admin/datatables/dataTables.bootstrap4.min.css') }}">
 @endsection
 @section('scripts')
@@ -171,5 +254,88 @@
             });
             return false;
         })
+    </script>
+
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        function renderList(getUserSendToId) {
+            jQuery.ajax({
+                url: "{{ route('admin.user.renderConversationList') }}",
+                method: 'post',
+                data: {
+                    getUserSendToId: getUserSendToId
+                },
+                success: function(result) {
+                    $('#chatContainer #conversation')
+                        .html(result.html)
+                        .scrollTop($("#chatContainer #conversation")[0].scrollHeight);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        }
+        $(document).click(function(evt) {
+            if ($(evt.target).closest(".startChat").length > 0) {
+                return false;
+            }
+            if ($(evt.target).closest("#chatContainer").length > 0) {
+                return false;
+            }
+            $('#chatContainer').animate({
+                height: 40
+            }, 200).removeClass('hide');
+            $('#chatContainer').css('display', 'none');
+            $('#conversation').css('display', 'none');
+            $('#messageTextBtn').css('display', 'none');
+        });
+        $(document).on('click', '.startChat', function() {
+            let container = $('#chatContainer');
+            if (container.hasClass('hide')) {
+                container.animate({
+                    height: 40
+                }, 200).removeClass('hide');
+                $('#chatContainer').css('display', 'none');
+                $('#conversation').css('display', 'none');
+                $('#messageTextBtn').css('display', 'none');
+            } else {
+                container.animate({
+                    height: 350,
+                    width: 230
+                }, 200).addClass('hide');
+                $('#chatContainer').css('display', 'block');
+                $('#conversation').css('display', 'block');
+                $('#messageTextBtn').css('display', 'block');
+            }
+            let getUserSendToId = $(this).attr('data-user-id');
+            $('#sendToID').val(getUserSendToId)
+            renderList(getUserSendToId);
+        });
+
+        $(document).on('click', '.sendMessage', function() {
+            let getUserSendToId = $('#sendToID').val();
+            let message = $('#chatContainer #message').val();
+            jQuery.ajax({
+                url: "{{ route('admin.user.sendMessage') }}",
+                method: 'post',
+                data: {
+                    getUserSendToId: getUserSendToId,
+                    message: message,
+                },
+                success: function(result) {
+                    console.log(result);
+                    $('#chatContainer #message').val('');
+                    renderList(getUserSendToId);
+                },
+                error: function(result) {
+                    console.log(result);
+                }
+            });
+        });
     </script>
 @endsection

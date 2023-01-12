@@ -19,7 +19,7 @@
     <div class="wrapper wrapper-content  animated fadeInRight article">
         <div class="row justify-content-md-center">
             <div class="col-lg-10">
-                <div class="ibox" style="margin-bottom:80px">
+                <div class="ibox" style="margin-bottom:100px">
                     <div class="ibox-content">
                         <div class="tab-content">
                             <div id="contact-1" class="tab-pane active">
@@ -49,15 +49,17 @@
                                                 <span class="tm_btn_text">Print</span>
                                             </a>
                                             <button id="tm_download_btn" class="tm_invoice_btn tm_color2">
-                                                <span class="tm_btn_icon">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="ionicon"
-                                                        viewBox="0 0 512 512">
-                                                        <path
-                                                            d="M320 336h76c55 0 100-21.21 100-75.6s-53-73.47-96-75.6C391.11 99.74 329 48 256 48c-69 0-113.44 45.79-128 91.2-60 5.7-112 35.88-112 98.4S70 336 136 336h56M192 400.1l64 63.9 64-63.9M256 224v224.03"
-                                                            fill="none" stroke="currentColor" stroke-linecap="round"
-                                                            stroke-linejoin="round" stroke-width="32" />
-                                                    </svg>
-                                                </span>
+                                                <a href="{{route('admin.order.pdf', [$order->id])}}">
+                                                    <span class="tm_btn_icon">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon"
+                                                            viewBox="0 0 512 512">
+                                                            <path
+                                                                d="M320 336h76c55 0 100-21.21 100-75.6s-53-73.47-96-75.6C391.11 99.74 329 48 256 48c-69 0-113.44 45.79-128 91.2-60 5.7-112 35.88-112 98.4S70 336 136 336h56M192 400.1l64 63.9 64-63.9M256 224v224.03"
+                                                                fill="none" stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="32" />
+                                                        </svg>
+                                                    </span>
+                                                </a>
                                                 <span class="tm_btn_text">Download</span>
                                             </button>
                                         </div>
@@ -793,12 +795,12 @@
         }
 
         /* .tm_container {
-            max-width: 880px;
-            padding: 30px 15px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-            } */
+                            max-width: 880px;
+                            padding: 30px 15px;
+                            margin-left: auto;
+                            margin-right: auto;
+                            position: relative;
+                            } */
 
         .tm_text_center {
             text-align: center;
@@ -919,7 +921,7 @@
 
         .tm_invoice {
             /* background: #fff;
-            border-radius: 10px; */
+                            border-radius: 10px; */
             padding: 50px;
         }
 
@@ -1506,8 +1508,8 @@
         }
 
         /* .tm_invoice_wrap {
-            position: relative;
-            } */
+                            position: relative;
+                            } */
 
         .tm_note_list li:not(:last-child) {
             margin-bottom: 5px;
@@ -2200,6 +2202,10 @@
         }
 
         @media print {
+            .border-bottom {
+                display: none;
+            }
+
             .footer {
                 display: none;
             }

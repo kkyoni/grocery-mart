@@ -1,9 +1,25 @@
 <?php
 
 namespace App\Helpers;
-
+use App\Models\LogActivity;
+use Request;
 class Helper
 {
+
+    public static function addToLog($subject,$user_id,$status)
+    {
+        $log = [];
+        $log['subject'] = $subject;
+        $log['url'] = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
+        $log['method'] = $_SERVER['REQUEST_METHOD'];
+        $log['ip'] = $_SERVER['REMOTE_ADDR'];
+        $log['agent'] = $_SERVER["HTTP_USER_AGENT"];
+        $log['status'] = $status;
+        $log['user_id'] = $user_id ? $user_id : 1;
+        LogActivity::create($log);
+    }
+
+
 
     public static function ORM_to_string($object)
     {

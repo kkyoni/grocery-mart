@@ -13,7 +13,9 @@ use Yajra\DataTables\Html\Builder;
 use Auth;
 use Event;
 use App\Helpers\Helper;
+use App\Models\ChatMessage;
 use App\Models\Comment;
+use App\Models\LogActivity;
 use App\Models\User;
 
 class UsersController extends Controller
@@ -42,9 +44,9 @@ class UsersController extends Controller
             return DataTables::of($user->get())->addIndexColumn()
                 ->editColumn('avatar', function (User $user) {
                     if (!$user->avatar) {
-                        return '<img class="img-thumbnail" src="' . asset('storage/avatar/default.png') . '" width="60px">';
+                        return '<img class="img-thumbnail" src="' . asset('storage/avatar/default.png') . '" width="50px" height="50px">';
                     } else {
-                        return '<img class="img-thumbnail" src="' . asset('storage/avatar' . '/' . $user->avatar) . '" width="60px">';
+                        return '<img class="img-thumbnail" src="' . asset('storage/avatar' . '/' . $user->avatar) . '" width="50px" height="50px">';
                     }
                 })
                 ->editColumn('status', function (User $user) {
@@ -62,7 +64,8 @@ class UsersController extends Controller
                     $action .= '<a class="btn btn-warning btn-circle btn-sm" href=' . route('admin.user.edit', [$user->id]) . '  data-toggle="tooltip" title="Edit"><i class="fa fa-pencil"></i></a>';
                     $action .= '<a class="btn btn-danger btn-circle btn-sm m-l-10 deleteuser ml-1 mr-1" data-id ="' . $user->id . '" href="javascript:void(0)" data-toggle="tooltip" title="Delete"><i class="fa fa-trash"></i></a>';
                     $action .= '<a href="javascript:void(0)" class="btn btn-primary btn-circle btn-sm ShowUser" data-id="' . $user->id . '" data-toggle="tooltip" title="Show"><i class="fa fa-eye"></i></a>';
-                    $action .= '<a class="btn btn-warning btn-circle btn-sm ml-1" href=' . route('admin.user.activity_log', [$user->id]) . '  data-toggle="tooltip" title="Activity Log"><i class="fa fa-tasks"></i></a>';
+                    $action .= '<a class="btn btn-success btn-circle btn-sm ml-1" href=' . route('admin.user.activity_log', [$user->id]) . '  data-toggle="tooltip" title="Activity Log"><i class="fa fa-tasks"></i></a>';
+                    $action .= '<a href="javascript:void(0)" class="btn btn-circle btn-sm ml-1 startChat" data-user-id="' . $user->id . '" data-toggle="tooltip" title="Chat" style="background-color:#5cb85c;border-color:#4cae4c;color:#FFF"><i class="fa fa-comments-o"></i></a>';
                     return $action;
                 })
                 ->rawColumns(['status', 'action', 'avatar', 'name'])
@@ -77,6 +80,37 @@ class UsersController extends Controller
             ['data' => 'action', 'name' => 'action', 'title' => 'ACTION', 'width' => '10%', "orderable" => false, "searchable" => false],
         ])->parameters(['order' => []]);
         return view($this->pageLayout . 'index', compact('html'));
+    }
+
+    public function renderConversationList(Request $request)
+    {
+        $conversationList = ChatMessage::where('to_user_id', $request->get('getUserSendToId'))
+            ->orWhere('from_user_id', $request->get('getUserSendToId'))
+            ->get();
+            $SecondUser = User::where('id',$request->get('getUserSendToId'))->first();
+        $view = view("admin.pages.user.conversationList", compact('conversationList','SecondUser'))->render();
+        return response()->json(['html' => $view]);
+    }
+    public function sendMessage(Request $request)
+    {
+        try {
+            $getSentToID = $request->get('getUserSendToId');
+            $message = $request->get('message');
+            ChatMessage::create([
+                'to_user_id'    => $getSentToID,
+                'from_user_id'  => Auth::user()->id,
+                'chat_message'  => $message,
+            ]);
+            return response()->json([
+                'status'    => 'success',
+                'message'   => 'Message Sent Successfully.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status'    => 'error',
+                'message'   => $e->getMessage()
+            ]);
+        }
     }
 
     /*-----------------------------------------------------------------------------------
@@ -301,11 +335,46 @@ class UsersController extends Controller
         }
     }
 
-    public function activitylog($id)
+    public function activitylog(Builder $builder, Request $request, $id)
     {
-        $user_detail = User::where('id', $id)->first();
-        // $user_detail = Comment::where('user_id', $id)->get();
-        $messages_count = Comment::where('user_id', $id)->count('user_id');
-        return view($this->pageLayout . 'ActivityLog', compact('user_detail', 'messages_count'));
+        $logactivity = LogActivity::where('user_id', $id)->orderBy('id', 'desc');
+        if (request()->ajax()) {
+            return DataTables::of($logactivity->get())->addIndexColumn()
+                ->editColumn('status', function (LogActivity $logactivity) {
+                    if ($logactivity->status == 'success') {
+                        return  '<span class="label label-primary"><i class="fa fa-check"></i> Completed</span>';
+                    } else {
+                        return '<span class="label label-danger"><i class="fa fa-times"></i> Error</span>';
+                    }
+                })
+                ->editColumn('url', function (LogActivity $logactivity) {
+                    return '<p class="text-success">' . $logactivity->url . '</p>';
+                })
+                ->editColumn('method', function (LogActivity $logactivity) {
+                    return '<label class="label label-info">' . $logactivity->method . '</label>';
+                })
+                ->editColumn('ip', function (LogActivity $logactivity) {
+                    return '<p class="text-warning">' . $logactivity->ip . '</p>';
+                })
+                ->editColumn('agent', function (LogActivity $logactivity) {
+                    return '<p class="text-danger">' . $logactivity->agent . '</p>';
+                })
+                ->editColumn('created_at', function (LogActivity $logactivity) {
+                    return $logactivity->created_at->format('y-m-d');
+                })
+                ->rawColumns(['status', 'url', 'method', 'ip', 'agent', 'created_at'])
+                ->make(true);
+        }
+        $html = $builder->columns([
+            ['data' => 'DT_RowIndex', 'name' => '', 'title' => 'NO', 'width' => '5%', "orderable" => false, "searchable" => false],
+            ['data' => 'subject', 'name' => 'subject', 'title' => 'Subject', 'width' => '10%'],
+            ['data' => 'url', 'name' => 'url', 'title' => 'Url', 'width' => '10%'],
+            ['data' => 'method', 'name' => 'method', 'title' => 'Method', 'width' => '10%'],
+            ['data' => 'ip', 'name' => 'ip', 'title' => 'IP', 'width' => '10%'],
+            ['data' => 'agent', 'name' => 'agent', 'title' => 'Agent', 'width' => '10%'],
+            ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '10%'],
+            ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Date', 'width' => '10%'],
+        ])->parameters(['order' => []]);
+        return view($this->pageLayout . 'ActivityLog', compact('html'));
     }
 }

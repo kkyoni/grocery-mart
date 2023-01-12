@@ -90,6 +90,9 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::post('/user/updateProfileDetail', [UsersController::class, 'updateProfileDetail'])->name('user.updateProfileDetail');
         Route::post('/user/updatePassword', [UsersController::class, 'updatePassword'])->name('user.updatePassword');
         Route::get('/user/activity_log/{id}', [UsersController::class, 'activitylog'])->name('user.activity_log');
+        Route::get('/user/chat/{id}', [UsersController::class, 'chat'])->name('user.chat');
+        Route::post('/user/renderConversationList', [UsersController::class, 'renderConversationList'])->name('user.renderConversationList');
+        Route::post('/user/sendMessage', [UsersController::class, 'sendMessage'])->name('user.sendMessage');
 
         //====================> CMS Management =========================
         Route::get('/cms', [CmsController::class, 'index'])->name('cms.index');
@@ -166,5 +169,7 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::get('/order', [OrderController::class, 'index'])->name('order.index');
         Route::post('/order/filter_by_button', [OrderController::class, 'index'])->name('order.filter_by_button');
         Route::get('/order/view/{id}', [OrderController::class, 'view'])->name('order.view');
+        Route::get('/order/pdf/{id}', [OrderController::class, 'downloadPdf'])->name('order.pdf');
+
     });
 });

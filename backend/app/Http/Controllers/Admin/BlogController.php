@@ -45,9 +45,9 @@ class BlogController extends Controller
                 })
                 ->editColumn('image', function (Blog $blog) {
                     if (!$blog->image) {
-                        return '<img class="img-thumbnail" src="' . asset('storage/blog/default.png') . '" width="60px">';
+                        return '<img class="img-thumbnail" src="' . asset('storage/blog/default.png') . '" width="50px" height="50px">';
                     } else {
-                        return '<img class="img-thumbnail" src="' . asset('storage/blog' . '/' . $blog->image) . '" width="60px">';
+                        return '<img class="img-thumbnail" src="' . asset('storage/blog' . '/' . $blog->image) . '" width="50px" height="50px">';
                     }
                 })
                 ->editColumn('action', function (Blog $blog) {

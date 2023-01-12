@@ -13,8 +13,7 @@
 </div>
 
 <body class="" onload="myFunction()" style="margin:0;">
-    <div id="wrapper">
-        {{-- <div id="wrapper" style="display:none;"> --}}
+    <div id="wrapper" style="display:none;">
         @include('admin.includes.sideBar')
         <div id="page-wrapper" class="gray-bg">
             @include('admin.includes.topNavigation')

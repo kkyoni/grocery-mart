@@ -34,7 +34,6 @@
             'class' => 'select2_demo_2 form-control',
             'id' => 'user_id',
             'multiple' => 'multiple',
-            'data-width' => '100%',
         ]) !!}
         <span class="help-block">
             <font color="red"> {{ $errors->has('user_id') ? '' . $errors->first('user_id') . '' : '' }} </font>
@@ -124,7 +123,7 @@
     <link href="{{ asset('assets/admin/css/plugins/iCheck/custom.css') }}" rel="stylesheet">
     <style>
         .select2-container .select2-search--inline .select2-search__field {
-            width: 140px !important;
+            width: 140px !important
         }
     </style>
 @endsection
@@ -142,19 +141,20 @@
         var selectedValuesTest = ["all"];
         $(document).ready(function() {
             $(".select2_demo_2").select2({
+                width: '100%',
                 theme: 'bootstrap4',
                 placeholder: "Select a User Email",
-                dropdownAutoWidth: true,
                 allowClear: true
             });
-            $('#data_5 .input-daterange').datepicker({
-                format: 'yyyy-mm-dd',
-                tags: "true",
-                allowClear: true,
-                keyboardNavigation: false,
-                forceParse: false,
-                autoclose: true
-            });
+            // $('#data_5 .input-daterange').datepicker({
+            //     format: 'yyyy-mm-dd',
+            //     tags: "true",
+            //     allowClear: true,
+            //     keyboardNavigation: false,
+            //     forceParse: false,
+            //     autoclose: true,
+            //     startDate: (new Date()).toISOString().split('T')[0],
+            // });
         });
 
         function readURL(input) {
@@ -170,6 +170,29 @@
             $('input[type="file"]').trigger('click');
             $('input[type="file"]').change(function() {
                 readURL(this);
+            });
+        });
+
+        $(document).ready(function() {
+            $('#data_5 .input-daterange').datepicker({
+                startDate: new Date(),
+                format: "yyyy-mm-dd",
+                todayBtn: "linked",
+                autoclose: true,
+            });
+            $("#end_date").prop("disabled", true)
+                .datepicker({
+                    format: "yyyy-mm-dd",
+                }).on('changeDate', function(selected) {
+                    var maxDate = new Date(selected.date.valueOf());
+                    $('#start_date').datepicker('setEndDate', maxDate);
+                });
+
+            $("#start_date").datepicker({
+                format: "yyyy-mm-dd",
+            }).on('changeDate', function(selected) {
+                var minDate = new Date(selected.date.valueOf());
+                $("#end_date").prop("disabled", false).datepicker('setStartDate', minDate);
             });
         });
     </script>

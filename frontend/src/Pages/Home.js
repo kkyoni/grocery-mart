@@ -8,6 +8,7 @@ import TopProducts from "./TopProducts/TopProducts";
 import SpecialDeals from "./SpecialDeals/SpecialDeals";
 import Banner from "./Banner/Banner";
 import SliderBanner from "./Banner/SliderBanner";
+import Chat from "./Chat/Chat";
 class Home extends Component {
     constructor(props) {
         super(props)
@@ -35,6 +36,7 @@ class Home extends Component {
                 <Partners />
                 <Newsletter />
                 <Footer />
+                <Chat />
             </div>
         );
     }

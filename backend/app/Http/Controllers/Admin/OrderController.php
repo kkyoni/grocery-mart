@@ -18,9 +18,10 @@ use App\Models\OrderProduct;
 use App\Models\Promo;
 use App\Models\PromoUser;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use Exception;
 use PDF;
-use View;
+use Illuminate\Support\Facades\DB;
+
 
 class OrderController extends Controller
 {
@@ -140,6 +141,19 @@ class OrderController extends Controller
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
             ]);
+        }
+    }
+
+    public function downloadPdf($id)
+    {
+        try {
+            $order = Order::with(['user_details', 'UserAddressDetails'])->where('id', $id)->first();
+            $ProductOrder = OrderProduct::where('order_id', $id)->get();
+            view()->share('Order', $order,'ProductOrder',$ProductOrder);
+            $pdf = PDF::loadView('admin.pages.order.order-pdf', ['order' => $order,'ProductOrder'=>$ProductOrder]);
+            return $pdf->download('invoice.pdf');
+        } catch (Exception $e) {
+            echo $e;
         }
     }
 }

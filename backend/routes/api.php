@@ -31,11 +31,9 @@ Route::get('/get-sitelogo', [CommonController::class, 'sitelogo'])->middleware([
 //Post Method
 Route::post('/login', [CommonController::class, 'login'])->middleware(['UnderMaintenance']);
 Route::post('/sendOtp', [CommonController::class, 'sendOtp'])->middleware(['UnderMaintenance']);
-Route::post('/checkoutsave', [CommonController::class, 'checkoutsave'])->middleware(['UnderMaintenance']);
 Route::post('/checkoutsavecod', [CommonController::class, 'checkoutsavecod'])->middleware(['UnderMaintenance']);
 Route::post('/stripe_payment', [CommonController::class, 'stripe_payment'])->middleware(['UnderMaintenance']);
 Route::post('/paypal_payment', [CommonController::class, 'paypal_payment'])->middleware(['UnderMaintenance']);
-Route::post('/payment', [CommonController::class, 'payment'])->middleware(['UnderMaintenance']);
 Route::post('/verifyOtp', [CommonController::class, 'verifyOtp'])->middleware(['UnderMaintenance']);
 Route::post('/add-contact', [CommonController::class, 'addcontact'])->middleware(['UnderMaintenance']);
 Route::post('/add-support', [CommonController::class, 'addsupport'])->middleware(['UnderMaintenance']);
