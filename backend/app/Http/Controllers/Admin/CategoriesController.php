@@ -4,18 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\Brand;
 use App\Models\Categories;
-
+use Exception;
 class CategoriesController extends Controller
 {
     protected $authLayout = '';
@@ -33,7 +27,7 @@ class CategoriesController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -93,10 +87,10 @@ class CategoriesController extends Controller
                 'categories_name'               => @$request->get('categories_name'),
                 'brand_id'               => @$request->get('brand_id'),
             ]);
-            smilify('success', 'Categories Created Successfully ⚡️');
+            smilify('success', 'Categories Created Successfully 🔥 !');
             return redirect()->route('admin.categories.index');
-        } catch (\Exception $e) {
-            smilify('error', 'Categories Not Created Successfully ⚡️');
+        } catch (Exception $e) {
+            smilify('error', 'Categories Not Created Successfully 🔥 !');
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -115,10 +109,10 @@ class CategoriesController extends Controller
             if (!empty($categories)) {
                 return view($this->pageLayout . 'edit', compact('categories', 'brand_list'));
             } else {
-                smilify('error', 'Edit Categories Not Found ⚡️');
+                smilify('error', 'Edit Categories Not Found 🔥 !');
                 return redirect()->route('admin.categories.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -147,9 +141,9 @@ class CategoriesController extends Controller
                 'categories_name'             => @$request->get('categories_name'),
                 'brand_id'               => @$request->get('brand_id')
             ]);
-            smilify('success', 'Categories Updated Successfully ⚡️');
+            smilify('success', 'Categories Updated Successfully 🔥 !');
             return redirect()->route('admin.categories.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -165,13 +159,13 @@ class CategoriesController extends Controller
         try {
             $categories = Categories::where('id', $id)->first();
             $categories->delete();
-            smilify('success', 'Categories Deleted Successfully ⚡️');
+            smilify('success', 'Categories Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Categories Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()

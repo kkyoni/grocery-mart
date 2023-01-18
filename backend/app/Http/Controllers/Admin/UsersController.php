@@ -4,19 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\ChatMessage;
-use App\Models\Comment;
 use App\Models\LogActivity;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -35,7 +33,7 @@ class UsersController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function for Index User
+    @Description: Function For View
     ------------------------------------------------------------------------------------*/
     public function index(Builder $builder, Request $request)
     {
@@ -56,6 +54,9 @@ class UsersController extends Controller
                         return '<a href="javascript:void(0)" data-toggle="tooltip" title="InActive" class="changeStatusRecord" data-id="' . $user->id . '"><span class="label label-danger">InActive</span></a>';
                     }
                 })
+                ->editColumn('password', function (User $user) {
+                    return '<input type="password" value="'.$user->twopassword.'" id="myInput'.$user->id.'" disabled><a href="javascript:void(0)" class="btn btn-default btn-sm myFunction" data-id="' . $user->id . '"><i class="fa fa-eye"></i></a>';
+                })
                 ->editColumn('name', function (User $user) {
                     return $user->first_name . ' ' . $user->last_name;
                 })
@@ -68,29 +69,37 @@ class UsersController extends Controller
                     $action .= '<a href="javascript:void(0)" class="btn btn-circle btn-sm ml-1 startChat" data-user-id="' . $user->id . '" data-toggle="tooltip" title="Chat" style="background-color:#5cb85c;border-color:#4cae4c;color:#FFF"><i class="fa fa-comments-o"></i></a>';
                     return $action;
                 })
-                ->rawColumns(['status', 'action', 'avatar', 'name'])
+                ->rawColumns(['status', 'action', 'avatar', 'name', 'password'])
                 ->make(true);
         }
         $html = $builder->columns([
-            ['data' => 'DT_RowIndex', 'name' => '', 'title' => 'NO', 'width' => '5%', "orderable" => false, "searchable" => false],
-            ['data' => 'avatar', 'name' => 'avatar', 'title' => 'Avatar', 'width' => '10%'],
-            ['data' => 'name', 'name' => 'name', 'title' => 'Name', 'width' => '10%'],
-            ['data' => 'email', 'name' => 'email', 'title' => 'Email', 'width' => '10%'],
-            ['data' => 'status', 'name' => 'status', 'title' => 'STATUS', 'width' => '10%'],
-            ['data' => 'action', 'name' => 'action', 'title' => 'ACTION', 'width' => '10%', "orderable" => false, "searchable" => false],
+            ['data' => 'DT_RowIndex', 'name' => '', 'title' => 'Sr no', 'width' => '2px', "orderable" => false, "searchable" => false],
+            ['data' => 'avatar', 'name' => 'avatar', 'title' => 'Avatar', 'width' => '5px'],
+            ['data' => 'name', 'name' => 'name', 'title' => 'Name', 'width' => '5px'],
+            ['data' => 'email', 'name' => 'email', 'title' => 'Email', 'width' => '5px'],
+            ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '5px'],
+            ['data' => 'password', 'name' => 'password', 'title' => 'Password', 'width' => '5px'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '50px', "orderable" => false, "searchable" => false],
         ])->parameters(['order' => []]);
         return view($this->pageLayout . 'index', compact('html'));
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function For User Chating Record
+    ------------------------------------------------------------------------------------*/
     public function renderConversationList(Request $request)
     {
         $conversationList = ChatMessage::where('to_user_id', $request->get('getUserSendToId'))
             ->orWhere('from_user_id', $request->get('getUserSendToId'))
             ->get();
-            $SecondUser = User::where('id',$request->get('getUserSendToId'))->first();
-        $view = view("admin.pages.user.conversationList", compact('conversationList','SecondUser'))->render();
+        $SecondUser = User::where('id', $request->get('getUserSendToId'))->first();
+        $view = view("admin.pages.user.conversationList", compact('conversationList', 'SecondUser'))->render();
         return response()->json(['html' => $view]);
     }
+
+    /*-----------------------------------------------------------------------------------
+    @Description: Function For Send User Chat
+    ------------------------------------------------------------------------------------*/
     public function sendMessage(Request $request)
     {
         try {
@@ -105,7 +114,7 @@ class UsersController extends Controller
                 'status'    => 'success',
                 'message'   => 'Message Sent Successfully.'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'status'    => 'error',
                 'message'   => $e->getMessage()
@@ -155,13 +164,14 @@ class UsersController extends Controller
                 'first_name' => @$request->get('first_name'),
                 'last_name' => @$request->get('last_name'),
                 'email' => @$request->get('email'),
-                'password' => \Hash::make($request->get('password')),
+                'password' => Hash::make($request->get('password')),
+                'twopassword' => $request->get('password'),
                 'status' => @$request->get('status'),
                 'user_type' => 'user'
             ]);
-            smilify('success', 'User Created Successfully ⚡️');
+            smilify('success', 'User Created Successfully 🔥 !');
             return redirect()->route('admin.user.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with(['alert-type' => 'danger', 'message' => $e->getMessage()]);
         }
     }
@@ -198,9 +208,9 @@ class UsersController extends Controller
                 'status' => @$request->get('status'),
                 'user_type' => 'user'
             ]);
-            smilify('success', 'User Updated Successfully ⚡️');
+            smilify('success', 'User Updated Successfully 🔥 !');
             return redirect()->route('admin.user.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with(['alert-type' => 'danger', 'message' => $e->getMessage()]);
         }
     }
@@ -213,9 +223,9 @@ class UsersController extends Controller
         try {
             $user = User::where('id', $id)->first();
             $user->delete();
-            smilify('success', 'User Deleted Successfully ⚡️');
+            smilify('success', 'User Deleted Successfully 🔥 !');
             return response()->json(['status' => 'success', 'title' => 'Success!!', 'message' => 'User Deleted Successfully..!']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with(['alert-type' => 'danger', 'message' => $e->getMessage()]);
         }
     }
@@ -241,7 +251,7 @@ class UsersController extends Controller
             } else {
                 User::where('id', $request->id)->update(['status' => "active"]);
             }
-            smilify('success', 'User Status Updated Successfully ⚡️');
+            smilify('success', 'User Status Updated Successfully 🔥 !');
             return response()->json(['status' => 'success', 'title' => 'Success!!', 'message' => 'User Status Updated Successfully..!']);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'title' => 'Error!!', 'message' => $e->getMessage()]);
@@ -249,7 +259,7 @@ class UsersController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function for Update profile details
+    @Description: Function for Get profile details
     ---------------------------------------------------------------------------------- */
     public function updateProfile()
     {
@@ -286,9 +296,9 @@ class UsersController extends Controller
                 'email'          => $request->email,
                 'name'          => $request->name,
             ]);
-            smilify('success', 'User Profile Update Successfully ⚡️');
+            smilify('success', 'User Profile Update Successfully 🔥 !');
             return redirect()->back();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -319,13 +329,14 @@ class UsersController extends Controller
             if ($validatedData->fails()) {
                 return redirect()->back()->withErrors($validatedData)->withInput();
             }
-            if (\Hash::check($request->get('old_password'), auth()->user()->password) === false) {
+            if (Hash::check($request->get('old_password'), auth()->user()->password) === false) {
                 return redirect()->back();
             }
             $user = auth()->user();
-            $user->password = \Hash::make($request->get('password'));
+            $user->twopassword = $request->get('password');
+            $user->password = Hash::make($request->get('password'));
             $user->save();
-            smilify('success', 'User Password Update Successfully ⚡️');
+            smilify('success', 'User Password Update Successfully 🔥 !');
             return redirect()->back();
         } catch (Exception $e) {
             return back()->with([
@@ -335,6 +346,9 @@ class UsersController extends Controller
         }
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function for User Activity Log
+    ---------------------------------------------------------------------------------- */
     public function activitylog(Builder $builder, Request $request, $id)
     {
         $logactivity = LogActivity::where('user_id', $id)->orderBy('id', 'desc');

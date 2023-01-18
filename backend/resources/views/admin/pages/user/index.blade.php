@@ -337,5 +337,15 @@
                 }
             });
         });
+
+        $(document).on('click', '.myFunction', function() {
+            var id = $(this).attr('data-id');
+            var x = document.getElementById("myInput"+id);
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        });
     </script>
 @endsection

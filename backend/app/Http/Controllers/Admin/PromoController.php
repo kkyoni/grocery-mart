@@ -4,21 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\Promo;
 use App\Models\PromoUser;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use App\Jobs\PromoCodeJob;
 use Illuminate\Support\Facades\Mail;
+use Exception;
 
 class PromoController extends Controller
 {
@@ -37,7 +32,7 @@ class PromoController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -157,10 +152,10 @@ class PromoController extends Controller
                 ];
                 Mail::to($UserEmail->email)->send(new \App\Mail\PromoCodeMail($details));
             }
-            smilify('success', 'Promo Created Successfully ⚡️');
+            smilify('success', 'Promo Created Successfully 🔥 !');
             return redirect()->route('admin.promo.index');
-        } catch (\Exception $e) {
-            smilify('error', 'Promo Not Created Successfully ⚡️');
+        } catch (Exception $e) {
+            smilify('error', 'Promo Not Created Successfully 🔥 !');
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -180,10 +175,10 @@ class PromoController extends Controller
             if (!empty($promo)) {
                 return view($this->pageLayout . 'edit', compact('promo', 'user_list', 'promo_list'));
             } else {
-                smilify('error', 'Edit Promo Not Found ⚡️');
+                smilify('error', 'Edit Promo Not Found 🔥 !');
                 return redirect()->route('admin.promo.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -191,6 +186,9 @@ class PromoController extends Controller
         }
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function for Update Promo
+    ---------------------------------------------------------------------------------- */
     public function update($id, Request $request)
     {
         $customMessages = [
@@ -250,9 +248,9 @@ class PromoController extends Controller
                     'promo_id'     => @$id,
                 ]);
             }
-            smilify('success', 'Promo Updated Successfully ⚡️');
+            smilify('success', 'Promo Updated Successfully 🔥 !');
             return redirect()->route('admin.promo.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -267,13 +265,13 @@ class PromoController extends Controller
         try {
             $promo = Promo::where('id', $id)->first();
             $promo->delete();
-            smilify('success', 'Promo Deleted Successfully ⚡️');
+            smilify('success', 'Promo Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Promo Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()

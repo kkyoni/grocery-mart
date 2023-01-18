@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">	
+<html>
 @include('admin.includes.headAuth')
 <body id="container">
 	<div class="middle-box text-center loginscreen">

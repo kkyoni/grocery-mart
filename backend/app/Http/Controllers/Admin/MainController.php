@@ -8,16 +8,16 @@ use App\Models\Blog;
 use App\Models\Brand;
 use App\Models\Categories;
 use App\Models\Cms;
+use App\Models\Contact;
 use App\Models\Faq;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Promo;
 use App\Models\Setting;
 use App\Models\SiteSetting;
+use App\Models\Support;
 use App\Models\User;
-use App\Models\UserAddress;
-use Carbon\Carbon;
-use Response;
+use Exception;
 
 class MainController extends Controller
 {
@@ -35,14 +35,6 @@ class MainController extends Controller
         $this->middleware('auth');
     }
 
-    /*------------------------------------------------------------------------------------
-    @Description: Function Index Page
-    ----------------------------------------------------------------------------------- */
-    public function index()
-    {
-        return view('front.auth.login');
-    }
-
     /*-----------------------------------------------------------------------------------
     @Description: Function Dashboard Page
     ----------------------------------------------------------------------------------- */
@@ -58,7 +50,10 @@ class MainController extends Controller
         $TotalPromo = Promo::count();
         $TotalSetting = Setting::count();
         $TotalOrder = Order::count();
-        return view('admin.pages.dashboard', compact('TotalUser', 'TotalBlog', 'TotalCms', 'TotalFaq', 'TotalBrand', 'TotalCategories', 'TotalProduct', 'TotalPromo', 'TotalSetting', 'TotalOrder'));
+        $TotalSupport = Support::get();
+        $TotalConatct = Contact::whereDate('created_at', '=', date('Y-m-d'))->get();
+        $Ordercronlist = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime("this week")))->whereDate('created_at', '<=', date('Y-m-d', strtotime("sunday 0 week")))->get();
+        return view('admin.pages.dashboard', compact('TotalUser', 'TotalBlog', 'TotalCms', 'TotalFaq', 'TotalBrand', 'TotalCategories', 'TotalProduct', 'TotalPromo', 'TotalSetting', 'TotalOrder', 'Ordercronlist', 'TotalSupport', 'TotalConatct'));
     }
 
 
@@ -81,5 +76,38 @@ class MainController extends Controller
         SiteSetting::where('id', $id)->update($data);
         return redirect()->route('admin.dashboard');
     }
-}
 
+
+    public function change_support(Request $request)
+    {
+        try {
+            $support = Support::where('id', $request->id)->first();
+            if (!empty($support)) {
+                if ($support->flage == "unread") {
+                    Support::where('id', $request->id)->update([
+                        'flage' => "read",
+                    ]);
+                }
+                smilify('success', 'Support Status Update Successfully 🔥 !');
+                return response()->json([
+                    'status'    => 'success',
+                    'title'     => 'Success!!',
+                    'message'   => 'Support Status Updated Successfully..!'
+                ]);
+            } else {
+                smilify('error', 'Support Status Update Successfully 🔥 !');
+                return response()->json([
+                    'status'    => 'error',
+                    'title'     => 'Error!!',
+                    'message'   => 'Support Status Updated Successfully..!'
+                ]);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'status'    => 'error',
+                'title'     => 'Error!!',
+                'message'   => $e->getMessage()
+            ]);
+        }
+    }
+}

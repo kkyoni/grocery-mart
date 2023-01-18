@@ -4,17 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\Blog;
 use App\Models\Comment;
+use Exception;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 
 class BlogController extends Controller
 {
@@ -33,7 +30,7 @@ class BlogController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -104,15 +101,15 @@ class BlogController extends Controller
             } else {
                 $filename = 'default.png';
             }
-            $blog = Blog::create([
+            Blog::create([
                 'title'               => @$request->get('title'),
                 'description'         => @$request->get('description'),
                 'image'               => @$filename,
             ]);
-            smilify('success', 'Blog Created Successfully ⚡️');
+            smilify('success', 'Blog Created Successfully  🔥 !');
             return redirect()->route('admin.blog.index');
-        } catch (\Exception $e) {
-            smilify('error', 'Blog Not Created Successfully ⚡️');
+        } catch (Exception $e) {
+            smilify('error', 'Blog Not Created Successfully 🔥 !');
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -130,10 +127,10 @@ class BlogController extends Controller
             if (!empty($blog)) {
                 return view($this->pageLayout . 'edit', compact('blog'));
             } else {
-                smilify('error', 'Edit Blog Not Found ⚡️');
+                smilify('error', 'Edit Blog Not Found 🔥 !');
                 return redirect()->route('admin.blog.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -176,9 +173,9 @@ class BlogController extends Controller
                 'description'  => @$request->get('description'),
                 'image'             => @$filename
             ]);
-            smilify('success', 'Blog Updated Successfully ⚡️');
+            smilify('success', 'Blog Updated Successfully  🔥 !');
             return redirect()->route('admin.blog.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -194,13 +191,13 @@ class BlogController extends Controller
         try {
             $blog = Blog::where('id', $id)->first();
             $blog->delete();
-            smilify('success', 'Blog Deleted Successfully ⚡️');
+            smilify('success', 'Blog Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Blog Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -223,6 +220,9 @@ class BlogController extends Controller
         }
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function for show Load Comment Blog
+    ---------------------------------------------------------------------------------- */
     public function load_data(Request $request)
     {
         if (!empty($request->id)) {
@@ -284,14 +284,14 @@ class BlogController extends Controller
                         'status' => "active",
                     ]);
                 }
-                smilify('success', 'Blog Status Update Successfully ⚡️');
+                smilify('success', 'Blog Status Update Successfully 🔥 !');
                 return response()->json([
                     'status'    => 'success',
                     'title'     => 'Success!!',
                     'message'   => 'Blog Status Updated Successfully..!'
                 ]);
             } else {
-                smilify('error', 'Blog Status Update Successfully ⚡️');
+                smilify('error', 'Blog Status Update Successfully 🔥 !');
                 return response()->json([
                     'status'    => 'error',
                     'title'     => 'Error!!',

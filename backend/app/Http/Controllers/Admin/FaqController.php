@@ -4,17 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\Faq;
-
+use Exception;
 
 class FaqController extends Controller
 {
@@ -32,7 +27,7 @@ class FaqController extends Controller
         $this->middleware('auth');
     }
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -110,10 +105,10 @@ class FaqController extends Controller
                 'answer'         => @$request->get('answer'),
                 'status'              => @$request->get('status'),
             ]);
-            smilify('success', 'Faq Created Successfully ⚡️');
+            smilify('success', 'Faq Created Successfully 🔥 !');
             return redirect()->route('admin.faq.index');
-        } catch (\Exception $e) {
-            smilify('error', 'Faq Not Created Successfully ⚡️');
+        } catch (Exception $e) {
+            smilify('error', 'Faq Not Created Successfully 🔥 !');
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -131,10 +126,10 @@ class FaqController extends Controller
             if (!empty($faq)) {
                 return view($this->pageLayout . 'edit', compact('faq'));
             } else {
-                smilify('error', 'Edit Faq Not Found ⚡️');
+                smilify('error', 'Edit Faq Not Found 🔥 !');
                 return redirect()->route('admin.faq.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -166,9 +161,9 @@ class FaqController extends Controller
                 'answer'  => @$request->get('answer'),
                 'status'  => @$request->get('status')
             ]);
-            smilify('success', 'Faq Updated Successfully ⚡️');
+            smilify('success', 'Faq Updated Successfully 🔥 !');
             return redirect()->route('admin.faq.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -184,13 +179,13 @@ class FaqController extends Controller
         try {
             $faq = Faq::where('id', $id)->first();
             $faq->delete();
-            smilify('success', 'Faq Deleted Successfully ⚡️');
+            smilify('success', 'Faq Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Faq Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -224,14 +219,14 @@ class FaqController extends Controller
                         'status' => "active",
                     ]);
                 }
-                smilify('success', 'Faq Status Update Successfully ⚡️');
+                smilify('success', 'Faq Status Update Successfully 🔥 !');
                 return response()->json([
                     'status'    => 'success',
                     'title'     => 'Success!!',
                     'message'   => 'Faq Status Updated Successfully..!'
                 ]);
             } else {
-                smilify('error', 'Faq Status Update Successfully ⚡️');
+                smilify('error', 'Faq Status Update Successfully 🔥 !');
                 return response()->json([
                     'status'    => 'error',
                     'title'     => 'Error!!',

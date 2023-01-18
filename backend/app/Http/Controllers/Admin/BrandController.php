@@ -4,16 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\Brand;
+use Exception;
 
 class BrandController extends Controller
 {
@@ -32,7 +29,7 @@ class BrandController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -101,10 +98,10 @@ class BrandController extends Controller
                 'brand_name'   => @$request->get('brand_name'),
                 'brand_image'   => @$filename,
             ]);
-            smilify('success', 'Brand Created Successfully ⚡️');
+            smilify('success', 'Brand Created Successfully 🔥 !');
             return redirect()->route('admin.brand.index');
-        } catch (\Exception $e) {
-            smilify('error', 'Brand Not Created Successfully ⚡️');
+        } catch (Exception $e) {
+            smilify('error', 'Brand Not Created Successfully 🔥 !');
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -122,10 +119,10 @@ class BrandController extends Controller
             if (!empty($brand)) {
                 return view($this->pageLayout . 'edit', compact('brand'));
             } else {
-                smilify('error', 'Edit Brand Not Found ⚡️');
+                smilify('error', 'Edit Brand Not Found 🔥 !');
                 return redirect()->route('admin.brand.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -165,9 +162,9 @@ class BrandController extends Controller
                 'brand_name'               => @$request->get('brand_name'),
                 'brand_image'               => @$filename,
             ]);
-            smilify('success', 'Brand Updated Successfully ⚡️');
+            smilify('success', 'Brand Updated Successfully 🔥 !');
             return redirect()->route('admin.brand.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -183,13 +180,13 @@ class BrandController extends Controller
         try {
             $brand = Brand::where('id', $id)->first();
             $brand->delete();
-            smilify('success', 'Brand Deleted Successfully ⚡️');
+            smilify('success', 'Brand Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Brand Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()

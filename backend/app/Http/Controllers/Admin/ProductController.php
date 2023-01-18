@@ -4,19 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Categories;
 use App\Models\ProductImage;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -35,7 +32,7 @@ class ProductController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -123,10 +120,10 @@ class ProductController extends Controller
                     }
                 }
             }
-            smilify('success', 'Product Created Successfully ⚡️');
+            smilify('success', 'Product Created Successfully 🔥 !');
             return redirect()->route('admin.product.index');
-        } catch (\Exception $e) {
-            smilify('error', 'Product Not Created Successfully ⚡️');
+        } catch (Exception $e) {
+            smilify('error', 'Product Not Created Successfully 🔥 !');
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -142,13 +139,13 @@ class ProductController extends Controller
         try {
             $product = Product::where('id', $id)->first();
             $product->delete();
-            smilify('success', 'Product Deleted Successfully ⚡️');
+            smilify('success', 'Product Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Product Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -169,6 +166,9 @@ class ProductController extends Controller
         }
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function Get Brand For Product
+    ---------------------------------------------------------------------------------- */
     public function getbrand(Request $request)
     {
         $data['categories'] = Categories::where('brand_id', $request->idbrand)->get(["categories_name", "id"]);

@@ -18,6 +18,7 @@ class CreateSupportTable extends Migration
             $table->string('supportname')->length(250)->nullable();
             $table->string('supportemail')->length(250)->nullable();
             $table->string('supportmessage')->length(250)->nullable();
+            $table->enum('flage', ['read', 'unread'])->default('unread');
             $table->timestamps();
             $table->softDeletes();
         });

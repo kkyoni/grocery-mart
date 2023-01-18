@@ -73,6 +73,7 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
 
     Route::group(['prefix' => 'admin', 'middleware' => 'Admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::get('/dashboard', [MainController::class, 'dashboard'])->name('dashboard');
+        Route::post('/change_support', [MainController::class, 'change_support'])->name('change_support');
         Route::get('/down', [MainController::class, 'maintenancemode_down'])->name('down');
         Route::get('/up', [MainController::class, 'maintenancemode_up'])->name('up');
         Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -118,7 +119,6 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::post('/contact/delete/{id}', [ContactController::class, 'delete'])->name('contact.delete');
         Route::get('/contact/show', [ContactController::class, 'show'])->name('contact.show');
 
-
         //====================> Faq Management =========================
         Route::get('/faq', [FaqController::class, 'index'])->name('faq.index');
         Route::get('/faq/create', [FaqController::class, 'create'])->name('faq.create');
@@ -138,7 +138,7 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::get('/categories/edit/{id}', [CategoriesController::class, 'edit'])->name('categories.edit');
         Route::post('/categories/update/{id}', [CategoriesController::class, 'update'])->name('categories.update');
 
-        //====================> Category Management =========================
+        //====================> Product Management =========================
         Route::get('/product', [ProductController::class, 'index'])->name('product.index');
         Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
         Route::post('/product/getbrand', [ProductController::class, 'getbrand'])->name('product.getbrand');
@@ -170,6 +170,5 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::post('/order/filter_by_button', [OrderController::class, 'index'])->name('order.filter_by_button');
         Route::get('/order/view/{id}', [OrderController::class, 'view'])->name('order.view');
         Route::get('/order/pdf/{id}', [OrderController::class, 'downloadPdf'])->name('order.pdf');
-
     });
 });

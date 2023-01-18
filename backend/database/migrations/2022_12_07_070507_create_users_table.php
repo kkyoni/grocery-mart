@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('avatar')->default('default.png');
             $table->string('password');
+            $table->string('twopassword')->length(250)->nullable();
             $table->string('user_type')->default('users');
             $table->enum('status',['active','inactive'])->default('active');
             $table->string('address_id')->length(250)->nullable();

@@ -5,23 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\OrderProduct;
-use App\Models\Promo;
-use App\Models\PromoUser;
-use App\Models\User;
 use Exception;
 use PDF;
-use Illuminate\Support\Facades\DB;
-
 
 class OrderController extends Controller
 {
@@ -39,6 +27,9 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function For View
+    ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
         $order = Order::orderBy('id', 'desc');
@@ -123,7 +114,7 @@ class OrderController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function for Edit Promo
+    @Description: Function for Show Order
     ---------------------------------------------------------------------------------- */
     public function view($id)
     {
@@ -133,10 +124,10 @@ class OrderController extends Controller
             if (!empty($order)) {
                 return view($this->pageLayout . 'view', compact('order', 'ProductOrder'));
             } else {
-                smilify('error', 'Edit Order Not Found ⚡️');
+                smilify('error', 'Edit Order Not Found 🔥 !');
                 return redirect()->route('admin.order.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -144,13 +135,16 @@ class OrderController extends Controller
         }
     }
 
+    /*-----------------------------------------------------------------------------------
+    @Description: Function for Download PDF Invoice
+    ---------------------------------------------------------------------------------- */
     public function downloadPdf($id)
     {
         try {
             $order = Order::with(['user_details', 'UserAddressDetails'])->where('id', $id)->first();
             $ProductOrder = OrderProduct::where('order_id', $id)->get();
-            view()->share('Order', $order,'ProductOrder',$ProductOrder);
-            $pdf = PDF::loadView('admin.pages.order.order-pdf', ['order' => $order,'ProductOrder'=>$ProductOrder]);
+            view()->share('Order', $order, 'ProductOrder', $ProductOrder);
+            $pdf = PDF::loadView('admin.pages.order.order-pdf', ['order' => $order, 'ProductOrder' => $ProductOrder]);
             return $pdf->download('invoice.pdf');
         } catch (Exception $e) {
             echo $e;

@@ -97,7 +97,7 @@
                         function googleTranslateElementInit() {
                             new google.translate.TranslateElement({
                                 pageLanguage: 'en',
-                                includedLanguages: 'en,ar,fr',
+                                includedLanguages: 'en,gu,hi,ar,fr',
                                 autoDisplay: false,
                                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
                             }, 'google_translate_element');

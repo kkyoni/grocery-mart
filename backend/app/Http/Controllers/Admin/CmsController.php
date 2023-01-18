@@ -4,17 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use DataTables, Notify, Validator, Str, Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Builder;
-use Auth;
-use Event;
-use App\Helpers\Helper;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Cms;
-
+use Exception;
 class CmsController extends Controller
 {
     protected $authLayout = '';
@@ -32,7 +27,7 @@ class CmsController extends Controller
     }
 
     /*-----------------------------------------------------------------------------------
-    @Description: Function Index Page
+    @Description: Function For View
     ---------------------------------------------------------------------------------- */
     public function index(Builder $builder, Request $request)
     {
@@ -84,10 +79,10 @@ class CmsController extends Controller
             if (!empty($cms)) {
                 return view($this->pageLayout . 'edit', compact('cms'));
             } else {
-                smilify('error', 'Edit Cms Not Found ⚡️');
+                smilify('error', 'Edit Cms Not Found 🔥 !');
                 return redirect()->route('admin.cms.index');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -119,9 +114,9 @@ class CmsController extends Controller
                 'description'  => @$request->get('description'),
                 'status'  => @$request->get('status')
             ]);
-            smilify('success', 'Cms Updated Successfully ⚡️');
+            smilify('success', 'Cms Updated Successfully 🔥 !');
             return redirect()->route('admin.cms.index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -137,13 +132,13 @@ class CmsController extends Controller
         try {
             $cms = Cms::where('id', $id)->first();
             $cms->delete();
-            smilify('success', 'Cms Deleted Successfully ⚡️');
+            smilify('success', 'Cms Deleted Successfully 🔥 !');
             return response()->json([
                 'status'    => 'success',
                 'title'     => 'Success!!',
                 'message'   => 'Cms Deleted Successfully..!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return back()->with([
                 'alert-type'    => 'danger',
                 'message'       => $e->getMessage()
@@ -177,14 +172,14 @@ class CmsController extends Controller
                         'status' => "active",
                     ]);
                 }
-                smilify('success', 'Cms Status Update Successfully ⚡️');
+                smilify('success', 'Cms Status Update Successfully 🔥 !');
                 return response()->json([
                     'status'    => 'success',
                     'title'     => 'Success!!',
                     'message'   => 'Cms Status Updated Successfully..!'
                 ]);
             } else {
-                smilify('error', 'Cms Status Update Successfully ⚡️');
+                smilify('error', 'Cms Status Update Successfully 🔥 !');
                 return response()->json([
                     'status'    => 'error',
                     'title'     => 'Error!!',

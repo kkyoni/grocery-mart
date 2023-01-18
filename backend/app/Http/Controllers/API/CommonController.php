@@ -725,7 +725,7 @@ class CommonController extends Controller
             Helper::addToLog('COD Order SucessFully',$request->user_id,'success');
             return response()->json([
                 'status' => 'success',
-                'message' => 'Order is SucessFully ⚡️'
+                'message' => 'Order is SucessFully 🔥 !'
             ]);
         } catch (Exception $exception) {
             Helper::addToLog('COD Order Not SucessFully',$request->user_id,'error');

@@ -12,5 +12,5 @@ class Support extends Model
     use SoftDeletes;
 
     protected $table = 'support';
-    protected $fillable = ['supportname', 'supportemail', 'supportmessage'];
+    protected $fillable = ['supportname', 'supportemail', 'supportmessage', 'flage'];
 }

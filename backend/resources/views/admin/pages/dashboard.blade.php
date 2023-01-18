@@ -226,70 +226,18 @@
                             </div>
                             <div class="ibox-content" style="">
                                 <div class="feed-activity-list">
-
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right text-navy">1m ago</small>
-                                            <strong>Monica Smith</strong>
-                                            <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                                                Lorem Ipsum</div>
-                                            <small class="text-muted">Today 5:60 pm - 12.06.2014</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right">2m ago</small>
-                                            <strong>Jogn Angel</strong>
-                                            <div>There are many variations of passages of Lorem Ipsum available</div>
-                                            <small class="text-muted">Today 2:23 pm - 11.06.2014</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right">5m ago</small>
-                                            <strong>Jesica Ocean</strong>
-                                            <div>Contrary to popular belief, Lorem Ipsum</div>
-                                            <small class="text-muted">Today 1:00 pm - 08.06.2014</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right">5m ago</small>
-                                            <strong>Monica Jackson</strong>
-                                            <div>The generated Lorem Ipsum is therefore </div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right">5m ago</small>
-                                            <strong>Anna Legend</strong>
-                                            <div>All the Lorem Ipsum generators on the Internet tend to repeat </div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                        </div>
-                                    </div>
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right">5m ago</small>
-                                            <strong>Damian Nowak</strong>
-                                            <div>The standard chunk of Lorem Ipsum used </div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                        </div>
-                                    </div>
-                                    <div class="feed-element">
-                                        <div>
-                                            <small class="float-right">5m ago</small>
-                                            <strong>Gary Smith</strong>
-                                            <div>200 Latin words, combined with a handful</div>
-                                            <small class="text-muted">Yesterday 8:48 pm - 10.06.2014</small>
-                                        </div>
-                                    </div>
-
+                                    @if (sizeof($TotalConatct) > 0)
+                                        @foreach ($TotalConatct as $conatct)
+                                            <div class="feed-element">
+                                                <div>
+                                                    <small
+                                                        class="float-right text-navy">{{ \Carbon\Carbon::parse($conatct->created_at)->diffForHumans() }}</small>
+                                                    <strong>{{ $conatct->first_name }} {{ $conatct->last_name }}</strong>
+                                                    <div>{{ $conatct->message }}</div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -307,32 +255,60 @@
                                     <div class="ibox-content table-responsive">
                                         <table class="table table-hover no-margins">
                                             <thead>
-                                            <tr>
-                                                <th>Status</th>
-                                                <th>Date</th>
-                                                <th>User</th>
-                                                <th>Value</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <th>Date</th>
+                                                    <th>User</th>
+                                                    <th>Value</th>
+                                                    <th>Action</th>
+                                                </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td><span class="label label-warning">Canceled</span> </td>
-                                                <td><i class="fa fa-clock-o"></i> 10:40am</td>
-                                                <td>Monica</td>
-                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
-                                            </tr>
-                                            <tr>
-                                                <td><small>Pending...</small> </td>
-                                                <td><i class="fa fa-clock-o"></i> 12:08am</td>
-                                                <td>Damian</td>
-                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 23% </td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="label label-primary">Completed</span> </td>
-                                                <td><i class="fa fa-clock-o"></i> 04:10am</td>
-                                                <td>Amelia</td>
-                                                <td class="text-navy"> <i class="fa fa-level-up"></i> 66% </td>
-                                            </tr>
+                                                @if (sizeof($Ordercronlist) > 0)
+                                                    @foreach ($Ordercronlist as $cronelist)
+                                                        <tr>
+                                                            <td>
+                                                                <span class="label label-<?php if ($cronelist->status == 'processing') { echo 'warning';}
+                                                                elseif ($cronelist->status == 'accepted') {echo 'success';}
+                                                                elseif ($cronelist->status == 'ontheway') {echo 'primary';}
+                                                                elseif ($cronelist->status == 'delivered') {echo 'info';}
+                                                                else {echo 'danger';} ?>">{{ $cronelist->status }}
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                @if (!empty($cronelist->date))
+                                                                    <i class="fa fa-clock-o"></i>
+                                                                    {{ $cronelist->date }}
+                                                                @else
+                                                                    N/A
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $cronelist->user_details->first_name }}</td>
+                                                            <td class="text-navy">
+                                                                @if ($cronelist->status == 'processing')
+                                                                    <i class="fa fa-level-up"></i> 25%
+                                                                @elseif ($cronelist->status == 'accepted')
+                                                                    <i class="fa fa-level-up"></i> 50%
+                                                                @elseif ($cronelist->status == 'ontheway')
+                                                                    <i class="fa fa-level-up"></i> 75%
+                                                                @elseif ($cronelist->status == 'delivered')
+                                                                    <i class="fa fa-level-up"></i> 100%
+                                                                @else
+                                                                    <span style="color:#ed5565"><i class="fa fa-level-down"></i> 0%</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn-xs btn-primary">
+                                                                    <a href="{{ route('admin.order.edit', ['order' => $cronelist->id]) }}" style="color: white">Edit</a>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    @else
+                                                    <tr>
+                                                        <td colspan="5" style="text-align: center">Record Not Found...</td>
+                                                    </tr>
+                                                @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -345,29 +321,33 @@
                                     </div>
                                     <div class="ibox-content">
                                         <ul class="todo-list m-t small-list">
-                                            <li>
-                                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                                <span class="m-l-xs todo-completed">Buy a milk</span>
-
-                                            </li>
-                                            <li>
-                                                <a href="#" class="check-link"><i class="fa fa-square-o"></i> </a>
-                                                <span class="m-l-xs">Send documents to Mike</span>
-                                                <small class="label label-primary"><i class="fa fa-clock-o"></i> 1 mins</small>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="check-link"><i class="fa fa-check-square"></i> </a>
-                                                <span class="m-l-xs todo-completed">Plan vacation</span>
-                                            </li>
+                                            @if (sizeof($TotalSupport) > 0)
+                                                @foreach ($TotalSupport as $support)
+                                                    <li>
+                                                        @if ($support->flage == 'unread')
+                                                            <input type="checkbox" class="check-link" checked disabled>
+                                                            <span
+                                                                class="m-l-xs todo-completed">{{ $support->supportmessage }}</span>
+                                                        @else
+                                                            <a href="javascript:void(0)" class="check-link chnagesupport"
+                                                                data-id={{ $support->id }}>
+                                                                <i class="fa fa-square-o"></i>
+                                                            </a>
+                                                            <span class="m-l-xs">{{ $support->supportmessage }}</span>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            @else
+                                                <li>
+                                                    <span class="m-l-xs">Not Record Found</span>
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -536,14 +516,57 @@
 @section('scripts')
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript"
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7M8IrIHnp_j4AIpVWtRE6bFcTlh7SyAo&signed_in=false&libraries=places">
-    </script>
+
     <script type="text/javascript">
+        $(document).on("click", "a.chnagesupport", function(e) {
+            console.log("sfdgfdg");
+            // var row = $(this);
+            // var id = $(this).attr('data-id');
+            // swal({
+            //     title: "Are you sure?",
+            //     text: "You want's to update this record status ",
+            //     type: "warning",
+            //     showCancelButton: true,
+            //     confirmButtonColor: "#e69a2a",
+            //     confirmButtonText: "Yes, updated it!",
+            //     cancelButtonText: "No, cancel plx!",
+            //     closeOnConfirm: false,
+            //     closeOnCancel: false
+            // }, function(isConfirm) {
+            //     if (isConfirm) {
+            //         $.ajax({
+            //             url: "{{ route('admin.change_support', 'replaceid') }}",
+            //             type: 'post',
+            //             data: {
+            //                 "_method": 'post',
+            //                 'id': id,
+            //                 "_token": "{{ csrf_token() }}"
+            //             },
+            //             success: function(msg) {
+            //                 if (msg.status == 'success') {
+            //                     swal({
+            //                             title: "Status",
+            //                             text: "Status Record success",
+            //                             type: "success"
+            //                         },
+            //                         function() {
+            //                             location.reload();
+            //                         });
+            //                 } else {
+            //                     swal("Warning!", msg.message, "warning");
+            //                 }
+            //             },
+            //             error: function() {
+            //                 swal("Error!", 'Error in updated Record', "error");
+            //             }
+            //         });
+            //     } else {
+            //         swal("Cancelled", "Your Support Status is safe :)", "error");
+            //     }
+            // });
+            // return false;
+        })
+
         Highcharts.chart('dynamic_data', {
             chart: {
                 type: 'variablepie',
