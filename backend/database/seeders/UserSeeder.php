@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Admin',
             'email' => 'admin@admin.com',
             'password' => bcrypt('data@1234'),
+            'twopassword' => 'data@1234',
             'user_type' => 'superadmin',
             'status' => 'active',
         ]);
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Modi',
             'email' => 'jaymin@gmail.com',
             'password' => bcrypt('data@1234'),
+            'twopassword' => 'data@1234',
             'user_type' => 'user',
             'status' => 'active',
         ]);
@@ -38,6 +40,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Darji',
             'email' => 'sagar@gmail.com',
             'password' => bcrypt('data@1234'),
+            'twopassword' => 'data@1234',
             'user_type' => 'user',
             'status' => 'active',
         ]);
@@ -47,6 +50,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Darji',
             'email' => 'jainam@gmail.com',
             'password' => bcrypt('data@1234'),
+            'twopassword' => 'data@1234',
             'user_type' => 'user',
             'status' => 'active',
         ]);
@@ -56,6 +60,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Mevada',
             'email' => 'bharat@gmail.com',
             'password' => bcrypt('data@1234'),
+            'twopassword' => 'data@1234',
             'user_type' => 'user',
             'status' => 'active',
         ]);

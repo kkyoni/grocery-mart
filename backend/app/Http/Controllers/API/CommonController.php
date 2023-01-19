@@ -722,13 +722,13 @@ class CommonController extends Controller
             $details['username'] = @$UserProductOrder->first_name . ' ' . @$UserProductOrder->last_name;
             $details['subject'] = 'Grocery Mart - Invoice';
             dispatch(new InvoiceJob($details, $emailcontent));
-            Helper::addToLog('COD Order SucessFully',$request->user_id,'success');
+            Helper::addToLog('COD Order SucessFully', 'success', $request->user_id);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Order is SucessFully 🔥 !'
             ]);
         } catch (Exception $exception) {
-            Helper::addToLog('COD Order Not SucessFully',$request->user_id,'error');
+            Helper::addToLog('COD Order Not SucessFully', 'error', $request->user_id);
             return response()->json(['message' => $exception->getMessage()]);
         }
     }
@@ -752,6 +752,31 @@ class CommonController extends Controller
     public function addcontact(Request $request)
     {
         try {
+            $first_name_error = '';
+            $last_name_error = '';
+            $email_error = '';
+            $message_error = '';
+            if (!$request->first_name) {
+                $first_name_error = 'First Name is Required !!';
+            }
+            if (!$request->last_name) {
+                $last_name_error = 'Last Name is Required !!';
+            }
+            if (!$request->email) {
+                $email_error = 'Email is Required !!';
+            }
+            if (!$request->message) {
+                $message_error = 'Message is Required !!';
+            }
+            if ($first_name_error || $last_name_error || $email_error || $message_error) {
+                return response()->json([
+                    'status' => 'error',
+                    'first_name_error' => $first_name_error,
+                    'last_name_error' => $last_name_error,
+                    'email_error' => $email_error,
+                    'message_error' => $message_error
+                ]);
+            }
             $data = [
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -760,7 +785,6 @@ class CommonController extends Controller
             ];
             $contact = Contact::create($data);
             if ($contact) {
-
                 $emailcontent = array(
                     'title' => 'Contact Inquiry',
                     'text' => "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum",
@@ -770,14 +794,14 @@ class CommonController extends Controller
                 $details['username'] = $contact->first_name . ' ' . $contact->last_name;
                 $details['subject'] = 'Contact Inquiry';
                 dispatch(new ContactJob($details, $emailcontent));
-                Helper::addToLog('Contact SucessFully',1,'success');
+                Helper::addToLog('Contact SucessFully', 'success', $request->user_id);
                 return response()->json([
                     'contact'  => $contact,
                     'status' => 'success',
                     'message' => 'Contact Sucessfully !!'
                 ]);
             } else {
-                Helper::addToLog('Contact Not SucessFully',1,'error');
+                Helper::addToLog('Contact Not SucessFully', 'error', $request->user_id);
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Contact Not Sucessfully !!'
@@ -808,14 +832,14 @@ class CommonController extends Controller
                 $details['username'] = $support->supportname;
                 $details['subject'] = 'Support Inquiry';
                 dispatch(new SupportJob($details, $emailcontent));
-                Helper::addToLog('Support SucessFully',1,'success');
+                Helper::addToLog('Support SucessFully', 1, 'success');
                 return response()->json([
                     'support'  => $support,
                     'status' => 'success',
                     'message' => 'Support Sucessfully !!'
                 ]);
             } else {
-                Helper::addToLog('Support Not SucessFully',1,'error');
+                Helper::addToLog('Support Not SucessFully', 1, 'error');
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Support Not Sucessfully !!'
@@ -889,12 +913,14 @@ class CommonController extends Controller
                 'comment' => $request->comment,
             ]);
             $Comment = Comment::with(['UserDetails'])->where('blog_id', $request->blog_id)->orderby('id', 'desc')->get();
+            Helper::addToLog('Comment Added SucessFully', 'success', $request->user_id);
             return response()->json([
                 'Comment' => $Comment,
                 'status' => 'success',
-                'message' => 'Contact Added Sucessfully !!'
+                'message' => 'Comment Added Sucessfully !!'
             ]);
         } catch (Exception $exception) {
+            Helper::addToLog('Comment Not Added SucessFully', 'error', $request->user_id);
             return response()->json(['message' => $exception->getMessage()]);
         }
     }
@@ -903,11 +929,18 @@ class CommonController extends Controller
     {
         try {
             $Comment = Comment::with(['UserDetails'])->where('blog_id', $id)->orderby('id', 'desc')->get();
-            return response()->json([
-                'Comment' => $Comment,
-                'status' => 'success',
-                'message' => 'Contact Added Sucessfully !!'
-            ]);
+            if (sizeof($Comment) > 0) {
+                return response()->json([
+                    'Comment' => $Comment,
+                    'status' => 'success',
+                    'message' => 'Comment Added Sucessfully !!'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Comment Record Not Sucessfully !!'
+                ]);
+            }
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()]);
         }

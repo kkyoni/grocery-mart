@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import axios from "axios";
 import Service from "../../services/Service";
 import moment from "moment";
+import { Link } from "react-router-dom";
 class Comment extends Component {
     constructor(props) {
         super(props)
@@ -18,13 +19,11 @@ class Comment extends Component {
     async componentDidMount() {
         const login = JSON.parse(localStorage.getItem("userData"));
         Service.getComment(this.props.blog_id).then(res => {
-            this.setState({
-                Comment: res.data.Comment,
-                user_id: login.id,
-                blog_id: this.props.blog_id,
-                connection: true,
-                notrecordloading: false
-            });
+            if (res.data.status === 'success') {
+                this.setState({ Comment: res.data.Comment, user_id: login.id, blog_id: this.props.blog_id, connection: true, notrecordloading: true });
+            } else {
+                this.setState({ Comment: [], user_id: login.id, blog_id: this.props.blog_id, connection: true, notrecordloading: false });
+            }
         })
     }
     handleInput = (e) => {
@@ -38,15 +37,16 @@ class Comment extends Component {
         const res = await axios.post('http://127.0.0.1:8000/api/add-Comment', this.state);
         if (res.data.status === "success") {
             toast.success("Comment success", { position: toast.POSITION.TOP_RIGHT });
-            this.setState({
-                comment: '',
-                isLoading: false,
-                Comment: res.data.Comment,
-                connection: true,
-                notrecordloading: false
-            });
+            if (res.data.status === 'success') {
+                this.setState({ comment: '', isLoading: false, Comment: res.data.Comment, connection: true, notrecordloading: true });
+            } else {
+                this.setState({ comment: '', isLoading: false, Comment: [], connection: true, notrecordloading: false });
+            }
         } else {
             toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+            setTimeout(() => {
+                this.setState({ comment: '', isLoading: false });
+            }, 2000);
         }
     }
     render() {
@@ -65,7 +65,7 @@ class Comment extends Component {
                                         </div>
                                         <div className="media-body">
                                             <ul className="time-rply mb-2">
-                                                <li><a href="#URL" className="name mt-0 mb-2 d-block">{type.first_name} {type.last_name}</a>
+                                                <li><Link className="name mt-0 mb-2 d-block">{type.first_name} {type.last_name}</Link>
                                                     {moment(item.updated_at).format('ll')} - {moment(item.updated_at).format('LT')}
                                                 </li>
                                             </ul>
@@ -77,10 +77,10 @@ class Comment extends Component {
                         );
                     });
             } else {
-                Comment_HTMLTABLE = <img src='assets/images/nodatafound.png' alt="nodatafound" className="img-max" style={{ width: "100%", height: "1%" }} />
+                Comment_HTMLTABLE = <img src='../assets/images/nodatafound.png' alt="nodatafound" className="img-max" style={{ width: "10%", height: "1%" }} />
             }
         } else {
-            Comment_HTMLTABLE = <img src='assets/images/connection_lost.png' alt="connection_lost" className="img-max" style={{ width: "100%", height: "1%" }} />
+            Comment_HTMLTABLE = <img src='../assets/images/connection_lost.png' alt="connection_lost" className="img-max" style={{ width: "100%", height: "1%" }} />
         }
         return (
             <div>

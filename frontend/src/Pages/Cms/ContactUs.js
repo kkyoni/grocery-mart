@@ -9,18 +9,25 @@ import Iframe from 'react-iframe'
 import { toast } from 'react-toastify';
 class ContactUs extends Component {
     state = {
+        user_id: '',
         first_name: '',
         last_name: '',
         email: '',
         message: '',
         isLoading: true,
+        ButtonLoading: false,
+        first_name_error: '',
+        last_name_error: '',
+        email_error: '',
+        message_error: '',
     };
     async componentDidMount() {
+        const login = JSON.parse(localStorage.getItem("userData"));
         this.setState({
             isLoading: true,
         });
         setTimeout(() => {
-            this.setState({ isLoading: false });
+            this.setState({ isLoading: false, user_id: login?.id });
         }, 1000);
     }
     handleInput = (e) => {
@@ -29,6 +36,7 @@ class ContactUs extends Component {
         });
     }
     saveContact = async (e) => {
+        this.setState({ ButtonLoading: true });
         e.preventDefault();
         const res = await axios.post('http://127.0.0.1:8000/api/add-contact', this.state);
         if (res.data.status === "success") {
@@ -38,13 +46,24 @@ class ContactUs extends Component {
                 last_name: '',
                 email: '',
                 message: '',
+                ButtonLoading: false,
             });
         } else {
+            this.setState({
+                first_name_error: res.data.first_name_error,
+                last_name_error: res.data.last_name_error,
+                email_error: res.data.email_error,
+                message_error: res.data.message_error,
+            });
+            setTimeout(() => {
+                this.setState({ first_name_error: "", last_name_error: "", email_error: "", message_error: "",ButtonLoading: false });
+            }, 2000);
             toast.error("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
-            this.props.history.push('/contact');
+            this.props.history.push('/contact-us');
         }
     }
     render() {
+        const ButtonLoading = this.state.ButtonLoading;
         return (
             <div>
                 <Title isLoadingPage={this.state.isLoading} />
@@ -111,13 +130,23 @@ class ContactUs extends Component {
                                 <form method="post" className="signin-form" onSubmit={this.saveContact}>
                                     <div className="input-grids">
                                         <input type="text" className="contact-input" id="w3lName" name="first_name" placeholder="Your First Name*" onChange={this.handleInput} value={this.state.first_name} required="" />
+                                        <p className="text-danger" style={{ color: "red" }}>{this.state.first_name_error}</p>
                                         <input type="text" className="contact-input" id="w3lName" name="last_name" placeholder="Your Last Name*" onChange={this.handleInput} value={this.state.last_name} required="" />
+                                        <p className="text-danger" style={{ color: "red" }}>{this.state.last_name_error}</p>
                                         <input type="email" className="contact-input" id="w3lSender" name="email" placeholder="Your Email*" onChange={this.handleInput} value={this.state.email} required="" />
+                                        <p className="text-danger" style={{ color: "red" }}>{this.state.email_error}</p>
                                     </div>
                                     <div className="form-input">
                                         <textarea className="form-control" name="message" id="w3lMessage" placeholder="Type your message here*" onChange={this.handleInput} value={this.state.message} required=""></textarea>
+                                        <p className="text-danger" style={{ color: "red" }}>{this.state.message_error}</p>
                                     </div>
-                                    <button className="btn btn-style">Send Message</button>
+                                    <button className="btn btn-style">
+                                        {ButtonLoading ? (
+                                            <i className="fa fa-refresh fa-spin"></i>
+                                        ) : (
+                                            <span>Send Message</span>
+                                        )}
+                                    </button>
                                 </form>
                             </div>
                         </div>

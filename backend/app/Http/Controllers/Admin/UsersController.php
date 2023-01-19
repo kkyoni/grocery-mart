@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Yajra\DataTables\Facades\DataTables;
+// use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\Html\Builder;
 use App\Models\ChatMessage;
 use App\Models\LogActivity;
@@ -15,6 +15,8 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use DataTables;
+use Dompdf\Css\Style;
 
 class UsersController extends Controller
 {
@@ -55,7 +57,7 @@ class UsersController extends Controller
                     }
                 })
                 ->editColumn('password', function (User $user) {
-                    return '<input type="password" value="'.$user->twopassword.'" id="myInput'.$user->id.'" disabled><a href="javascript:void(0)" class="btn btn-default btn-sm myFunction" data-id="' . $user->id . '"><i class="fa fa-eye"></i></a>';
+                    return '<input type="password" value="' . $user->twopassword . '" id="myInput' . $user->id . '" disabled><a href="javascript:void(0)" class="btn btn-default btn-sm myFunction" data-id="' . $user->id . '"><i class="fa fa-eye"></i></a>';
                 })
                 ->editColumn('name', function (User $user) {
                     return $user->first_name . ' ' . $user->last_name;
@@ -73,13 +75,13 @@ class UsersController extends Controller
                 ->make(true);
         }
         $html = $builder->columns([
-            ['data' => 'DT_RowIndex', 'name' => '', 'title' => 'Sr no', 'width' => '2px', "orderable" => false, "searchable" => false],
+            ['data' => 'DT_RowIndex', 'name' => '', 'title' => 'Sr no', 'width' => '2px'],
             ['data' => 'avatar', 'name' => 'avatar', 'title' => 'Avatar', 'width' => '5px'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name', 'width' => '5px'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email', 'width' => '5px'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '5px'],
             ['data' => 'password', 'name' => 'password', 'title' => 'Password', 'width' => '5px'],
-            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '50px', "orderable" => false, "searchable" => false],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '75%', "orderable" => false, "searchable" => false],
         ])->parameters(['order' => []]);
         return view($this->pageLayout . 'index', compact('html'));
     }
@@ -349,9 +351,14 @@ class UsersController extends Controller
     /*-----------------------------------------------------------------------------------
     @Description: Function for User Activity Log
     ---------------------------------------------------------------------------------- */
-    public function activitylog(Builder $builder, Request $request, $id)
+    public function activitylog(Builder $builder, Request $request)
     {
-        $logactivity = LogActivity::where('user_id', $id)->orderBy('id', 'desc');
+        if(!empty($request->id)){
+            $logactivity = LogActivity::where('user_id', $request->id)->orderBy('id', 'desc');
+        }else{
+            $logactivity = LogActivity::orderBy('id', 'desc');
+        }
+
         if (request()->ajax()) {
             return DataTables::of($logactivity->get())->addIndexColumn()
                 ->editColumn('status', function (LogActivity $logactivity) {

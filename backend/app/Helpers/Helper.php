@@ -6,7 +6,7 @@ use Request;
 class Helper
 {
 
-    public static function addToLog($subject,$user_id,$status)
+    public static function addToLog($subject,$status,$user_id)
     {
         $log = [];
         $log['subject'] = $subject;
@@ -15,7 +15,7 @@ class Helper
         $log['ip'] = $_SERVER['REMOTE_ADDR'];
         $log['agent'] = $_SERVER["HTTP_USER_AGENT"];
         $log['status'] = $status;
-        $log['user_id'] = $user_id ? $user_id : 1;
+        $log['user_id'] = (!empty($user_id)) ? $user_id : 0;
         LogActivity::create($log);
     }
 

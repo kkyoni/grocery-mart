@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\SupportController;
 
 
 /*
@@ -91,6 +92,7 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::post('/user/updateProfileDetail', [UsersController::class, 'updateProfileDetail'])->name('user.updateProfileDetail');
         Route::post('/user/updatePassword', [UsersController::class, 'updatePassword'])->name('user.updatePassword');
         Route::get('/user/activity_log/{id}', [UsersController::class, 'activitylog'])->name('user.activity_log');
+        Route::get('/user/activitylog', [UsersController::class, 'activitylog'])->name('user.activitylog');
         Route::get('/user/chat/{id}', [UsersController::class, 'chat'])->name('user.chat');
         Route::post('/user/renderConversationList', [UsersController::class, 'renderConversationList'])->name('user.renderConversationList');
         Route::post('/user/sendMessage', [UsersController::class, 'sendMessage'])->name('user.sendMessage');
@@ -170,5 +172,9 @@ Route::group(['middleware' => 'preventBackHistory'], function () {
         Route::post('/order/filter_by_button', [OrderController::class, 'index'])->name('order.filter_by_button');
         Route::get('/order/view/{id}', [OrderController::class, 'view'])->name('order.view');
         Route::get('/order/pdf/{id}', [OrderController::class, 'downloadPdf'])->name('order.pdf');
+
+        //====================> Support Management =========================
+        Route::get('/support', [SupportController::class, 'index'])->name('support.index');
+        Route::get('/support/show', [SupportController::class, 'show'])->name('support.show');
     });
 });

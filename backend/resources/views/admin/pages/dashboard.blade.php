@@ -237,6 +237,10 @@
                                                 </div>
                                             </div>
                                         @endforeach
+                                    @else
+                                        <div style="text-align: center">
+                                            <div>Record Not Found...</div>
+                                        </div>
                                     @endif
                                 </div>
                             </div>
@@ -268,11 +272,18 @@
                                                     @foreach ($Ordercronlist as $cronelist)
                                                         <tr>
                                                             <td>
-                                                                <span class="label label-<?php if ($cronelist->status == 'processing') { echo 'warning';}
-                                                                elseif ($cronelist->status == 'accepted') {echo 'success';}
-                                                                elseif ($cronelist->status == 'ontheway') {echo 'primary';}
-                                                                elseif ($cronelist->status == 'delivered') {echo 'info';}
-                                                                else {echo 'danger';} ?>">{{ $cronelist->status }}
+                                                                <span
+                                                                    class="label label-<?php if ($cronelist->status == 'processing') {
+                                                                        echo 'warning';
+                                                                    } elseif ($cronelist->status == 'accepted') {
+                                                                        echo 'success';
+                                                                    } elseif ($cronelist->status == 'ontheway') {
+                                                                        echo 'primary';
+                                                                    } elseif ($cronelist->status == 'delivered') {
+                                                                        echo 'info';
+                                                                    } else {
+                                                                        echo 'danger';
+                                                                    } ?>">{{ $cronelist->status }}
                                                                 </span>
                                                             </td>
                                                             <td>
@@ -294,19 +305,22 @@
                                                                 @elseif ($cronelist->status == 'delivered')
                                                                     <i class="fa fa-level-up"></i> 100%
                                                                 @else
-                                                                    <span style="color:#ed5565"><i class="fa fa-level-down"></i> 0%</span>
+                                                                    <span style="color:#ed5565"><i
+                                                                            class="fa fa-level-down"></i> 0%</span>
                                                                 @endif
                                                             </td>
                                                             <td>
                                                                 <button type="button" class="btn-xs btn-primary">
-                                                                    <a href="{{ route('admin.order.edit', ['order' => $cronelist->id]) }}" style="color: white">Edit</a>
+                                                                    <a href="{{ route('admin.order.edit', ['order' => $cronelist->id]) }}"
+                                                                        style="color: white">Edit</a>
                                                                 </button>
                                                             </td>
                                                         </tr>
                                                     @endforeach
-                                                    @else
+                                                @else
                                                     <tr>
-                                                        <td colspan="5" style="text-align: center">Record Not Found...</td>
+                                                        <td colspan="5" style="text-align: center">Record Not Found...
+                                                        </td>
                                                     </tr>
                                                 @endif
                                             </tbody>
@@ -324,12 +338,12 @@
                                             @if (sizeof($TotalSupport) > 0)
                                                 @foreach ($TotalSupport as $support)
                                                     <li>
-                                                        @if ($support->flage == 'unread')
+                                                        @if ($support->flage == 'read')
                                                             <input type="checkbox" class="check-link" checked disabled>
                                                             <span
                                                                 class="m-l-xs todo-completed">{{ $support->supportmessage }}</span>
                                                         @else
-                                                            <a href="javascript:void(0)" class="check-link chnagesupport"
+                                                            <a href="javascript:void(0)" class="chnagesupport"
                                                                 data-id={{ $support->id }}>
                                                                 <i class="fa fa-square-o"></i>
                                                             </a>
@@ -339,7 +353,7 @@
                                                 @endforeach
                                             @else
                                                 <li>
-                                                    <span class="m-l-xs">Not Record Found</span>
+                                                    <span class="m-l-xs">Record Not Found...</span>
                                                 </li>
                                             @endif
                                         </ul>
@@ -516,55 +530,53 @@
 @section('scripts')
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
-
     <script type="text/javascript">
         $(document).on("click", "a.chnagesupport", function(e) {
-            console.log("sfdgfdg");
-            // var row = $(this);
-            // var id = $(this).attr('data-id');
-            // swal({
-            //     title: "Are you sure?",
-            //     text: "You want's to update this record status ",
-            //     type: "warning",
-            //     showCancelButton: true,
-            //     confirmButtonColor: "#e69a2a",
-            //     confirmButtonText: "Yes, updated it!",
-            //     cancelButtonText: "No, cancel plx!",
-            //     closeOnConfirm: false,
-            //     closeOnCancel: false
-            // }, function(isConfirm) {
-            //     if (isConfirm) {
-            //         $.ajax({
-            //             url: "{{ route('admin.change_support', 'replaceid') }}",
-            //             type: 'post',
-            //             data: {
-            //                 "_method": 'post',
-            //                 'id': id,
-            //                 "_token": "{{ csrf_token() }}"
-            //             },
-            //             success: function(msg) {
-            //                 if (msg.status == 'success') {
-            //                     swal({
-            //                             title: "Status",
-            //                             text: "Status Record success",
-            //                             type: "success"
-            //                         },
-            //                         function() {
-            //                             location.reload();
-            //                         });
-            //                 } else {
-            //                     swal("Warning!", msg.message, "warning");
-            //                 }
-            //             },
-            //             error: function() {
-            //                 swal("Error!", 'Error in updated Record', "error");
-            //             }
-            //         });
-            //     } else {
-            //         swal("Cancelled", "Your Support Status is safe :)", "error");
-            //     }
-            // });
-            // return false;
+            var row = $(this);
+            var id = $(this).attr('data-id');
+            swal({
+                title: "Are you sure?",
+                text: "You want's to update this record status ",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#e69a2a",
+                confirmButtonText: "Yes, updated it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        url: "{{ route('admin.change_support', 'replaceid') }}",
+                        type: 'post',
+                        data: {
+                            "_method": 'post',
+                            'id': id,
+                            "_token": "{{ csrf_token() }}"
+                        },
+                        success: function(msg) {
+                            if (msg.status == 'success') {
+                                swal({
+                                        title: "Status",
+                                        text: "Status Record success",
+                                        type: "success"
+                                    },
+                                    function() {
+                                        location.reload();
+                                    });
+                            } else {
+                                swal("Warning!", msg.message, "warning");
+                            }
+                        },
+                        error: function() {
+                            swal("Error!", 'Error in updated Record', "error");
+                        }
+                    });
+                } else {
+                    swal("Cancelled", "Your Support Status is safe :)", "error");
+                }
+            });
+            return false;
         })
 
         Highcharts.chart('dynamic_data', {

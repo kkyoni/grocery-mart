@@ -87,6 +87,30 @@
                     </span>
                 </a>
             </li>
+            <li class="@if (Request::segment('2') == 'order') active @endif" data-toggle="tooltip" title="Order">
+                <a href="{{ route('admin.order.index') }}">
+                    <i class="fa fa-exchange"></i>
+                    <span class="nav-label">
+                        Order
+                    </span>
+                </a>
+            </li>
+            <li class="@if (Request::segment('2') == 'activitylog') active @endif" data-toggle="tooltip" title="Activity Log">
+                <a href="{{ route('admin.user.activitylog') }}">
+                    <i class="fa fa-tasks"></i>
+                    <span class="nav-label">
+                        Activity Log
+                    </span>
+                </a>
+            </li>
+            <li class="@if (Request::segment('2') == 'support') active @endif" data-toggle="tooltip" title="Support">
+                <a href="{{ route('admin.support.index') }}">
+                    <i class="fa fa-wrench"></i>
+                    <span class="nav-label">
+                        Support
+                    </span>
+                </a>
+            </li>
             <li class="@if (Request::segment('1') == 'settings') active @endif" data-toggle="tooltip" title="Setting">
                 <a href="{{ url('settings') }}">
                     <i class="fa fa-cogs"></i>

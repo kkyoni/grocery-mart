@@ -32,6 +32,7 @@ class BlogSingle extends Component {
         const SingleBlog = this.state.blogdetail;
         const title = this.state.blogdetail.title;
         const description = this.state.blogdetail.description;
+        const url = "http://localhost:3000/blog-single/"+this.state.id;
         return (
             <div>
                 <Title isLoadingPage={this.state.isLoading} />
@@ -86,7 +87,7 @@ class BlogSingle extends Component {
                                             radius: 50,
                                             show_total: false,
                                             size: 35,
-                                            url: 'https://www.google.co.in/',
+                                            url: url,
                                             image: 'https://bit.ly/2CMhCMC',
                                             description: { description },
                                             title: { title },
