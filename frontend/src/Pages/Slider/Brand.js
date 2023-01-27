@@ -10,16 +10,24 @@ class Brand extends Component {
             Data: false,
         }
     }
-    async componentDidMount() {
+    componentDidMount() {
         Service.getBrand().then((res) => {
-			if (res.data.status === 'success') {
-				this.setState({ brand: res.data.brand, connection: true, notrecordloading: true });
-			} else {
-				this.setState({ brand: [], connection: true, notrecordloading: false });
-			}
-		});
+            if (res.data.status === 'success') {
+                this.setState({ brand: res.data.brand, connection: true, notrecordloading: true });
+            } else {
+                this.setState({ brand: [], connection: true, notrecordloading: false });
+            }
+        });
     }
     handleBrand(id) {
+        // const brand_local = JSON.parse(localStorage.getItem("brand"));
+        // let brandcurrentProduct = brand_local.filter(x => x === id);
+        // if (brandcurrentProduct.length === 0) {
+        //     brand_local.push(id);
+        //     localStorage.setItem('brand', JSON.stringify(brand_local));
+        // } else {
+        //     console.log("out");
+        // }
         Service.getSinglebrand(id).then(res => {
             if (res.data.status === "success") {
                 let singledata = [];

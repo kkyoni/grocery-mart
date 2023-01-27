@@ -15,6 +15,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.1",
     "react-toastify": "^8.2.0",
+    "react-translator-component": "^2.2.0",
     "reactstrap": "^8.4.1",
     "sharethis-reactjs": "^1.6.0",
     "sweetalert": "^2.1.2",

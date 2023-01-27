@@ -24,8 +24,7 @@
                     <div class="ibox-content">
                         <div class="col-md-12 text-right">
                             <a class="btn btn-primary btn-sm pull-right mb-3 op-btn them"
-                                href="{{ route('admin.promo.create') }}">
-                                <i class="icon-plus fa-fw"></i>Add Promo</a>
+                                href="{{ route('admin.promo.create') }}"><i class="fa fa-plus"></i> Add Promo</a>
                             <div class="clearfix"></div>
                         </div>
                         <div class="col-md-12">
@@ -55,12 +54,18 @@
     </div>
 @endsection
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('assets/admin/datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('new/jquery.dataTables.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('new/buttons.dataTables.min.css') }}" />
 @endsection
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('assets/admin/datatables/datatables.min.js') }}"></script>
-    <script type="text/javascript" charset="utf8" src="{{ asset('assets/admin/datatables/dataTables.bootstrap4.min.js') }}">
-    </script>
+<script src="{{ asset('new/jquery.dataTables.min.js') }}"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
     {!! $html->scripts() !!}
     <script type="text/javascript">
         $(document).on("click", "a.deletepromo", function(e) {

@@ -18,15 +18,6 @@ class SliderCategory extends Component {
 			}
 		});
     }
-    handleCategorys(id) {
-        Service.getSinglecategorys(id).then(res => {
-            if (res.data.status === "success") {
-                this.props.parentCategoryCallback(res.data.product);
-            } else {
-                this.props.parentCategoryCallback([]);
-            }
-        })
-    }
     render() {
         var categories_HTMLTABLE = "";
         if (this.state.connection) {
@@ -34,7 +25,7 @@ class SliderCategory extends Component {
                 categories_HTMLTABLE =
                     this.state.categories.map((item, i) => {
                         return (
-                            <li key={i}><Link onClick={() => this.handleCategorys(item.id)}>{item.categories_name}</Link></li>
+                            <li key={i}><Link to={`/products/${item.id}`}>{item.categories_name}</Link></li>
                         );
                     });
             } else {

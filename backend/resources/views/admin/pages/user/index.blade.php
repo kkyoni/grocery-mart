@@ -135,12 +135,18 @@
             padding: 0;
         }
     </style>
-    <link rel="stylesheet" href="{{ asset('assets/admin/datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('new/jquery.dataTables.min.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('new/buttons.dataTables.min.css') }}" />
 @endsection
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('assets/admin/datatables/datatables.min.js') }}"></script>
-    <script type="text/javascript" charset="utf8" src="{{ asset('assets/admin/datatables/dataTables.bootstrap4.min.js') }}">
-    </script>
+<script src="{{ asset('new/jquery.dataTables.min.js') }}"></script>
+<script src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.flash.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/pdfmake.min.js"></script>
+<script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.27/build/vfs_fonts.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.html5.min.js"></script>
+<script src="//cdn.datatables.net/buttons/1.3.1/js/buttons.print.min.js"></script>
     {!! $html->scripts() !!}
     <script>
         $(document).on("click", "a.deleteuser", function(e) {
@@ -340,7 +346,7 @@
 
         $(document).on('click', '.myFunction', function() {
             var id = $(this).attr('data-id');
-            var x = document.getElementById("myInput"+id);
+            var x = document.getElementById("myInput" + id);
             if (x.type === "password") {
                 x.type = "text";
             } else {

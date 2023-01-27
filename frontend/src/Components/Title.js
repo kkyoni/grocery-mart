@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Form, Input } from "reactstrap";
-import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Service from "../services/Service";
@@ -53,93 +52,81 @@ class Title extends Component {
     onOtpHandler = () => {
         const otpemail = localStorage.getItem("otpemail");
         this.setState({ isotpLoading: true });
-        axios
-            .post("http://127.0.0.1:8000/api/verifyOtp", {
-                email: otpemail,
-                otp_number: this.state.code,
-            })
-            .then((res) => {
+        var data = {
+            email: otpemail,
+            otp_number: this.state.code
+        };
+        Service.VerifyOtp(data).then((res) => {
+            if (res.data.status === 'success') {
                 this.setState({ isotpLoading: false });
-                if (res.data.status === 'success') {
-                    localStorage.setItem("userData", JSON.stringify(res.data.data));
-                    localStorage.setItem("isLoggedIn", true);
-                    localStorage.removeItem('otpemail');
-                    this.setState({
-                        msg: res.data.message,
-                        redirect: true,
-                    });
-                    this.setState({ otp: false });
-                    this.setState({ openModel: false });
-                    toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
-                } else {
-                    this.setState({
-                        errMsg: res.data.message,
-                    });
-                    setTimeout(() => {
-                        this.setState({ errMsg: "" });
-                    }, 2000);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                localStorage.setItem("userData", JSON.stringify(res.data.data));
+                localStorage.setItem("isLoggedIn", true);
+                localStorage.removeItem('otpemail');
+                this.setState({
+                    msg: res.data.message,
+                    redirect: true,
+                });
+                this.setState({ otp: false });
+                this.setState({ openModel: false });
+                toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+            } else {
+                this.setState({
+                    errMsg: res.data.message,
+                });
+                setTimeout(() => {
+                    this.setState({ errMsg: "" });
+                }, 2000);
+            }
+        });
     }
     onResetOtpHandler = () => {
         const otpemail = localStorage.getItem("otpemail");
         this.setState({ isLoading: true });
-        axios
-            .post("http://127.0.0.1:8000/api/sendOtp", {
-                email: otpemail,
-            })
-            .then((res) => {
+        var data = {
+            email: otpemail
+        };
+        Service.SendOtp(data).then((res) => {
+            if (res.data.status === 'success') {
                 this.setState({ isLoading: false });
-                if (res.data.status === 'success') {
-                    this.setState({
-                        msg: res.data.message,
-                        redirect: true,
-                    });
-                    toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
-                } else {
-                    this.setState({
-                        errMsg: res.data.message,
-                    });
-                    setTimeout(() => {
-                        this.setState({ errMsg: "" });
-                    }, 2000);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                this.setState({
+                    msg: res.data.message,
+                    redirect: true,
+                });
+                toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+            } else {
+                this.setState({
+                    errMsg: res.data.message,
+                });
+                setTimeout(() => {
+                    this.setState({ errMsg: "" });
+                }, 2000);
+            }
+        });
     }
     onSignInHandler = () => {
         this.setState({ isLoading: true });
-        axios
-            .post("http://127.0.0.1:8000/api/login", {
-                email: this.state.email,
-                password: this.state.password,
-            })
-            .then((res) => {
+        var data = {
+            email: this.state.email,
+            password: this.state.password,
+        };
+        Service.Login(data).then((res) => {
+            if (res.data.status === 'success') {
                 this.setState({ isLoading: false });
-                if (res.data.status === 'success') {
-                    localStorage.setItem("otpemail", this.state.email);
-                    this.setState({ otp: true });
-                    this.setState({
-                        msg: res.data.message,
-                        redirect: true,
-                    });
-                } else {
-                    this.setState({
-                        errMsg: res.data.message,
-                    });
-                    setTimeout(() => {
-                        this.setState({ errMsg: "" });
-                    }, 2000);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                localStorage.setItem("otpemail", this.state.email);
+                this.setState({ otp: true });
+                this.setState({
+                    msg: res.data.message,
+                    redirect: true,
+                });
+            } else {
+                this.setState({
+                    errMsg: res.data.message,
+                });
+                setTimeout(() => {
+                    this.setState({ errMsg: "" });
+                }, 2000);
+            }
+        })
     };
     onLogoutHandler = () => {
         localStorage.removeItem('userData');
@@ -177,7 +164,7 @@ class Title extends Component {
                         </div>
                     </div>
                 </div>
-                {openModel ?(
+                {openModel ? (
                     <div className="modal fade" id="myModalAuthentication" tabIndex={-1} aria-labelledby="myModalAuthentication" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
@@ -264,7 +251,7 @@ class Title extends Component {
                             </div>
                         </div>
                     </div>
-                ):("")}
+                ) : ("")}
             </div>
         )
     }

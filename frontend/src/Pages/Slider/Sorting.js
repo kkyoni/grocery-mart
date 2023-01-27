@@ -7,7 +7,8 @@ class Sorting extends Component {
         this.onSortingHandler = this.onSortingHandler.bind(this);
     }
     onSortingHandler(e) {
-        Service.getSortingProduct(e.target.value).then(res => {
+        console.log("this.props",this.props);
+        Service.getSortingProduct(e.target.value,this.props.category_id).then(res => {
             if (res.data.status === "success") {
                 this.props.parentSortCallback(res.data.productssort);
             }

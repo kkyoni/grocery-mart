@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import Service from "../../../services/Service";
 import swal from "sweetalert";
 class MyAccount extends Component {
     state = {
@@ -36,14 +36,13 @@ class MyAccount extends Component {
     }
     saveProfile = async (e) => {
         e.preventDefault();
-        const url = "http://127.0.0.1:8000/api/profile";
         const data = new FormData();
         data.append('profile_id', this.state.profile_id)
         data.append('first_name', this.state.first_name)
         data.append('last_name', this.state.last_name)
         data.append('email', this.state.email)
         data.append('image', this.state.image)
-        axios.post(url, data).then(res => {
+        Service.SaveUserProfile(data).then((res) => {
             if (res.data.status === "success") {
                 swal({
                     title: "Success!",
@@ -78,7 +77,7 @@ class MyAccount extends Component {
                 });
                 this.props.history.push('/profile');
             }
-        })
+    });
     }
     render() {
         return (

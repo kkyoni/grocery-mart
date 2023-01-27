@@ -25,14 +25,13 @@ function App() {
           <Route path="/faq" component={Faq} />
           <Route path="/blog" component={Blog} />
           <Route path="/:blog-single/:id" component={BlogSingle} />
-          <Route path="/products" component={Products} />
+          <Route path="/:products/:id" component={Products} />
           <Route path="/check-out" component={CheckOut} />
           <Route path="/profile" component={Profile} />
           <Route path="/order-tracking" component={OrderTracking} />
           <Route path="/:single-products/:id" component={ProductsSingle} />
           <Route path="/under-maintenance" component={UnderMaintenance} />
           <Route component={PageNotFund} />
-          {/* <Route component={UnderMaintenance} /> */}
         </Switch>
       </Router>
     </div>

@@ -17,6 +17,7 @@ use Tymon\JWTAuthExceptions\JWTException;
 use App\Models\User;
 use App\Models\Brand;
 use App\Models\Categories;
+use App\Models\ChatMessage;
 use App\Models\Otp;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
@@ -32,6 +33,7 @@ use App\Models\Setting;
 use App\Models\Support;
 use App\Models\UserAddress;
 use Exception;
+use PhpOffice\PhpSpreadsheet\Calculation\Category;
 use Stripe;
 use Tymon\JWTAuthExceptions\TokenExpiredException;
 use Tymon\JWTAuthExceptions\TokenInvalidException;
@@ -198,10 +200,17 @@ class CommonController extends Controller
         }
     }
 
-    public function getproducts(Request $request)
+    public function getproducts(Request $request, $id)
     {
         try {
-            $product = Product::with(['productimage'])->orderBy('id', 'desc')->get();
+            $product = Product::with(['productimage'])->where('category_id', $id)->orderBy('id', 'desc')->get();
+            $product_count = Product::where('category_id', $id)->orderBy('id', 'desc')->count();
+            $brand = Categories::with(['brand_details'])->where('id', $id)->orderBy('id', 'desc')->first();
+            if (!empty($brand['brand_details']['brand_image'])) {
+                $brand_image = $brand['brand_details']['brand_image'];
+            } else {
+                $brand_image = "default.png";
+            }
             foreach ($product as $key => $value) {
                 if (date('Y-m-d', strtotime($value['updated_at'])) >= date('Y-m-d')) {
                     $value['new_offer'] = 'new';
@@ -216,6 +225,8 @@ class CommonController extends Controller
             if (sizeof($product) > 0) {
                 return response()->json([
                     'product'  => $product,
+                    'product_count' => $product_count,
+                    'brand_image' => $brand_image,
                     'status' => 'success',
                     'message' => 'Product Listed Successfully !!'
                 ]);
@@ -263,8 +274,17 @@ class CommonController extends Controller
     public function getbrand(Request $request)
     {
         try {
-            $brand = Brand::orderBy('id', 'desc')->get();
+            $brand = Brand::with(['categories_details'])->orderBy('id', 'desc')->get();
             if (sizeof($brand) > 0) {
+                foreach ($brand as $value) {
+                    foreach ($value['categories_details'] as $val) {
+                        if (date('Y-m-d', strtotime($val['updated_at'])) >= date('Y-m-d')) {
+                            $val['new_offer'] = 'new';
+                        } else {
+                            $val['new_offer'] = 'old';
+                        }
+                    }
+                }
                 return response()->json([
                     'brand'  => $brand,
                     'status' => 'success',
@@ -587,7 +607,7 @@ class CommonController extends Controller
         }
     }
 
-    public function productssorting(Request $request, $sort)
+    public function productssorting(Request $request, $sort, $category_id)
     {
         try {
             if ($sort == 'lowtohigh') {
@@ -600,7 +620,7 @@ class CommonController extends Controller
                 $sort_price = "id";
                 $sort_list = "DESC";
             }
-            $productssort = Product::with(['productimage'])->orderBy($sort_price, $sort_list)->get();
+            $productssort = Product::with(['productimage'])->where('category_id', $category_id)->orderBy($sort_price, $sort_list)->get();
             foreach ($productssort as $key => $value) {
                 if (date('Y-m-d', strtotime($value['updated_at'])) >= date('Y-m-d')) {
                     $value['new_offer'] = 'new';
@@ -950,7 +970,6 @@ class CommonController extends Controller
     public function promocode(Request $request)
     {
         try {
-
             $now = date('Y-m-d');
             $checking_promo = Promo::where('code', $request->promocode)->whereDate('start_date', '<=', $now)->whereDate('end_date', '>=', $now)->where('status', 'active')->first();
             if (!empty($checking_promo)) {
@@ -1047,6 +1066,7 @@ class CommonController extends Controller
                 'zip' => $request->zip,
                 'states' => $request->states,
                 'country' => $request->country,
+                'optional' => $request->optional,
                 'street_address' => $request->street_address,
                 'city' => $request->city,
             ]);
@@ -1077,6 +1097,44 @@ class CommonController extends Controller
                     'message' => 'Track Order Not Sucessfully !!'
                 ]);
             }
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()]);
+        }
+    }
+
+    public function getchat(Request $request, $id)
+    {
+        try {
+            $conversationList = ChatMessage::where('to_user_id', $id)->orWhere('from_user_id', $id)->get();
+            if (sizeof($conversationList) > 0) {
+                foreach ($conversationList as $value) {
+                    if ($value['to_user_id'] === $id) {
+                        $user_left = User::where('id', $value['from_user_id'])->first();
+                        $value['flage'] = 'left';
+                        $value['date'] = \Carbon\Carbon::parse($value['created_at'])->diffForHumans();
+                        $value['name'] = $user_left->first_name . ' ' . $user_left->last_name;
+                        $value['photo'] = $user_left->avatar;
+                    } else {
+                        $user_right = User::where('id', $value['from_user_id'])->first();
+                        $value['flage'] = 'right';
+                        $value['date'] = \Carbon\Carbon::parse($value['created_at'])->diffForHumans();
+                        $value['name'] = $user_right->first_name . ' ' . $user_right->last_name;
+                        $value['photo'] = $user_right->avatar;
+                    }
+                }
+                return response()->json([
+                    'chat'  => $conversationList,
+                    'status' => 'success',
+                    'message' => 'Chat Record Sucessfully !!'
+                ]);
+            } else {
+                return response()->json([
+                    'chat'  => $conversationList,
+                    'status' => 'success',
+                    'message' => 'Chat Record Not Found!!'
+                ]);
+            }
+            // dd($conversationList);
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()]);
         }

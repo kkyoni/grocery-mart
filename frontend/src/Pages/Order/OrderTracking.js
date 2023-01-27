@@ -4,7 +4,7 @@ import Title from "../../Components/Title";
 import Footer from "../../Components/Footer";
 import Newsletter from "../Newsletter/Newsletter";
 import { Link } from 'react-router-dom';
-import axios from "axios";
+import Service from "../../services/Service";
 import { toast } from 'react-toastify';
 import './ordretracking.css';
 class OrderTracking extends Component {
@@ -37,13 +37,14 @@ class OrderTracking extends Component {
             e.preventDefault();
             value = this.state.invoice;
         }
-        const res = await axios.post('http://127.0.0.1:8000/api/track-now/' + value);
-        if (res.data.status === "success") {
-            localStorage.setItem('invoice', res.data.TrackOrder.invoice)
-            this.setState({ tracknow: false, TrackOrder: res.data.TrackOrder });
-        } else {
-            toast.error("Track Now", { position: toast.POSITION.TOP_RIGHT });
-        }
+        Service.TrackInvoice(value).then((res) => {
+            if (res.data.status === "success") {
+                localStorage.setItem('invoice', res.data.TrackOrder.invoice)
+                this.setState({ tracknow: false, TrackOrder: res.data.TrackOrder });
+            } else {
+                toast.error("Track Now", { position: toast.POSITION.TOP_RIGHT });
+            }
+        });
     }
 
     render() {

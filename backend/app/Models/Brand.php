@@ -12,4 +12,9 @@ class Brand extends Model
 
     protected $table = 'brand';
     protected $fillable = ['brand_name','brand_image'];
+
+    public function categories_details()
+    {
+        return $this->hasMany('App\Models\Categories','brand_id','id');
+    }
 }

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import axios from "axios";
 import Title from "../../Components/Title";
 import Header from "../../Components/Header";
 import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
 import Iframe from 'react-iframe'
 import { toast } from 'react-toastify';
+import Service from "../../services/Service";
 class ContactUs extends Component {
     state = {
         user_id: '',
@@ -38,29 +38,36 @@ class ContactUs extends Component {
     saveContact = async (e) => {
         this.setState({ ButtonLoading: true });
         e.preventDefault();
-        const res = await axios.post('http://127.0.0.1:8000/api/add-contact', this.state);
-        if (res.data.status === "success") {
-            toast.success("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
-            this.setState({
-                first_name: '',
-                last_name: '',
-                email: '',
-                message: '',
-                ButtonLoading: false,
-            });
-        } else {
-            this.setState({
-                first_name_error: res.data.first_name_error,
-                last_name_error: res.data.last_name_error,
-                email_error: res.data.email_error,
-                message_error: res.data.message_error,
-            });
-            setTimeout(() => {
-                this.setState({ first_name_error: "", last_name_error: "", email_error: "", message_error: "",ButtonLoading: false });
-            }, 2000);
-            toast.error("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
-            this.props.history.push('/contact-us');
-        }
+        var data = {
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
+            email: this.state.email,
+            message: this.state.message
+        };
+        Service.CreateContact(data).then((res) => {
+            if (res.data.status === 'success') {
+                toast.success("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
+                this.setState({
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                    message: '',
+                    ButtonLoading: false,
+                });
+            } else {
+                this.setState({
+                    first_name_error: res.data.first_name_error,
+                    last_name_error: res.data.last_name_error,
+                    email_error: res.data.email_error,
+                    message_error: res.data.message_error,
+                });
+                setTimeout(() => {
+                    this.setState({ first_name_error: "", last_name_error: "", email_error: "", message_error: "", ButtonLoading: false });
+                }, 2000);
+                toast.error("Conatct Inquiry", { position: toast.POSITION.TOP_RIGHT });
+                this.props.history.push('/contact-us');
+            }
+        });
     }
     render() {
         const ButtonLoading = this.state.ButtonLoading;
@@ -141,11 +148,7 @@ class ContactUs extends Component {
                                         <p className="text-danger" style={{ color: "red" }}>{this.state.message_error}</p>
                                     </div>
                                     <button className="btn btn-style">
-                                        {ButtonLoading ? (
-                                            <i className="fa fa-refresh fa-spin"></i>
-                                        ) : (
-                                            <span>Send Message</span>
-                                        )}
+                                    {ButtonLoading ? (<span>please wait...</span>) : (<span>Send Message</span>)}
                                     </button>
                                 </form>
                             </div>

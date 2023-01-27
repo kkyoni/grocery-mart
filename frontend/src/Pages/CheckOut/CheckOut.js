@@ -6,7 +6,7 @@ import Newsletter from "../Newsletter/Newsletter";
 import Footer from "../../Components/Footer";
 import "./checkout.css";
 import swal from "sweetalert";
-import axios from "axios";
+import Service from "../../services/Service";
 import { toast } from 'react-toastify';
 class CheckOut extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ class CheckOut extends Component {
       promototal: 0.00,
       user_id: '',
       address_id: '',
+      address_error:'',
       promo_id: '',
       comments: "",
       purchase: false,
@@ -60,32 +61,35 @@ class CheckOut extends Component {
     });
   };
   SaveCheckOutCOD = async (e) => {
+
     this.setState({ codLoading: true })
     e.preventDefault();
-    const res = await axios.post(
-      "http://127.0.0.1:8000/api/checkoutsavecod",
-      this.state
-    );
-    if (res.data.status === "success") {
-      this.setState({
-        product_cart: {},
-        codLoading: false,
-        newTotal: 0.00,
-        comments: "",
-        promo_id: '',
-        promocode: '',
-        cod: false,
-        codcash: false,
-        purchase: true,
-        purchasepayment: true
-      });
-      localStorage.removeItem("product_details");
-      toast.success("COD Payment SuccessFully...", { position: toast.POSITION.TOP_RIGHT });
+    if (!this.state.address_id) {
+      this.setState({address_error:'Plase Add Address',cod: false});
     } else {
-      toast.error("COD Payment Not SuccessFully...", { position: toast.POSITION.TOP_RIGHT });
-      this.setState({
-        purchase: true,
-        purchasepayment: false
+      Service.SaveCod(this.state).then((res) => {
+        if (res.data.status === "success") {
+          this.setState({
+            product_cart: {},
+            codLoading: false,
+            newTotal: 0.00,
+            comments: "",
+            promo_id: '',
+            promocode: '',
+            cod: false,
+            codcash: false,
+            purchase: true,
+            purchasepayment: true
+          });
+          localStorage.removeItem("product_details");
+          toast.success("COD Payment SuccessFully...", { position: toast.POSITION.TOP_RIGHT });
+        } else {
+          toast.error("COD Payment Not SuccessFully...", { position: toast.POSITION.TOP_RIGHT });
+          this.setState({
+            purchase: true,
+            purchasepayment: false
+          });
+        }
       });
     }
   };
@@ -162,16 +166,19 @@ class CheckOut extends Component {
 
   ApplyPromoCode = async (e) => {
     e.preventDefault();
-    const res = await axios.post(
-      "http://127.0.0.1:8000/api/promocode",
-      this.state
-    );
-    if (res.data.status === "success") {
-      toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
-      this.setState({ newTotal: Number.parseFloat(res.data.DisCount).toFixed(2), promo_id: res.data.promo_id, promototal: Number.parseFloat(res.data.promototal) });
-    } else {
-      toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
-    }
+    var data = {
+      promocode: this.state.promocode,
+      user_id: this.state.user_id,
+      newTotal: this.state.newTotal
+    };
+    Service.PromoCode(data).then((res) => {
+      if (res.data.status === "success") {
+        toast.success(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+        this.setState({ newTotal: Number.parseFloat(res.data.DisCount).toFixed(2), promo_id: res.data.promo_id, promototal: Number.parseFloat(res.data.promototal) });
+      } else {
+        toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+      }
+    });
   }
   render() {
     const login = JSON.parse(localStorage.getItem("userData"));
@@ -453,15 +460,12 @@ class CheckOut extends Component {
                             </div>
                             {cod ? (
                               <button type="button" className="btn btn-primary" style={{ background: '#3A5795', border: '#3A5795' }} onClick={this.SaveCheckOutCOD}>
-                                COD PAYMENT {this.state.codLoading ? (
-                                  <i className="fa fa-refresh fa-spin"></i>
-                                ) : (
-                                  <span></span>
-                                )}
+                                {this.state.codLoading ? (<span>please wait...</span>) : (<span>COD PAYMENT</span>)}
                               </button>
                             ) : (
                               <button type="button" className="btn btn-primary" style={{ background: '#3A5795', border: '#3A5795' }} disabled>COD PAYMENT</button>
                             )}
+                            <p className="text-danger" style={{ color: "red" }}>{this.state.address_error}</p>
                           </div>
                         </div>
                       </div>

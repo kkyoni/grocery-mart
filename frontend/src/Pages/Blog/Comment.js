@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { toast } from 'react-toastify';
-import axios from "axios";
 import Service from "../../services/Service";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -34,20 +33,26 @@ class Comment extends Component {
     saveComment = async (e) => {
         this.setState({ isLoading: true });
         e.preventDefault();
-        const res = await axios.post('http://127.0.0.1:8000/api/add-Comment', this.state);
-        if (res.data.status === "success") {
-            toast.success("Comment success", { position: toast.POSITION.TOP_RIGHT });
-            if (res.data.status === 'success') {
-                this.setState({ comment: '', isLoading: false, Comment: res.data.Comment, connection: true, notrecordloading: true });
+        var data = {
+            user_id: this.state.user_id,
+            blog_id: this.state.blog_id,
+            comment: this.state.comment
+        };
+        Service.CreateComment(data).then((res) => {
+            if (res.data.status === "success") {
+                toast.success("Comment success", { position: toast.POSITION.TOP_RIGHT });
+                if (res.data.status === 'success') {
+                    this.setState({ comment: '', isLoading: false, Comment: res.data.Comment, connection: true, notrecordloading: true });
+                } else {
+                    this.setState({ comment: '', isLoading: false, Comment: [], connection: true, notrecordloading: false });
+                }
             } else {
-                this.setState({ comment: '', isLoading: false, Comment: [], connection: true, notrecordloading: false });
+                toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
+                setTimeout(() => {
+                    this.setState({ comment: '', isLoading: false });
+                }, 2000);
             }
-        } else {
-            toast.error(res.data.message, { position: toast.POSITION.TOP_RIGHT });
-            setTimeout(() => {
-                this.setState({ comment: '', isLoading: false });
-            }, 2000);
-        }
+        });
     }
     render() {
         const isLoading = this.state.isLoading;
@@ -98,11 +103,7 @@ class Comment extends Component {
                         </div>
                         <div className="submit text-right">
                             <button className="btn btn-style btn-style-primary">
-                                {isLoading ? (
-                                    <i className="fa fa-refresh fa-spin"></i>
-                                ) : (
-                                    <span>Post Comment</span>
-                                )}
+                            {isLoading ? (<span>please wait...</span>) : (<span>Post Comment</span>)}
                             </button>
                         </div>
                     </form>

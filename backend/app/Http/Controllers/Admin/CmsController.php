@@ -10,6 +10,7 @@ use Yajra\DataTables\Html\Builder;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Cms;
 use Exception;
+
 class CmsController extends Controller
 {
     protected $authLayout = '';
@@ -65,8 +66,21 @@ class CmsController extends Controller
             ['data' => 'description', 'name' => 'description', 'title' => 'Description', 'width' => '10%'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '10%'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '10%', "orderable" => false, "searchable" => false],
-        ])
-            ->parameters(['order' => []]);
+        ])->parameters([
+            'order' => [],
+            'paging'      => true,
+            'info'        => true,
+            'searchDelay' => 350,
+            'dom'         => 'lBfrtip',
+            'buttons'     => [
+                ['extend' => 'copy', 'title' => "CMS Report", 'text' => '<i class="fa fa-copy" aria-hidden="true" style="font-size:16px"></i> Copy', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'excel', 'title' => "CMS Report", 'text' => '<i class="fa fa-file-excel-o" aria-hidden="true" style="font-size:16px"></i> Excel', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'csv', 'title' => "CMS Report", 'text' => '<i class="fa fa-file-text-o" aria-hidden="true" style="font-size:16px"></i> CSV', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'pdf', 'title' => "CMS Report", 'text' => '<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:16px"></i> PDF', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'print', 'title' => "CMS Report", 'text' => '<i class="fa fa-print" aria-hidden="true" style="font-size:16px"></i> Print', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+            ],
+            'searching'   => true,
+        ]);
         return view($this->pageLayout . 'index', compact('html'));
     }
     /*-----------------------------------------------------------------------------------

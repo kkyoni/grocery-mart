@@ -77,7 +77,14 @@ class Profile extends Component {
                     <div className="user-panel container mx-auto py-5 px-5">
                         <div className="grid grid-cols-12 tabs-container" style={{ gap: '1.25rem' }}>
                             <div className="col-span-12 md:col-span-4">
-                                <ul className="bg-white rounded p-5">
+                                <ul className="list-group">
+                                    <li className={this.state.myaccount ? ("list-group-item active") : ("list-group-item")} onClick={this.toggle.bind(this, 'myaccount')}>My Account</li>
+                                    <li className={this.state.orders ? ("list-group-item active") : ("list-group-item")} onClick={this.toggle.bind(this, 'orders')}>Orders</li>
+                                    <li className={this.state.myaddress ? ("list-group-item active") : ("list-group-item")} onClick={this.toggle.bind(this, 'myaddress')}>My Address</li>
+                                    <li className={this.state.support ? ("list-group-item active") : ("list-group-item")} onClick={this.toggle.bind(this, 'support')}>Support</li>
+                                    <li className="list-group-item">Log out</li>
+                                </ul>
+                                {/* <ul className="bg-white rounded p-5">
                                     <li className={this.state.myaccount ? ("btn-tabs flex items-center p-2 text-lg border-b border-gray-200 hover:text-primary-color transition-all duration-300 cursor-pointer active") : ("btn-tabs flex items-center p-2 text-lg border-b border-gray-200 hover:text-primary-color transition-all duration-300 cursor-pointer")} onClick={this.toggle.bind(this, 'myaccount')}>
                                         <i className="bi bi-person-fill text-primary-color"></i>
                                         <span>My Account</span>
@@ -98,7 +105,7 @@ class Profile extends Component {
                                         <i className="bi bi-box-arrow-left text-primary-color"></i>
                                         <span>Log out</span>
                                     </li>
-                                </ul>
+                                </ul> */}
                             </div>
                             <div className="col-span-12 md:col-span-8">
                                 <div className="tabs-content">

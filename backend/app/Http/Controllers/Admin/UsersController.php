@@ -79,10 +79,24 @@ class UsersController extends Controller
             ['data' => 'avatar', 'name' => 'avatar', 'title' => 'Avatar', 'width' => '5px'],
             ['data' => 'name', 'name' => 'name', 'title' => 'Name', 'width' => '5px'],
             ['data' => 'email', 'name' => 'email', 'title' => 'Email', 'width' => '5px'],
-            ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '5px'],
-            ['data' => 'password', 'name' => 'password', 'title' => 'Password', 'width' => '5px'],
-            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '75%', "orderable" => false, "searchable" => false],
-        ])->parameters(['order' => []]);
+            ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '2px'],
+            // ['data' => 'password', 'name' => 'password', 'title' => 'Password', 'width' => '5px'],
+            ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '15%', "orderable" => false, "searchable" => false],
+        ])->parameters([
+            'order' => [],
+            'paging'      => true,
+            'info'        => true,
+            'searchDelay' => 350,
+            'dom'         => 'lBfrtip',
+            'buttons'     => [
+                ['extend' => 'copy', 'title' => "Users Report", 'text' => '<i class="fa fa-copy" aria-hidden="true" style="font-size:16px"></i> Copy', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'excel', 'title' => "Users Report", 'text' => '<i class="fa fa-file-excel-o" aria-hidden="true" style="font-size:16px"></i> Excel', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'csv', 'title' => "Users Report", 'text' => '<i class="fa fa-file-text-o" aria-hidden="true" style="font-size:16px"></i> CSV', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'pdf', 'title' => "Users Report", 'text' => '<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:16px"></i> PDF', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'print', 'title' => "Users Report", 'text' => '<i class="fa fa-print" aria-hidden="true" style="font-size:16px"></i> Print', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+            ],
+            'searching'   => true,
+        ]);
         return view($this->pageLayout . 'index', compact('html'));
     }
 
@@ -353,9 +367,9 @@ class UsersController extends Controller
     ---------------------------------------------------------------------------------- */
     public function activitylog(Builder $builder, Request $request)
     {
-        if(!empty($request->id)){
+        if (!empty($request->id)) {
             $logactivity = LogActivity::where('user_id', $request->id)->orderBy('id', 'desc');
-        }else{
+        } else {
             $logactivity = LogActivity::orderBy('id', 'desc');
         }
 
@@ -395,7 +409,21 @@ class UsersController extends Controller
             ['data' => 'agent', 'name' => 'agent', 'title' => 'Agent', 'width' => '10%'],
             ['data' => 'status', 'name' => 'status', 'title' => 'Status', 'width' => '10%'],
             ['data' => 'created_at', 'name' => 'created_at', 'title' => 'Date', 'width' => '10%'],
-        ])->parameters(['order' => []]);
+        ])->parameters([
+            'order' => [],
+            'paging'      => true,
+            'info'        => true,
+            'searchDelay' => 350,
+            'dom'         => 'lBfrtip',
+            'buttons'     => [
+                ['extend' => 'copy', 'title' => "Activity_Log Report", 'text' => '<i class="fa fa-copy" aria-hidden="true" style="font-size:16px"></i> Copy', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5, 6]]],
+                ['extend' => 'excel', 'title' => "Activity_Log Report", 'text' => '<i class="fa fa-file-excel-o" aria-hidden="true" style="font-size:16px"></i> Excel', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5, 6]]],
+                ['extend' => 'csv', 'title' => "Activity_Log Report", 'text' => '<i class="fa fa-file-text-o" aria-hidden="true" style="font-size:16px"></i> CSV', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5, 6]]],
+                ['extend' => 'pdf', 'title' => "Activity_Log Report", 'text' => '<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:16px"></i> PDF', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5, 6]]],
+                ['extend' => 'print', 'title' => "Activity_Log Report", 'text' => '<i class="fa fa-print" aria-hidden="true" style="font-size:16px"></i> Print', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5, 6]]],
+            ],
+            'searching'   => true,
+        ]);
         return view($this->pageLayout . 'ActivityLog', compact('html'));
     }
 }

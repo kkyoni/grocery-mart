@@ -17,12 +17,12 @@ class TopProducts extends Component {
     }
     async componentDidMount() {
         Service.getTopProducts().then((res) => {
-			if (res.data.status === 'success') {
-				this.setState({ product: res.data.product, connection: true, notrecordloading: true });
-			} else {
-				this.setState({ product: [], connection: true, notrecordloading: false });
-			}
-		});
+            if (res.data.status === 'success') {
+                this.setState({ product: res.data.product, connection: true, notrecordloading: true });
+            } else {
+                this.setState({ product: [], connection: true, notrecordloading: false });
+            }
+        });
     }
     onAddCartHandler = (item) => {
         const productDetails = JSON.parse(localStorage.getItem("product_details"));
@@ -72,11 +72,8 @@ class TopProducts extends Component {
                                     <div className="simpleCart_shelfItem">
                                         <p><i className="item_price">₹ {item.price}</i></p>
                                         <Button className="w3ls-cart" onClick={() => this.onAddCartHandler(item)}>
-                                            {isLoadingButton ? (
-                                                <i className="fa fa-refresh fa-spin"></i>
-                                            ) : (
-                                                <span>Add to cart</span>
-                                            )}</Button>
+                                            {isLoadingButton ? (<span>please wait...</span>) : (<span>Add To Cart</span>)}
+                                        </Button>
                                     </div>
                                 </div>
                             </div>

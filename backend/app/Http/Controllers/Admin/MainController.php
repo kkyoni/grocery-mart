@@ -53,6 +53,7 @@ class MainController extends Controller
         $TotalSupport = Support::get();
         $TotalConatct = Contact::whereDate('created_at', '=', date('Y-m-d'))->get();
         $Ordercronlist = Order::whereDate('created_at', '>=', date('Y-m-d', strtotime("this week")))->whereDate('created_at', '<=', date('Y-m-d', strtotime("sunday 0 week")))->get();
+        // dd($Ordercronlist);
         return view('admin.pages.dashboard', compact('TotalUser', 'TotalBlog', 'TotalCms', 'TotalFaq', 'TotalBrand', 'TotalCategories', 'TotalProduct', 'TotalPromo', 'TotalSetting', 'TotalOrder', 'Ordercronlist', 'TotalSupport', 'TotalConatct'));
     }
 

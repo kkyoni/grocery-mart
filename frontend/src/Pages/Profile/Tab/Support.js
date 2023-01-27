@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import Service from "../../../services/Service";
 import { toast } from 'react-toastify';
 class Support extends Component {
     state = {
@@ -14,18 +14,24 @@ class Support extends Component {
     }
     saveSupport = async (e) => {
         e.preventDefault();
-        const res = await axios.post('http://127.0.0.1:8000/api/add-support', this.state);
-        if (res.data.status === "success") {
-            toast.success("Support Success", { position: toast.POSITION.TOP_RIGHT });
-            this.setState({
-                supportname: '',
-                supportemail: '',
-                supportmessage: '',
-            });
-        } else {
-            toast.error("Support Error", { position: toast.POSITION.TOP_RIGHT });
-            this.props.history.push('/contact');
-        }
+        var data = {
+            supportname: this.state.supportname,
+            supportemail: this.state.supportemail,
+            supportmessage: this.state.supportmessage
+        };
+        Service.CreateSupport(data).then((res) => {
+            if (res.data.status === "success") {
+                toast.success("Support Success", { position: toast.POSITION.TOP_RIGHT });
+                this.setState({
+                    supportname: '',
+                    supportemail: '',
+                    supportmessage: '',
+                });
+            } else {
+                toast.error("Support Error", { position: toast.POSITION.TOP_RIGHT });
+                this.props.history.push('/contact');
+            }
+        });
     }
     render() {
         return (

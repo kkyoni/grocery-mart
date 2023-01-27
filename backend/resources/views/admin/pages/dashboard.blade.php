@@ -264,7 +264,6 @@
                                                     <th>Date</th>
                                                     <th>User</th>
                                                     <th>Value</th>
-                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -308,12 +307,6 @@
                                                                     <span style="color:#ed5565"><i
                                                                             class="fa fa-level-down"></i> 0%</span>
                                                                 @endif
-                                                            </td>
-                                                            <td>
-                                                                <button type="button" class="btn-xs btn-primary">
-                                                                    <a href="{{ route('admin.order.edit', ['order' => $cronelist->id]) }}"
-                                                                        style="color: white">Edit</a>
-                                                                </button>
                                                             </td>
                                                         </tr>
                                                     @endforeach

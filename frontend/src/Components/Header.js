@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import './header.css';
 import './cart.css';
 import swal from "sweetalert";
+import Service from "../services/Service";
 class Header extends Component {
     constructor(props) {
         super(props)
         this.state = {
             TemplateTheme: 'light',
             product_cart: {},
+            brand: [],
             newTotal: 0.00,
             photo: 'http://127.0.0.1:8000/storage/product/',
         }
@@ -23,6 +25,13 @@ class Header extends Component {
             });
             this.setState({ product_cart: JSON.parse(CurrentproductDetails), newTotal: Number.parseFloat(newTotal).toFixed(2) });
         }
+        Service.getBrand().then((res) => {
+            if (res.data.status === 'success') {
+                this.setState({ brand: res.data.brand, connection: true, notrecordloading: true });
+            } else {
+                this.setState({ brand: [], connection: true, notrecordloading: false });
+            }
+        });
     }
     componentDidMount() {
         if (window.location.pathname !== '/order-tracking') {
@@ -96,9 +105,40 @@ class Header extends Component {
     render() {
         const login = JSON.parse(localStorage.getItem("userData"));
         let pathname = window.location.pathname;
+
+
+
+        var Brand_HTMLTABLE = "";
+        if (this.state.connection) {
+            if (this.state.notrecordloading) {
+                Brand_HTMLTABLE =
+                    this.state.brand.map((item, i) => {
+                        const { brand_name } = item;
+                        return (
+                            <div key={i} className="col-lg-4 mt-lg-0 mt-4">
+                                <ul className="multi-column-dropdown">
+                                    <h6>{brand_name}</h6>
+                                    {item.categories_details.map((type, j) => {
+                                        return <li key={j}><Link to={`/products/${type.id}`}>{type.categories_name} {type.new_offer === 'new' ? (<span>New</span>) : ("")}</Link></li>
+                                    })}
+                                </ul>
+                            </div>
+                        );
+                    });
+            } else {
+                Brand_HTMLTABLE = <img src='assets/images/nodatafound.png' alt="nodatafound" className="img-max" style={{ width: "100%", height: "1%" }} />
+            }
+        } else {
+            Brand_HTMLTABLE = <img src='assets/images/connection_lost.png' alt="connection_lost" className="img-max" style={{ width: "100%", height: "1%" }} />
+        }
+
+
+
+
+
+
         var Cart_HTMLTABLE = "";
         if (this.state.product_cart && this.state.product_cart.length > 0) {
-
             Cart_HTMLTABLE =
                 this.state.product_cart.map((item, index) => {
                     const { name, description, id, qty, productimage, price } = item;
@@ -157,16 +197,17 @@ class Header extends Component {
                                         </Link>
                                         <ul className="dropdown-menu dropdown-menu-2" aria-labelledby="navbarScrollingDropdown">
                                             <div className="row">
-                                                <div className="col-lg-4">
-                                                    <ul className="multi-column-dropdown">
+                                                {/* <div className="col-lg-4"> */}
+                                                {Brand_HTMLTABLE}
+                                                {/* <ul className="multi-column-dropdown">
                                                         <h6>Kitchen</h6>
                                                         <li><Link to={"/products"}>Meat & Seafood </Link></li>
                                                         <li><Link to={"/products"}>Snack Foods<span>New</span></Link></li>
                                                         <li><Link to={"/products"}>Oils, Vinegars</Link></li>
                                                         <li><Link to={"/products"}>Pasta & Noodles<span>New</span></Link></li>
-                                                    </ul>
-                                                </div>
-                                                <div className="col-lg-4 mt-lg-0 mt-4">
+                                                    </ul> */}
+                                                {/* </div> */}
+                                                {/* <div className="col-lg-4 mt-lg-0 mt-4">
                                                     <ul className="multi-column-dropdown">
                                                         <h6>Household</h6>
                                                         <li><Link to={"/products"}>Detergents</Link></li>
@@ -174,7 +215,7 @@ class Header extends Component {
                                                         <li><Link to={"/products"}>Pet Care <span>New</span></Link></li>
                                                         <li><Link to={"/products"}><i>Festive Decoratives</i></Link></li>
                                                     </ul>
-                                                </div>
+                                                </div> */}
                                                 <div className="col-lg-4">
                                                     <div className="w3ls_products_pos">
                                                         <h4 className="mb-4">30%<i>Off/-</i></h4>
@@ -254,7 +295,7 @@ class Header extends Component {
                                         </div>
                                         {Cart_HTMLTABLE}
                                         <h5 className="text-success list-group mt-3" style={{ fontSize: 'initial' }}>
-                                            <Link to={"/check-out"} className="btn btn-primary"><i className="fa fa-check"></i> CheckOut</Link>
+                                            <Link to={"/check-out"} className="btn btn-primary" data-bs-dismiss="offcanvas" aria-label="Close"><i className="fa fa-check"></i> CheckOut</Link>
                                         </h5>
                                     </div>
                                 </div>

@@ -99,17 +99,29 @@ class OrderController extends Controller
             ['data' => 'payment_mode', 'name' => 'payment_mode', 'title' => 'Payment Mode', 'width' => '10%'],
             ['data' => 'grandtotal', 'name' => 'grandtotal', 'title' => 'Total', 'width' => '10%'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '10%', "orderable" => false, "searchable" => false],
-        ])
-            ->ajax([
-                'url' => route('admin.order.filter_by_button'),
-                'type' => 'POST',
-                'data' => 'function(d) {
+        ])->ajax([
+            'url' => route('admin.order.filter_by_button'),
+            'type' => 'POST',
+            'data' => 'function(d) {
                 d._token = "' . csrf_token() . '";
                 d.start_date = $("#start_date").val();
                 d.end_date = $("#end_date").val();
             }',
-            ])
-            ->parameters(['order' => []]);
+        ])->parameters([
+            'order' => [],
+            'paging'      => true,
+            'info'        => true,
+            'searchDelay' => 350,
+            'dom'         => 'lBfrtip',
+            'buttons'     => [
+                ['extend' => 'copy', 'title' => "Order Report", 'text' => '<i class="fa fa-copy" aria-hidden="true" style="font-size:16px"></i> Copy', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5]]],
+                ['extend' => 'excel', 'title' => "Order Report", 'text' => '<i class="fa fa-file-excel-o" aria-hidden="true" style="font-size:16px"></i> Excel', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5]]],
+                ['extend' => 'csv', 'title' => "Order Report", 'text' => '<i class="fa fa-file-text-o" aria-hidden="true" style="font-size:16px"></i> CSV', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5]]],
+                ['extend' => 'pdf', 'title' => "Order Report", 'text' => '<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:16px"></i> PDF', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5]]],
+                ['extend' => 'print', 'title' => "Order Report", 'text' => '<i class="fa fa-print" aria-hidden="true" style="font-size:16px"></i> Print', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4, 5]]],
+            ],
+            'searching'   => true,
+        ]);
         return view($this->pageLayout . 'index', compact('html'));
     }
 

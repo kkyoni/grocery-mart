@@ -52,8 +52,21 @@ class ContactController extends Controller
             ['data' => 'email', 'name' => 'email', 'title' => 'Email', 'width' => '10%'],
             ['data' => 'message', 'name' => 'message', 'title' => 'Message', 'width' => '15%'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '10%', "orderable" => false, "searchable" => false],
-        ])
-            ->parameters(['order' => []]);
+        ])->parameters([
+            'order' => [],
+            'paging'      => true,
+            'info'        => true,
+            'searchDelay' => 350,
+            'dom'         => 'lBfrtip',
+            'buttons'     => [
+                ['extend' => 'copy', 'title' => "Conatct Report", 'text' => '<i class="fa fa-copy" aria-hidden="true" style="font-size:16px"></i> Copy', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'excel', 'title' => "Conatct Report", 'text' => '<i class="fa fa-file-excel-o" aria-hidden="true" style="font-size:16px"></i> Excel', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'csv', 'title' => "Conatct Report", 'text' => '<i class="fa fa-file-text-o" aria-hidden="true" style="font-size:16px"></i> CSV', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'pdf', 'title' => "Conatct Report", 'text' => '<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:16px"></i> PDF', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+                ['extend' => 'print', 'title' => "Conatct Report", 'text' => '<i class="fa fa-print" aria-hidden="true" style="font-size:16px"></i> Print', 'exportOptions' => ['columns' => [0, 1, 2, 3, 4]]],
+            ],
+            'searching'   => true,
+        ]);
         return view($this->pageLayout . 'index', compact('html'));
     }
 

@@ -60,8 +60,21 @@ class ProductController extends Controller
             ['data' => 'price', 'name' => 'price', 'title' => 'Price', 'width' => '5%'],
             ['data' => 'description', 'name' => 'description', 'title' => 'Description', 'width' => '10%'],
             ['data' => 'action', 'name' => 'action', 'title' => 'Action', 'width' => '10%', "orderable" => false, "searchable" => false],
-        ])
-            ->parameters(['order' => []]);
+        ])->parameters([
+            'order' => [],
+            'paging'      => true,
+            'info'        => true,
+            'searchDelay' => 350,
+            'dom'         => 'lBfrtip',
+            'buttons'     => [
+                ['extend' => 'copy', 'title' => "Product Report", 'text' => '<i class="fa fa-copy" aria-hidden="true" style="font-size:16px"></i> Copy', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'excel', 'title' => "Product Report", 'text' => '<i class="fa fa-file-excel-o" aria-hidden="true" style="font-size:16px"></i> Excel', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'csv', 'title' => "Product Report", 'text' => '<i class="fa fa-file-text-o" aria-hidden="true" style="font-size:16px"></i> CSV', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'pdf', 'title' => "Product Report", 'text' => '<i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:16px"></i> PDF', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+                ['extend' => 'print', 'title' => "Product Report", 'text' => '<i class="fa fa-print" aria-hidden="true" style="font-size:16px"></i> Print', 'exportOptions' => ['columns' => [0, 1, 2, 3]]],
+            ],
+            'searching'   => true,
+        ]);
         return view($this->pageLayout . 'index', compact('html'));
     }
 

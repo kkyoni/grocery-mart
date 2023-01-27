@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Service from "../../../services/Service";
 import { toast } from 'react-toastify';
 import swal from "sweetalert";
-import axios from "axios";
 class MyAddress extends Component {
     state = {
         zip: '',
@@ -13,6 +12,7 @@ class MyAddress extends Component {
         city: '',
         user_id: '',
         address_id: '',
+        optional: 'home',
         alluserAddress: [],
         connection: false,
         notrecordloading: false,
@@ -87,25 +87,45 @@ class MyAddress extends Component {
             }
         })
     }
+    
+    setSelectedFruit = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        let data = {};
+        data[name] = value;
+        this.setState(data);
+    };
     SaveAddress = async (e) => {
         e.preventDefault();
-        const res = await axios.post('http://127.0.0.1:8000/api/add-address', this.state);
-        if (res.data.status === "success") {
-            toast.success("Add Address", { position: toast.POSITION.TOP_RIGHT });
-            this.setState({
-                alluserAddress: res.data.alluserAddress,
-                zip: '',
-                states: '',
-                country: '',
-                street_address: '',
-                city: '',
-            });
-            window.location.reload(false);
-        } else {
-            toast.error("Not Add Address", { position: toast.POSITION.TOP_RIGHT });
-        }
+        var data = {
+            alluserAddress: this.state.alluserAddress,
+            user_id: this.state.user_id,
+            optional: this.state.optional,
+            zip: this.state.zip,
+            states: this.state.states,
+            country: this.state.country,
+            street_address: this.state.street_address,
+            city: this.state.city
+        };
+        Service.CreateAddress(data).then((res) => {
+            if (res.data.status === "success") {
+                toast.success("Add Address", { position: toast.POSITION.TOP_RIGHT });
+                this.setState({
+                    alluserAddress: res.data.alluserAddress,
+                    zip: '',
+                    states: '',
+                    country: '',
+                    street_address: '',
+                    optional: 'home',
+                    city: '',
+                });
+                window.location.reload(false);
+            } else {
+                toast.error("Not Add Address", { position: toast.POSITION.TOP_RIGHT });
+            }
+        });
     }
-   
+
     render() {
         const login = JSON.parse(localStorage.getItem("userData"));
         var All_User_Address_HTMLTABLE = "";
@@ -114,7 +134,7 @@ class MyAddress extends Component {
                 All_User_Address_HTMLTABLE =
                     this.state.alluserAddress.map((item, i) => {
                         return (
-                            <div key={i} className={item.id === Number(login.address_id) ? ("relative border-2 rounded p-4 w-[200px] border-primary-color") : ("relative border-2 rounded p-4 w-[200px]")} style={{width:'195px'}}>
+                            <div key={i} className={item.id === Number(login.address_id) ? ("relative border-2 rounded p-4 w-[200px] border-primary-color") : ("relative border-2 rounded p-4 w-[200px]")} style={{ width: '195px' }}>
                                 {item.id === Number(login.address_id) ? ("") : (<div className="absolute top-0 right-0 p-2 cursor-pointer" style={{ cursor: "pointer", right: "0" }} onClick={() => this.handleDeleteAddress(item.id, login.id)}>
                                     <i className="fa fa-times text-xl"></i>
                                 </div>)}
@@ -140,7 +160,7 @@ class MyAddress extends Component {
             <div>
                 <Link className="btn-open-modal text-primary-color hover:underline" data-bs-toggle="modal" data-bs-target="#AddModalAddress">Add Address</Link>
                 <div className="flex flex-wrap" style={{ gap: "1.25rem" }}>
-                        {All_User_Address_HTMLTABLE}
+                    {All_User_Address_HTMLTABLE}
                     <div className="modal fade" id="AddModalAddress" tabIndex={-1} aria-labelledby="AddModalAddress" aria-hidden="true">
                         <div className="modal-dialog modal-dialog-centered">
                             <div className="modal-content">
@@ -157,7 +177,7 @@ class MyAddress extends Component {
                                                 <div className="row contact-block">
                                                     <div className="col-md-6 contact-left">
                                                         <div className="input-grids">
-                                                            <select name="optional" className="select_item" style={{ width: '100%', background: 'var(--bg-light)', fontSize: "16px", padding: "14px", border: "2px solid var(--border-color-light)", outline: "none", marginBottom: "16px", borderRadius: "var(--border-radius)", resize: "none", WebkitAppearance: "none" }}>
+                                                            <select name="optional" className="select_item" style={{ width: '100%', background: 'var(--bg-light)', fontSize: "16px", padding: "14px", border: "2px solid var(--border-color-light)", outline: "none", marginBottom: "16px", borderRadius: "var(--border-radius)", resize: "none", WebkitAppearance: "none" }} onChange={this.setSelectedFruit}>
                                                                 <option value={'home'}>Home</option>
                                                                 <option value={'office'}>Office</option>
                                                             </select>

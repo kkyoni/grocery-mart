@@ -15,6 +15,7 @@ class Products extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
+			id: this.props.match.params.id,
 			product: [],
 			temp: [],
 			loading: false,
@@ -23,6 +24,7 @@ class Products extends Component {
 			isLoading: true,
 			isLoadingButton: false,
 			AddCartDetails: false,
+			ShowingResults: 0,
 			singleFetchedProduct: {}
 		}
 		this.loadmore = this.loadmore.bind(this);
@@ -31,22 +33,36 @@ class Products extends Component {
 	brandDataFromChildComp = (data) => this.setState({ product: data });
 	priceDataFromChildComp = (data) => this.setState({ product: data });
 	sortDataFromChildComp = (data) => this.setState({ product: data });
-	async componentDidMount() {
+
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			isLoading: true,
+		});
+		setTimeout(() => {
+			this.setState({ isLoading: false, visible:6 });
+		}, 1000);
+		this.ChangeProduct(nextProps.match.params.id);
+	}
+	componentDidMount() {
 		this.setState({
 			isLoading: true,
 		});
 		setTimeout(() => {
 			this.setState({ isLoading: false });
 		}, 1000);
+		this.ChangeProduct(this.state.id);
+	}
 
-		Service.getProducts().then((res) => {
+	ChangeProduct(id) {
+		Service.getProducts(id).then((res) => {
 			if (res.data.status === 'success') {
-				this.setState({ product: res.data.product, connection: true, notrecordloading: true });
+				this.setState({ product: res.data.product, ShowingResults: res.data.product_count, connection: true, notrecordloading: true });
 			} else {
 				this.setState({ product: [], connection: true, notrecordloading: false });
 			}
 		});
 	}
+
 	loadmore() {
 		this.setState({
 			isLoading: true,
@@ -100,6 +116,7 @@ class Products extends Component {
 		toast.success("Add To Cart", { position: toast.POSITION.TOP_RIGHT });
 	}
 	render() {
+		// console.log("jaymin",this.state.product);
 		const { name, description, productimage, price } = this.state.singleFetchedProduct;
 		const { isLoadingButton } = this.state.isLoadingButton;
 		var product_HTMLTABLE = "";
@@ -127,11 +144,8 @@ class Products extends Component {
 									<div className="simpleCart_shelfItem">
 										<p><i className="item_price">₹ {item.price}</i></p>
 										<Button className="w3ls-cart" onClick={() => this.onAddCartHandler(item)}>
-											{isLoadingButton ? (
-												<i className="fa fa-refresh fa-spin"></i>
-											) : (
-												<span>Add to cart</span>
-											)}</Button>
+										{isLoadingButton ? (<span>please wait...</span>) : (<span>Add to cart</span>)}
+										</Button>
 									</div>
 									{item.new_offer === 'new' ? (
 										<div className="mobiles_grid_pos">
@@ -170,7 +184,7 @@ class Products extends Component {
 					<div className="container py-lg-4 py-3">
 						<div className="row w3ls_mobiles_grids">
 							<div className="col-md-4 w3ls_mobiles_grid_left">
-								<SliderCategory parentCategoryCallback={this.catagoryDataFromChildComp} />
+								<SliderCategory />
 								<Brand parentBrandCallback={this.brandDataFromChildComp} />
 								<Price parentPriceCallback={this.priceDataFromChildComp} />
 							</div>
@@ -178,7 +192,7 @@ class Products extends Component {
 								<div className="row">
 									<div className="col-md-6 w3ls_mobiles_grid_right_left">
 										<div className="w3ls_mobiles_grid_right_grid1">
-											<img src="assets/images/pbg1.jpg" alt="pbg1" className="img-fluid radius-image" />
+											<img src="../assets/images/pbg1.jpg" alt="pbg1" className="img-fluid radius-image" />
 											<div className="w3ls_mobiles_grid_right_grid1_pos1">
 												<h3>Best<span> Price</span> on Vegetables</h3>
 											</div>
@@ -186,14 +200,14 @@ class Products extends Component {
 									</div>
 									<div className="col-md-6 w3ls_mobiles_grid_right_left">
 										<div className="w3ls_mobiles_grid_right_grid1">
-											<img src="assets/images/pbg2.jpg" alt="pbg2" className="img-fluid radius-image" />
+											<img src="../assets/images/pbg2.jpg" alt="pbg2" className="img-fluid radius-image" />
 											<div className="w3ls_mobiles_grid_right_grid1_pos">
 												<h3>Best Deals <span> For New</span>Products</h3>
 											</div>
 										</div>
 									</div>
 								</div>
-								<Sorting parentSortCallback={this.sortDataFromChildComp} ShowResults={this.state.visible} />
+								<Sorting parentSortCallback={this.sortDataFromChildComp} ShowResults={this.state.ShowingResults} category_id={this.props.match.params.id} />
 								<div className="row w3ls_mobiles_grid_right_grid3">
 									{product_HTMLTABLE}
 									<br />

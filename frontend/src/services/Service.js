@@ -31,8 +31,8 @@ class Service {
     getProductsSingle(id) {
         return axios.get(API_BASE_URL + 'products-single/' + id);
     }
-    getSortingProduct(sort) {
-        return axios.get(API_BASE_URL + 'products-sorting/' + sort);
+    getSortingProduct(sort, category_id) {
+        return axios.get(API_BASE_URL + 'products-sorting/' + sort + '/' + category_id);
     }
     getProductPrice(min, max) {
         return axios.get(API_BASE_URL + 'products-price/' + min + '/' + max);
@@ -49,8 +49,11 @@ class Service {
     getBlog() {
         return axios.get(API_BASE_URL + 'get-blog/');
     }
-    getProducts() {
-        return axios.get(API_BASE_URL + 'get-products/');
+    getProducts(id) {
+        return axios.get(API_BASE_URL + 'get-products/' + id);
+    }
+    getChat(id) {
+        return axios.get(API_BASE_URL + 'get-chat/' + id);
     }
     getBrand() {
         return axios.get(API_BASE_URL + 'get-brand/');
@@ -61,8 +64,41 @@ class Service {
     getTopProducts() {
         return axios.get(API_BASE_URL + 'get-top-products/');
     }
-    getsiteLogo(){
+    getsiteLogo() {
         return axios.get(API_BASE_URL + 'get-sitelogo/');
+    }
+    VerifyOtp(data) {
+        return axios.post(API_BASE_URL + 'verifyOtp/',data);
+    }
+    SendOtp(data) {
+        return axios.post(API_BASE_URL + 'sendOtp/',data);
+    }
+    Login(data) {
+        return axios.post(API_BASE_URL + 'login/',data);
+    }
+    CreateContact(data) {
+        return axios.post(API_BASE_URL + 'add-contact/',data);
+    }
+    CreateSupport(data) {
+        return axios.post(API_BASE_URL + 'add-support/',data);
+    }
+    CreateAddress(data) {
+        return axios.post(API_BASE_URL + 'add-address/',data);
+    }
+    PromoCode(data) {
+        return axios.post(API_BASE_URL + 'promocode/',data);
+    }
+    SaveCod(data) {
+        return axios.post(API_BASE_URL + 'checkoutsavecod/',data);
+    }
+    TrackInvoice(data) {
+        return axios.post(API_BASE_URL + 'track-now/',data);
+    }
+    SaveUserProfile(data) {
+        return axios.post(API_BASE_URL + 'profile/',data);
+    }
+    CreateComment(data) {
+        return axios.post(API_BASE_URL + 'add-Comment/',data);
     }
 }
 

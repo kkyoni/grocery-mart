@@ -16,31 +16,35 @@ Route::get('/user-address-delete/{address_id}/{user_id}', [CommonController::cla
 Route::get('/user-address-select/{address_id}/{user_id}', [CommonController::class, 'useraddressselect'])->middleware(['UnderMaintenance']);
 Route::get('/user-edit-address/{address_id}', [CommonController::class, 'usereditaddress'])->middleware(['UnderMaintenance']);
 Route::get('/products-single/{id}', [CommonController::class, 'productssingle'])->middleware(['UnderMaintenance']);
-Route::get('/products-sorting/{sort}', [CommonController::class, 'productssorting'])->middleware(['UnderMaintenance']);
+Route::get('/products-sorting/{sort}/{category_id}', [CommonController::class, 'productssorting'])->middleware(['UnderMaintenance']);
 Route::get('/products-price/{min}/{max}', [CommonController::class, 'productsprice'])->middleware(['UnderMaintenance']);
 Route::get('/blog-detail/{id}', [CommonController::class, 'blogdetail'])->middleware(['UnderMaintenance']);
 Route::get('/get-Comment/{id}', [CommonController::class, 'getcomment'])->middleware(['UnderMaintenance']);
 Route::get('/get-faq', [CommonController::class, 'getfaq'])->middleware(['UnderMaintenance']);
 Route::get('/get-blog', [CommonController::class, 'getblog'])->middleware(['UnderMaintenance']);
-Route::get('/get-products', [CommonController::class, 'getproducts'])->middleware(['UnderMaintenance']);
+Route::get('/get-products/{id}', [CommonController::class, 'getproducts'])->middleware(['UnderMaintenance']);
 Route::get('/get-brand', [CommonController::class, 'getbrand'])->middleware(['UnderMaintenance']);
 Route::get('/get-categories', [CommonController::class, 'getcategories'])->middleware(['UnderMaintenance']);
 Route::get('/get-top-products', [CommonController::class, 'gettopproducts'])->middleware(['UnderMaintenance']);
 Route::get('/get-sitelogo', [CommonController::class, 'sitelogo'])->middleware(['UnderMaintenance']);
+Route::get('/get-chat/{id}', [CommonController::class, 'getchat'])->middleware(['UnderMaintenance']);
 
 //Post Method
-Route::post('/login', [CommonController::class, 'login'])->middleware(['UnderMaintenance']);
-Route::post('/sendOtp', [CommonController::class, 'sendOtp'])->middleware(['UnderMaintenance']);
-Route::post('/checkoutsavecod', [CommonController::class, 'checkoutsavecod'])->middleware(['UnderMaintenance']);
-Route::post('/stripe_payment', [CommonController::class, 'stripe_payment'])->middleware(['UnderMaintenance']);
-Route::post('/paypal_payment', [CommonController::class, 'paypal_payment'])->middleware(['UnderMaintenance']);
-Route::post('/verifyOtp', [CommonController::class, 'verifyOtp'])->middleware(['UnderMaintenance']);
 Route::post('/add-contact', [CommonController::class, 'addcontact'])->middleware(['UnderMaintenance']);
 Route::post('/add-support', [CommonController::class, 'addsupport'])->middleware(['UnderMaintenance']);
+Route::post('/login', [CommonController::class, 'login'])->middleware(['UnderMaintenance']);
+Route::post('/sendOtp', [CommonController::class, 'sendOtp'])->middleware(['UnderMaintenance']);
+Route::post('/verifyOtp', [CommonController::class, 'verifyOtp'])->middleware(['UnderMaintenance']);
+Route::post('/add-address', [CommonController::class, 'addaddress'])->middleware(['UnderMaintenance']);
+Route::post('/promocode', [CommonController::class, 'promocode'])->middleware(['UnderMaintenance']);
+
+
+Route::post('/checkoutsavecod', [CommonController::class, 'checkoutsavecod'])->middleware(['UnderMaintenance']);
+
+Route::post('/stripe_payment', [CommonController::class, 'stripe_payment'])->middleware(['UnderMaintenance']);
+Route::post('/paypal_payment', [CommonController::class, 'paypal_payment'])->middleware(['UnderMaintenance']);
 Route::post('/add-Comment', [CommonController::class, 'addcomment'])->middleware(['UnderMaintenance']);
 Route::post('/profile', [CommonController::class, 'profile'])->middleware(['UnderMaintenance']);
-Route::post('/promocode', [CommonController::class, 'promocode'])->middleware(['UnderMaintenance']);
-Route::post('/add-address', [CommonController::class, 'addaddress'])->middleware(['UnderMaintenance']);
 Route::post('/track-now/{id}', [CommonController::class, 'tracknow'])->middleware(['UnderMaintenance']);
 // });
 
