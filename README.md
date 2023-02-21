@@ -15,7 +15,7 @@
 
 ## Backend Laravel Project Order Status Crone
 
-- php artisan OrderStatus:cron
+* php artisan OrderStatus:cron
 
 ## Backend Templete
 
