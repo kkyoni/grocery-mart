@@ -43,4 +43,4 @@
 
 ## Front Templete
 
-- https://demo.w3layouts.com/demos_new/template_demo/06-10-2021/grocery-mart-liberty-demo_Free/794674028/web/
+- [https://demo.w3layouts.com/demos_new/template_demo/06-10-2021/grocery-mart-liberty-demo_Free/794674028/web/](https://themeforest.net/item/quicky-html-chat-template/27127279)https://themeforest.net/item/quicky-html-chat-template/27127279
